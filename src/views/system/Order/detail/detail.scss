@@ -1,0 +1,35 @@
+.order-detail {
+}
+.button {
+  width: 148px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  font-weight: 400;
+  font-size: 20px;
+}
+.cancel-type {
+  border-radius: 6px;
+  border: 1px solid #bfc2cc;
+  color: #606266;
+}
+.cancel-type:hover {
+  border-radius: 6px !important;
+  border: 1px solid #bfc2cc !important;
+  color: #606266 !important;
+}
+.confirm-type {
+  background: #fa8c16;
+  color: #ffffff;
+  border: 1px solid #fa8c16;
+}
+.confirm-type:hover {
+  background: #fa8c16 !important;
+  color: #ffffff !important;
+  border: 1px solid #fa8c16 !important;
+}
+// :global {
+.ant-tabs-top > .ant-tabs-nav::before {
+  border-bottom: none !important;
+}
+// }
