@@ -38,8 +38,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build example
-        run: pnpm build:example
+      - name: Build rsdoctor
+        run: pnpm build:rsdoctor
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
