@@ -84,16 +84,16 @@ export default defineConfig({
     //   index: '/index.tsx',
     // },
     proxy: {
-      // '/api': {
-      //   target: process.env.VITE_BASE_API,
-      //   changeOrigin: true,
-      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
-      // },
       '/api': {
-        target: 'http://localhost:3008',
+        target: process.env.VITE_BASE_API,
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
+      // '/api': {
+      //   target: 'http://localhost:3008',
+      //   changeOrigin: true,
+      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
+      // },
     },
   },
 })
