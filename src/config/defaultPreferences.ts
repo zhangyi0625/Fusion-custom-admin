@@ -19,7 +19,7 @@ export const defaultPreferences: Preferences = {
     layout: 'sidebar-nav',
     locale: 'zh-CN',
     loginExpiredMode: 'page',
-    name: '在舱光速抢舱管理平台',
+    name: '销售协同管理系统',
     preferencesButtonPosition: 'auto',
     watermark: false,
   },

@@ -182,7 +182,7 @@ const Login: React.FC = () => {
                     color: '#999999',
                   }}
                 >
-                  在舱光速抢舱管理平台
+                  销售协同管理系统
                 </span>
               </p>
             </div>

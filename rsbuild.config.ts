@@ -36,7 +36,7 @@ export default defineConfig({
   // 配置html模板
   html: {
     favicon: path.resolve(__dirname, './src/assets/images/favicon.ico'),
-    title: '在舱光速抢舱管理平台',
+    title: '销售协同管理系统',
     tags: [
       {
         tag: 'html',

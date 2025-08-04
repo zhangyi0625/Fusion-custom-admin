@@ -104,7 +104,7 @@ const UserDropdown: React.FC = () => {
             sessionStorage.removeItem('loginUser')
 
             // 修改回document.title
-            document.title = '在舱光速抢舱管理平台 - 登录'
+            document.title = '销售协同管理系统 - 登录'
             // 退出到登录页面
             navigate('/login')
           },
