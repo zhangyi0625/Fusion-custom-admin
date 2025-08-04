@@ -78,22 +78,22 @@ export default defineConfig({
   // 服务相关
   server: {
     host: '::',
-    port: 3005,
+    port: 3008,
     open: false,
     // historyApiFallback: {
     //   index: '/index.tsx',
     // },
     proxy: {
-      '/api': {
-        target: process.env.VITE_BASE_API,
-        changeOrigin: true,
-        pathRewrite: (path) => path.replace(/^\/api/, ''),
-      },
       // '/api': {
-      //   target: 'http://localhost:3005',
+      //   target: process.env.VITE_BASE_API,
       //   changeOrigin: true,
       //   pathRewrite: (path) => path.replace(/^\/api/, ''),
       // },
+      '/api': {
+        target: 'http://localhost:3008',
+        changeOrigin: true,
+        pathRewrite: (path) => path.replace(/^\/api/, ''),
+      },
     },
   },
 })
