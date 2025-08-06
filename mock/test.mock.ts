@@ -2,7 +2,7 @@ import { defineMock } from 'rspack-plugin-mock/helper'
 
 export default defineMock([
   {
-    url: '/api/business-enquiry/page?page=1&limit=10',
+    url: '/api/business-enquiry/page',
     method: 'GET',
     enabled: true,
     body(request) {
@@ -53,7 +53,6 @@ export default defineMock([
       return {
         code: 200,
         message: 'success',
-        // data: {
         data: [
           {
             id: '3122222',
@@ -74,7 +73,34 @@ export default defineMock([
             productSpecifications: '17mm-银色',
           },
         ],
-        // },
+      }
+    },
+  },
+  {
+    url: '/api/business-enquiry/supplier',
+    method: 'GET',
+    enabled: true,
+    body(request) {
+      return {
+        code: 200,
+        message: 'success',
+        data: [
+          {
+            id: '3122222',
+            supplierNo: 'P202507007',
+            supplierName: '供应商名称···1',
+          },
+          {
+            id: '213213123',
+            supplierNo: 'P202507008',
+            supplierName: '供应商名称···2',
+          },
+          {
+            id: '213213125',
+            supplierNo: 'P202507009',
+            supplierName: '供应商名称···3',
+          },
+        ],
       }
     },
   },

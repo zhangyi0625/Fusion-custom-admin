@@ -11,6 +11,7 @@ export enum BusinessEnquiryApi {
   businessEnquiryList = '/business-enquiry',
   businessEnquiryListByPage = '/business-enquiry/page',
   productList = '/business-enquiry/product',
+  supplierList = '/business-enquiry/supplier',
 }
 
 /**
@@ -106,6 +107,22 @@ export const getProductList = () => {
   return HttpRequest.get(
     {
       url: BusinessEnquiryApi.productList,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 获取全部供应商列表
+ * @param params 商家询价参数
+ * @returns 商家询价列表
+ */
+export const getSupplierList = () => {
+  return HttpRequest.get(
+    {
+      url: BusinessEnquiryApi.supplierList,
     },
     {
       successMessageMode: 'none',

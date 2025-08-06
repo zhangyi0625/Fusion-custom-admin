@@ -2,10 +2,10 @@ import { Button, Drawer, Space, Table, Tabs } from 'antd'
 import React, { Component, useEffect } from 'react'
 import { CloseOutlined } from '@ant-design/icons'
 import BaseInfoCom from './Component/BaseInfo'
-import EnquiryProductCom from './Component/enquiryProduct'
-import EnquiryRecordCom from './Component/enquiryRecord'
-import OperationRecordCom from './Component/operationRecord'
-import SupplierInfoCom from './Component/supplierInfo'
+import EnquiryProductCom from './Component/EnquiryProduct'
+import EnquiryRecordCom from './Component/EnquiryRecord'
+import OperationRecordCom from './Component/OperationRecord'
+import SupplierInfoCom from './Component/SupplierInfo'
 
 export type BusinessEnquiryDrawerProps = {
   drawer: {
@@ -30,7 +30,7 @@ const components = [
   {
     label: '供应商',
     key: 'SupplierInfoCom',
-    children: <SupplierInfoCom />,
+    children: <SupplierInfoCom source="SaleProject" />,
   },
   {
     label: '询价记录',

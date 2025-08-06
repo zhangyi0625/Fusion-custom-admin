@@ -8,6 +8,7 @@ import {
   Dropdown,
   MenuProps,
   Space,
+  TablePaginationConfig,
   TableProps,
 } from 'antd'
 import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
@@ -263,18 +264,18 @@ const BusinessEnquiry: React.FC = () => {
     setDrawer({ drawerShow: true, detailId: no })
   }
 
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
+    })
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
-      <ConfigProvider
-        theme={{
-          components: {
-            Form: {
-              itemMarginBottom: 0,
-            },
-          },
-        }}
-      >
+      <ConfigProvider>
         <Card>
           <SearchForm
             columns={BusinessEnquirySearchColumns}
@@ -299,7 +300,7 @@ const BusinessEnquiry: React.FC = () => {
             advancedFilterText={['展开', '收起']}
             onUpdateSearch={onUpdateSearch}
           />
-          <div className="flex items-center mt-[20px]">
+          <div className="flex items-center">
             <p className="text-gray-900">项目状态：</p>
             {statusOptions.map((item) => (
               <Button
@@ -337,14 +338,12 @@ const BusinessEnquiry: React.FC = () => {
           totalKey="total"
           fetchResultKey="data"
           immediate={immediate}
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 208 }}
           fetchData={getBusinessEnquiryListPage}
           searchFilter={searchDefaultForm}
           isSelection={true}
-          isPagination={false}
-          onUpdatePagination={() => {
-            return
-          }}
+          isPagination={true}
+          onUpdatePagination={onUpdatePagination}
         />
       </Card>
       <AddBusinessEnquiry
