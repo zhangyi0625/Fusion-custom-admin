@@ -1,17 +1,7 @@
-import DragModal from '@/components/modal/DragModal'
-import { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import {
-  Button,
-  Col,
-  DatePicker,
-  Drawer,
-  Form,
-  Input,
-  Row,
-  Select,
-  Space,
-} from 'antd'
 import React, { useEffect } from 'react'
+import { Col, DatePicker, Form, Input, Row, Select } from 'antd'
+import DragModal from '@/components/modal/DragModal'
+import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { AddBusinessEnquiryForm } from '../config'
 import dayjs from 'dayjs'
 
@@ -20,7 +10,7 @@ export type AddBusinessEnquiryProps = {
     visible: boolean
     currentRow: BusinessEnquiryType | null
   }
-  onOk: (params: any) => void
+  onOk: (params: BusinessEnquiryType) => void
   onCancel: () => void
 }
 
@@ -61,7 +51,7 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
     <DragModal
       width="55%"
       open={visible}
-      title={currentRow ? '编辑商机' : '创建商机'}
+      title={currentRow ? '编辑项目' : '创建项目'}
       onOk={onConfirm}
       onCancel={onCancel}
     >

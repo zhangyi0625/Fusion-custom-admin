@@ -13,6 +13,7 @@ import {
 import { debounce } from 'lodash-es'
 import ProductTransfer from '../../ProductTransfer'
 import { getBusinessEnquiryListPage } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import ImportProduct from '../../ImportProduct'
 
 export type EnquiryProductProps = {}
 
@@ -41,6 +42,11 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
   }>({
     visible: false,
     selected: null,
+  })
+
+  const [importModal, setImportModal] = useState({
+    visible: false,
+    source: 'BusinessEnquiry',
   })
 
   useEffect(() => {
@@ -73,7 +79,9 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
     ...restProps
   }) => {
     const [editing, setEditing] = useState(false)
+
     const inputRef = useRef<InputRef>(null)
+
     const form = useContext(EditableContext)!
 
     useEffect(() => {
@@ -169,7 +177,11 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
       render(_) {
         return (
           <Space>
-            <Button onClick={() => deleteItem(_.id)} type="link" color="red">
+            <Button
+              onClick={() => deleteItem(_.id)}
+              color="danger"
+              variant="link"
+            >
               删除
             </Button>
           </Space>
@@ -221,6 +233,8 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
 
   const importProduct = () => {}
 
+  const importSuccess = () => {}
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -234,7 +248,12 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
             <Button onClick={downloadTable} type="default">
               下载询价表
             </Button>
-            <Button onClick={importProduct} type="default">
+            <Button
+              onClick={() =>
+                setImportModal({ visible: true, source: 'BusinessEnquiry' })
+              }
+              type="default"
+            >
               导入产品
             </Button>
             <Button
@@ -274,6 +293,13 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(() => {
         onOk={(newArr: string[]) =>
           setParams({ visible: false, selected: newArr })
         }
+      />
+      <ImportProduct
+        params={importModal}
+        onCancel={() =>
+          setImportModal({ visible: false, source: 'BusinessEnquiry' })
+        }
+        onOk={importSuccess}
       />
     </>
   )

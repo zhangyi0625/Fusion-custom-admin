@@ -146,3 +146,34 @@ export const AddBusinessEnquiryForm: Omit<
     span: 24,
   },
 ]
+
+export const ProjectStatusOptions = [
+  {
+    text: '全部',
+    value: null,
+  },
+  {
+    text: '带采购',
+    value: '1',
+  },
+  {
+    text: '已报价',
+    value: '2',
+  },
+  {
+    text: '已确认',
+    value: '3',
+  },
+  {
+    text: '已签合同',
+    value: '4',
+  },
+  {
+    text: '结束',
+    value: '5',
+  },
+  {
+    text: '中止',
+    value: '6',
+  },
+]

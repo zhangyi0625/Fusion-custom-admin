@@ -5,7 +5,7 @@ import type {
 } from './BusinessEnquiryModel'
 
 /**
- * 枚举商家询价相关的api
+ * 枚举商机询价相关的api
  */
 export enum BusinessEnquiryApi {
   businessEnquiryList = '/business-enquiry',
@@ -15,9 +15,9 @@ export enum BusinessEnquiryApi {
 }
 
 /**
- * 获取商家询价列表
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * 获取商机询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const getBusinessEnquiryList = (params: BusinessEnquiryParams) => {
   return HttpRequest.get(
@@ -32,9 +32,9 @@ export const getBusinessEnquiryList = (params: BusinessEnquiryParams) => {
 }
 
 /**
- * 分页获取商家询价列表
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * 分页获取商机询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const getBusinessEnquiryListPage = (params: BusinessEnquiryParams) => {
   return HttpRequest.get(
@@ -49,9 +49,9 @@ export const getBusinessEnquiryListPage = (params: BusinessEnquiryParams) => {
 }
 
 /**
- * 添加商家询价
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * 添加商机询价
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const addBusinessEnquiryList = (params: BusinessEnquiryType) => {
   return HttpRequest.post(
@@ -67,8 +67,8 @@ export const addBusinessEnquiryList = (params: BusinessEnquiryType) => {
 
 /**
  * 修改商机询价
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const updateBusinessEnquiryList = (params: BusinessEnquiryType) => {
   return HttpRequest.post(
@@ -84,8 +84,8 @@ export const updateBusinessEnquiryList = (params: BusinessEnquiryType) => {
 
 /**
  * 删除商机询价
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const deleteBusinessEnquiryList = (id: string | number) => {
   return HttpRequest.delete(
@@ -100,8 +100,8 @@ export const deleteBusinessEnquiryList = (id: string | number) => {
 
 /**
  * 获取全部产品列表
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const getProductList = () => {
   return HttpRequest.get(
@@ -116,8 +116,8 @@ export const getProductList = () => {
 
 /**
  * 获取全部供应商列表
- * @param params 商家询价参数
- * @returns 商家询价列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
  */
 export const getSupplierList = () => {
   return HttpRequest.get(

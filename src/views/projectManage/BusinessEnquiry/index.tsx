@@ -13,7 +13,7 @@ import {
 } from 'antd'
 import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
-import { BusinessEnquirySearchColumns } from '../config'
+import { BusinessEnquirySearchColumns, ProjectStatusOptions } from '../config'
 import useParentSize from '@/hooks/useParentSize'
 import {
   addBusinessEnquiryList,
@@ -25,37 +25,6 @@ import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnqui
 import AddBusinessEnquiry from './AddBusinessEnquiry'
 import BusinessEnquiryDrawer from './BusinessEnquiryDrawer'
 import { filterKeys } from '@/utils/tool'
-
-const statusOptions = [
-  {
-    text: '全部',
-    value: null,
-  },
-  {
-    text: '带采购',
-    value: '1',
-  },
-  {
-    text: '已报价',
-    value: '2',
-  },
-  // {
-  //   text: '已确认',
-  //   value: '3',
-  // },
-  // {
-  //   text: '已签合同',
-  //   value: '4',
-  // },
-  // {
-  //   text: '结束',
-  //   value: '5',
-  // },
-  // {
-  //   text: '终止',
-  //   value: '6',
-  // },
-]
 
 const BusinessEnquiry: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -82,9 +51,11 @@ const BusinessEnquiry: React.FC = () => {
   const [drawer, setDrawer] = useState<{
     drawerShow: boolean
     detailId: string | null
+    source: 'BusinessEnquiry'
   }>({
     drawerShow: false,
     detailId: null,
+    source: 'BusinessEnquiry',
   })
 
   const tableColumns: TableProps['columns'] = [
@@ -125,8 +96,26 @@ const BusinessEnquiry: React.FC = () => {
     {
       title: '状态',
       key: 'status',
-      dataIndex: 'status',
       align: 'center',
+      render(value) {
+        return (
+          <div className="flex items-center justify-center">
+            <div
+              className={`w-[8px] h-[8px] rounded-lg
+                ${
+                  value.status === '待采购'
+                    ? 'bg-gray-500'
+                    : value.status === '中止'
+                    ? 'bg-red-500'
+                    : 'bg-green-500'
+                }
+                  `}
+            ></div>
+            <p className="ml-[8px]">{value.status}</p>
+          </div>
+        )
+      },
+      width: 150,
     },
     {
       title: '询价供应商',
@@ -261,7 +250,7 @@ const BusinessEnquiry: React.FC = () => {
   }
 
   const jumpDetail = (no: string) => {
-    setDrawer({ drawerShow: true, detailId: no })
+    setDrawer({ drawerShow: true, detailId: no, source: 'BusinessEnquiry' })
   }
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -302,7 +291,7 @@ const BusinessEnquiry: React.FC = () => {
           />
           <div className="flex items-center">
             <p className="text-gray-900">项目状态：</p>
-            {statusOptions.map((item) => (
+            {ProjectStatusOptions.slice(0, 3).map((item) => (
               <Button
                 key={item.value}
                 className="ml-[8px]"
@@ -353,7 +342,13 @@ const BusinessEnquiry: React.FC = () => {
       />
       <BusinessEnquiryDrawer
         drawer={drawer}
-        onCancel={() => setDrawer({ drawerShow: false, detailId: null })}
+        onCancel={() =>
+          setDrawer({
+            drawerShow: false,
+            detailId: null,
+            source: 'BusinessEnquiry',
+          })
+        }
       />
     </>
   )

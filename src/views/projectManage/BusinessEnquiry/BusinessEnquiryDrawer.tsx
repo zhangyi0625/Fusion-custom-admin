@@ -1,54 +1,67 @@
-import { Button, Drawer, Space, Table, Tabs } from 'antd'
-import React, { Component, useEffect } from 'react'
-import { CloseOutlined } from '@ant-design/icons'
+import React, { useEffect } from 'react'
+import { Button, Drawer, Space, Tabs, TabsProps } from 'antd'
 import BaseInfoCom from './Component/BaseInfo'
 import EnquiryProductCom from './Component/EnquiryProduct'
 import EnquiryRecordCom from './Component/EnquiryRecord'
 import OperationRecordCom from './Component/OperationRecord'
 import SupplierInfoCom from './Component/SupplierInfo'
+import SalesContract from '../SaleProject/Component/SalesContract'
+import FollowRecord from '../SaleProject/Component/FollowRecord'
 
 export type BusinessEnquiryDrawerProps = {
   drawer: {
     drawerShow: boolean
     detailId: string | null
+    source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
   }
-
   onCancel: () => void
 }
-
-const components = [
-  {
-    label: '基本信息',
-    key: 'BaseInfoCom',
-    children: <BaseInfoCom />,
-  },
-  {
-    label: '询价产品',
-    key: 'EnquiryProductCom',
-    children: <EnquiryProductCom />,
-  },
-  {
-    label: '供应商',
-    key: 'SupplierInfoCom',
-    children: <SupplierInfoCom source="SaleProject" />,
-  },
-  {
-    label: '询价记录',
-    key: 'EnquiryRecordCom',
-    children: <EnquiryRecordCom />,
-  },
-  {
-    label: '操作记录',
-    key: 'OperationRecordCom',
-    children: <OperationRecordCom />,
-  },
-]
 
 const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
   drawer,
   onCancel,
 }) => {
   const { drawerShow, detailId } = drawer
+
+  const components: TabsProps['items'] = [
+    {
+      label: '基本信息',
+      key: 'BaseInfoCom',
+      children: <BaseInfoCom />,
+    },
+    {
+      label: '询价产品',
+      key: 'EnquiryProductCom',
+      children: <EnquiryProductCom />,
+    },
+    {
+      label: '供应商',
+      key: 'SupplierInfoCom',
+      children: <SupplierInfoCom source={drawer.source} />,
+    },
+    {
+      label: drawer.source === 'BusinessEnquiry' ? '询价记录' : '询报价记录',
+      key: 'EnquiryRecordCom',
+      children: <EnquiryRecordCom />,
+    },
+    {
+      label: '销售合同',
+      key: 'SalesContract',
+      children: <SalesContract />,
+      disabled: drawer.source === 'BusinessEnquiry',
+    },
+    {
+      label: '跟进记录',
+      key: 'FollowRecord',
+      children: <FollowRecord />,
+      disabled: drawer.source === 'BusinessEnquiry',
+    },
+    {
+      label: '操作记录',
+      key: 'OperationRecordCom',
+      children: <OperationRecordCom />,
+    },
+  ]
 
   useEffect(() => {
     if (!drawerShow) return
