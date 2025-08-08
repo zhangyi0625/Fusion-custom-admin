@@ -27,8 +27,8 @@ importers:
         specifier: ^4.2.0
         version: 4.2.0
       customer-search-form-table:
-        specifier: 1.0.1-rc.2
-        version: 1.0.1-rc.2
+        specifier: 1.0.1-rc.3
+        version: 1.0.1-rc.3
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
@@ -1103,8 +1103,8 @@ packages:
   csstype@3.1.3:
     resolution: {integrity: sha512-M1uQkMl8rQK/szD0LNhtqxIPLpimGm8sOBwU7lLnCpSbTyY3yeU1Vc7l4KT5zT4s/yOxHH5O7tIuuLOCnLADRw==, tarball: https://registry.npmmirror.com/csstype/-/csstype-3.1.3.tgz}
 
-  customer-search-form-table@1.0.1-rc.2:
-    resolution: {integrity: sha512-0zNJ6vJF1bM3x7PO1ngne622UKnb3OQpun49nre42rJomzzNKPIHjsRIbkbEnrA8huXEux3tSR6OtJ6o6uGKPQ==}
+  customer-search-form-table@1.0.1-rc.3:
+    resolution: {integrity: sha512-bnjd6NrBGuvCjfoacR1kreLiDZ2/A0l8vzKqfFvVB+8Lzmesv/MmNi/gzUqyU2jF1gfwWleVyBCFGZemVnz5hw==}
 
   dayjs@1.11.13:
     resolution: {integrity: sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==, tarball: https://registry.npmmirror.com/dayjs/-/dayjs-1.11.13.tgz}
@@ -3765,7 +3765,7 @@ snapshots:
 
   csstype@3.1.3: {}
 
-  customer-search-form-table@1.0.1-rc.2: {}
+  customer-search-form-table@1.0.1-rc.3: {}
 
   dayjs@1.11.13: {}
 
