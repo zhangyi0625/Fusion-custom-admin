@@ -7,6 +7,7 @@ import type { CustomerParams, CustomerType } from './CustomerModel'
 export enum CustomerManageApi {
   CustomerManage = '/business/customer',
   CustomerManageByPage = '/business/customer/page',
+  CustomerManageRecord = '/business/customer-event/',
 }
 
 /**
@@ -86,6 +87,38 @@ export const deleteCustomer = (id: string) => {
   return HttpRequest.delete(
     {
       url: CustomerManageApi.CustomerManage + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 获取客户详情
+ * @param params 客户管理参数
+ * @returns 客户管理列表
+ */
+export const getCustomerDetail = (customerId: string) => {
+  return HttpRequest.get(
+    {
+      url: CustomerManageApi.CustomerManage + '/' + customerId,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 获取客户修改记录列表
+ * @param params 客户管理参数
+ * @returns 客户管理列表
+ */
+export const getCustomerRecord = (customerId: string) => {
+  return HttpRequest.get(
+    {
+      url: CustomerManageApi.CustomerManageRecord + customerId,
     },
     {
       successMessageMode: 'none',
