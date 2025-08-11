@@ -25,7 +25,7 @@ import {
 import AddSupplier from './AddSupplier'
 import SupplierRecord from './SupplierRecord'
 import { SupplierSearchColumns } from '../config'
-import { postPreviewFile } from '@/services/upload'
+import { postPreviewFile } from '@/services/Upload/UploadApi'
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -109,7 +109,7 @@ const Supplier: React.FC = () => {
     {
       title: '手机号',
       key: 'contactPhone',
-      dataIndex: 'phone',
+      dataIndex: 'contactPhone',
       align: 'center',
       width: 100,
     },
