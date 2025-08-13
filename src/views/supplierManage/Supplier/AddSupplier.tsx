@@ -14,7 +14,7 @@ import DragModal from '@/components/modal/DragModal'
 import { AddSupplierForm } from '../config'
 import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 import { UploadOutlined } from '@ant-design/icons'
-import { postUploadFile } from '@/services/Upload/UploadApi'
+import { postUploadFile } from '@/services/upload/UploadApi'
 
 export type AddSupplierProps = {
   params: {

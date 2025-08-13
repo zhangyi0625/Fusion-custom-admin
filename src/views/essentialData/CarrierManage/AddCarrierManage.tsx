@@ -14,7 +14,7 @@ import DragModal from '@/components/modal/DragModal'
 import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
 import { CarrierManageForm } from './config'
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons'
-import { postUploadFile } from '@/services/upload'
+// import { postUploadFile } from '@/services/Upload/UploadApi'
 
 export type AddCarrierManageProps = {
   params: {
@@ -102,12 +102,12 @@ const AddCarrierManage: React.FC<AddCarrierManageProps> = ({
     },
     onChange(info) {
       setLoading(true)
-      const formdata = new FormData()
-      formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
-      postUploadFile(formdata).then((resp) => {
-        setLoading(false)
-        setImageUrl(resp.data)
-      })
+      // const formdata = new FormData()
+      // formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
+      // postUploadFile(formdata).then((resp) => {
+      //   setLoading(false)
+      //   setImageUrl(resp.data)
+      // })
     },
     onRemove() {
       setImageUrl('')

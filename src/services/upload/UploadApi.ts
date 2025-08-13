@@ -29,6 +29,7 @@ export const postDownlFile = (id: string) => {
   return HttpRequest.post(
     {
       url: UploadApi.downloadFile + id,
+      responseType: 'blob',
     },
     { isTransformResponse: false }
   )
