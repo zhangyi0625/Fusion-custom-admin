@@ -20,6 +20,7 @@ import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
 import { BussinesFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postUploadFile } from '@/services/upload/UploadApi'
+import dayjs from 'dayjs'
 
 export type AddFollowRecordProps = {
   params: {
@@ -47,9 +48,15 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
 
   useEffect(() => {
     if (!visible) return
-    form.resetFields()
-    currentRow && form.setFieldsValue({ ...currentRow })
-    setFileList([])
+    if (currentRow) {
+      form.setFieldsValue({
+        ...currentRow,
+        followedAt: dayjs(currentRow.followedAt),
+      })
+      setFileList([{ name: currentRow.fileName, uid: currentRow.fileId }])
+    } else {
+      setFileList([])
+    }
   }, [visible])
 
   const uploadProps: UploadProps = {
@@ -93,6 +100,10 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
       .validateFields()
       .then(() => {
         onOk({ ...form.getFieldsValue() })
+        setTimeout(() => {
+          form.resetFields()
+          setFileList([])
+        }, 500)
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段

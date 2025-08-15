@@ -1,5 +1,5 @@
 import '../index.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   App,
   Button,
@@ -13,37 +13,60 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import useParentSize from '@/hooks/useParentSize'
 import { filterKeys } from '@/utils/tool'
-import { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import {
-  addSaleProjectList,
-  deleteSaleProjectList,
-  getSaleProjectListPage,
-  updateSaleProjectList,
-} from '@/services/projectManage/SaleProject/SaleProjectApi'
+  BusinessEnquiryParams,
+  BusinessEnquiryType,
+} from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { BusinessEnquirySearchColumns, ProjectStatusOptions } from '../config'
 import AddBusinessEnquiry from '../BusinessEnquiry/AddBusinessEnquiry'
 import BusinessEnquiryDrawer from '../BusinessEnquiry/BusinessEnquiryDrawer'
+import {
+  addBusinessEnquiryList,
+  deleteBusinessEnquiryList,
+  getBusinessEnquiryListPage,
+  updateBusinessEnquiryList,
+} from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, setEssentail } from '@/stores/store'
+import { getRoleUser } from '@/services/system/role/roleApi'
+import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
+import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
+import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
+import { formatTime } from '@/utils/format'
 
 const SaleProject: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { modal, message } = App.useApp()
 
-  const [status, setStatus] = useState<string | null>(null)
+  const dispatch = useDispatch()
+
+  const essential = useSelector((state: RootState) => state.essentail)
 
   const [immediate, setImmediate] = useState<boolean>(false)
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
-    page: 1,
-    limit: 10,
-  })
+  const [searchColumns, setSearchColumns] = useState(
+    BusinessEnquirySearchColumns
+  )
+
+  const [searchDefaultForm, setSearchDefaultForm] =
+    useState<BusinessEnquiryParams>({
+      page: 1,
+      limit: 10,
+      keyword: null,
+      customerKeyword: null,
+      isInquiry: 0,
+      status: null,
+    })
 
   const [params, setParams] = useState<{
     visible: boolean
     currentRow: BusinessEnquiryType | null
+    source: 'SaleProject'
   }>({
     visible: false,
     currentRow: null,
+    source: 'SaleProject',
   })
 
   const [drawer, setDrawer] = useState<{
@@ -56,40 +79,89 @@ const SaleProject: React.FC = () => {
     source: 'SaleProject',
   })
 
+  useEffect(() => {
+    setImmediate(true)
+    if (
+      !essential.userData?.length ||
+      !essential.customerData?.length ||
+      !essential.contractingData?.length ||
+      !essential.payerUnitData?.length
+    ) {
+      loadSearchList()
+    } else {
+      getReduxData()
+    }
+  }, [essential])
+
+  // 重新更新查询部分数据 并存储进redux
+  const loadSearchList = () => {
+    Promise.all([
+      getRoleUser({}),
+      getCustomerList({}),
+      getContractingList(),
+      getPayerUnit(),
+    ]).then((resp) => {
+      let key = ['userData', 'customerData', 'contractingData', 'payerUnitData']
+      key.map((_, index: number) => {
+        dispatch(setEssentail({ value: resp[index], key: key[index] }))
+      })
+      getReduxData()
+    })
+  }
+
+  const getReduxData = () => {
+    let { userData, customerData } = essential
+    let newData = [
+      {
+        name: '全部客户',
+        id: '',
+      },
+    ].concat(customerData as ConcatArray<{ name: string; id: string }>)
+    searchColumns.map((item) => {
+      if (item.name === 'customerId' || item.name === 'salespersonId') {
+        item.options = item.name === 'customerId' ? newData : userData
+      }
+    })
+    setSearchColumns([...searchColumns])
+    setImmediate(false)
+  }
+
   const tableColumns: TableProps['columns'] = [
     {
       title: '项目编号',
-      key: 'projectNo',
+      key: 'number',
       align: 'center',
       render(value) {
         return (
           <div
             className="text-blue-500 cursor-pointer"
-            onClick={() => jumpDetail(value.projectNo)}
+            onClick={() => jumpDetail(value.id)}
           >
-            {value.projectNo}
+            {value.number}
           </div>
         )
       },
     },
     {
       title: '项目名称',
-      key: 'projectName',
-      dataIndex: 'projectName',
+      key: 'name',
+      dataIndex: 'name',
       align: 'center',
       width: 200,
     },
     {
       title: '客户',
-      key: 'customer',
-      dataIndex: 'customer',
+      key: 'customerName',
+      dataIndex: 'customerName',
       align: 'center',
+      width: 100,
     },
     {
       title: '业务员',
-      key: 'payer',
-      dataIndex: 'payer',
+      key: 'salespersonName',
+      dataIndex: 'salespersonName',
       align: 'center',
+      width: 100,
     },
     {
       title: '状态',
@@ -101,15 +173,20 @@ const SaleProject: React.FC = () => {
             <div
               className={`w-[8px] h-[8px] rounded-lg
                 ${
-                  value.status === '待采购'
+                  value.status === 'PENDING_PURCHASE'
                     ? 'bg-gray-500'
-                    : value.status === '中止'
+                    : value.status === 'TERMINATED'
                     ? 'bg-red-500'
                     : 'bg-green-500'
                 }
                   `}
             ></div>
-            <p className="ml-[8px]">{value.status}</p>
+            <p className="ml-[8px]">
+              {
+                ProjectStatusOptions.find((item) => item.value === value.status)
+                  ?.text
+              }
+            </p>
           </div>
         )
       },
@@ -117,47 +194,58 @@ const SaleProject: React.FC = () => {
     },
     {
       title: '询价供应商',
-      key: 'salesman',
-      dataIndex: 'salesman',
+      key: 'supplierCount',
+      dataIndex: 'supplierCount',
       align: 'center',
       width: 150,
     },
     {
       title: '预计采购日期',
-      key: 'expectedDate',
-      dataIndex: 'expectedDate',
+      key: 'estimatedPurchaseTime',
       align: 'center',
       width: 180,
+      render(value) {
+        return <div>{formatTime(value.estimatedPurchaseTime, 'Y-M-D')}</div>
+      },
     },
     {
       title: '项目类型',
-      key: 'projectType',
-      dataIndex: 'projectType',
+      key: 'type',
       align: 'center',
+      width: 120,
+      render(value) {
+        return (
+          <div>{value.type === 'FRAME_CONTRACT' ? '框架合同' : '即期合同'}</div>
+        )
+      },
     },
     {
       title: '金额',
       key: 'price',
       dataIndex: 'price',
       align: 'center',
+      width: 100,
     },
     {
       title: '付款方式',
-      key: 'payType',
-      dataIndex: 'payType',
+      key: 'payMethod',
+      dataIndex: 'payMethod',
       align: 'center',
+      width: 120,
     },
     {
       title: '创建时间',
-      key: 'created',
-      dataIndex: 'created',
+      key: 'createTime',
+      dataIndex: 'createTime',
       align: 'center',
+      width: 200,
     },
     {
       title: '创建者',
-      key: 'createdr',
-      dataIndex: 'creater',
+      key: 'createName',
+      dataIndex: 'createName',
       align: 'center',
+      width: 120,
     },
     {
       title: '操作',
@@ -168,7 +256,13 @@ const SaleProject: React.FC = () => {
         return (
           <Space>
             <Button
-              onClick={() => setParams({ visible: true, currentRow: _ })}
+              onClick={() =>
+                setParams({
+                  visible: true,
+                  currentRow: _,
+                  source: 'SaleProject',
+                })
+              }
               type="link"
             >
               编辑
@@ -203,7 +297,7 @@ const SaleProject: React.FC = () => {
       icon: <ExclamationCircleFilled />,
       content: '确定删除该销售合同吗？数据删除后将无法恢复！',
       onOk() {
-        deleteSaleProjectList(id).then(() => {
+        deleteBusinessEnquiryList(id).then(() => {
           // 刷新表格数据
           onUpdateSearch(searchDefaultForm)
         })
@@ -215,7 +309,11 @@ const SaleProject: React.FC = () => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'isInquiry', 'status'],
+      true
+    )
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -223,22 +321,22 @@ const SaleProject: React.FC = () => {
   }
 
   const changeStatus = (value: string | null) => {
-    setStatus(value)
+    setSearchDefaultForm({ ...searchDefaultForm, status: value })
   }
 
   const onEditOk = async (customerRow: BusinessEnquiryType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addSaleProjectList(customerRow)
+        await addBusinessEnquiryList(customerRow)
       } else {
         // 编辑数据
-        await updateSaleProjectList(customerRow)
+        await updateBusinessEnquiryList(customerRow)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
-      onUpdateSearch()
+      setParams({ visible: false, currentRow: null, source: 'SaleProject' })
+      onUpdateSearch(searchDefaultForm)
     } catch (error) {}
   }
 
@@ -289,7 +387,11 @@ const SaleProject: React.FC = () => {
                 key={item.value}
                 className="ml-[8px]"
                 size="middle"
-                type={status === item.value ? 'primary' : 'default'}
+                type={
+                  searchDefaultForm.status === item.value
+                    ? 'primary'
+                    : 'default'
+                }
                 onClick={() => changeStatus(item.value)}
               >
                 {item.text}
@@ -307,7 +409,13 @@ const SaleProject: React.FC = () => {
           <Button
             type="primary"
             style={{ zIndex: 99 }}
-            onClick={() => setParams({ visible: true, currentRow: null })}
+            onClick={() =>
+              setParams({
+                visible: true,
+                currentRow: null,
+                source: 'SaleProject',
+              })
+            }
           >
             创建项目
           </Button>
@@ -317,11 +425,11 @@ const SaleProject: React.FC = () => {
           columns={tableColumns}
           bordered
           rowKey="id"
-          totalKey="total"
-          fetchResultKey="data"
+          totalKey="count"
+          fetchResultKey="list"
           immediate={immediate}
-          scroll={{ x: 'max-content', y: height - 208 }}
-          fetchData={getSaleProjectListPage}
+          scroll={{ x: 'max-content', y: height - 178 }}
+          fetchData={getBusinessEnquiryListPage}
           searchFilter={searchDefaultForm}
           isSelection={true}
           isPagination={true}
@@ -330,7 +438,9 @@ const SaleProject: React.FC = () => {
       </Card>
       <AddBusinessEnquiry
         params={params}
-        onCancel={() => setParams({ visible: false, currentRow: null })}
+        onCancel={() =>
+          setParams({ visible: false, currentRow: null, source: 'SaleProject' })
+        }
         onOk={onEditOk}
       />
       <BusinessEnquiryDrawer

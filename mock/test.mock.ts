@@ -2,6 +2,34 @@ import { defineMock } from 'rspack-plugin-mock/helper'
 
 export default defineMock([
   {
+    url: '/api/system/entrust-unit/page/1',
+    method: 'GET',
+    enabled: true,
+    body(request) {
+      return {
+        code: 200,
+        message: 'success',
+        data: {
+          // data: {
+          list: [
+            {
+              id: '1953626475638816770',
+              createTime: '2025-08-08 09:17:03',
+              createId: '1',
+              createName: '管理员',
+              updateTime: '2025-08-08 09:17:03',
+              updateId: '1',
+              updateName: '管理员',
+              name: '宁波真和',
+            },
+          ],
+          count: '1',
+          // },
+        },
+      }
+    },
+  },
+  {
     url: '/api/business-enquiry/page',
     method: 'GET',
     enabled: true,

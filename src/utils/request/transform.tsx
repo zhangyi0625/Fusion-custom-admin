@@ -209,7 +209,11 @@ export const transform: AxiosTransform = {
    */
   requestInterceptors: (config, options) => {
     const cpt = options?.requestOptions?.encrypt
-    if (config.url?.includes('upload') || config.url?.includes('staff/login')) {
+    if (
+      config.url?.includes('upload') ||
+      config.url?.includes('preview') ||
+      config.url?.includes('staff/login')
+    ) {
       config.headers['Content-Type'] = ContentTypeEnum.FORM_DATA
     } else config.headers['Content-Type'] = ContentTypeEnum.JSON
     // 进行数据加密

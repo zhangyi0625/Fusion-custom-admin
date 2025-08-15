@@ -55,7 +55,7 @@ export const getProductClassByPage = (params: ProductClassParams) => {
  * @param params 产品管理参数
  * @returns 产品管理列表
  */
-export const getProductList = (params: ProductManageType) => {
+export const getProductList = (params: Partial<ProductManageType>) => {
   return HttpRequest.get(
     {
       url: ProductManageApi.ProductManage,

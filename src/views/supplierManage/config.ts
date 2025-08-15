@@ -41,8 +41,9 @@ export const ContractsSearchColumns: CustomColumn[] = [
     selectFetch: true,
     apiByUrl: '/api/business/supplier',
     apiByUrlMethod: 'get',
+    setSearchKey: 'name',
     apiByUrlParams: {
-      supplierId: null,
+      name: null,
     },
     apiByUrlHeaders: {
       authorization: 'Bearer ' + sessionStorage.getItem('token'),

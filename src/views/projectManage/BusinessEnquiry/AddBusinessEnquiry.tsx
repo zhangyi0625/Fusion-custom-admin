@@ -4,11 +4,15 @@ import DragModal from '@/components/modal/DragModal'
 import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { AddBusinessEnquiryForm } from '../config'
 import dayjs from 'dayjs'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/stores/store'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export type AddBusinessEnquiryProps = {
   params: {
     visible: boolean
     currentRow: BusinessEnquiryType | null
+    source: 'BusinessEnquiry' | 'SaleProject'
   }
   onOk: (params: BusinessEnquiryType) => void
   onCancel: () => void
@@ -19,20 +23,68 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow } = params
+  const { visible, currentRow, source } = params
+
+  const essential = useSelector((state: RootState) => state.essentail)
 
   const [form] = Form.useForm()
 
   useEffect(() => {
     if (!visible) return
-    if (!currentRow) form.resetFields()
-    else {
+    if (!currentRow) {
+      form.resetFields()
+      form.setFieldsValue({
+        status: 'PENDING_PURCHASE',
+        isInquiry: source === 'BusinessEnquiry' ? 1 : 0,
+      })
+    } else {
       form.setFieldsValue({
         ...currentRow,
-        expectedDate: dayjs(currentRow.expectedDate),
+        isInquiry: source === 'BusinessEnquiry' ? 1 : 0,
+        estimatedPurchaseTime: dayjs(currentRow.estimatedPurchaseTime),
       })
     }
   }, [visible])
+
+  const getBusinessEnquiryForm = () => {
+    let arr = [...AddBusinessEnquiryForm]
+    let { userData, customerData, contractingData, payerUnitData } = essential
+    arr.map((item) => {
+      if (
+        item.name === 'customerId' ||
+        item.name === 'salespersonId' ||
+        item.name === 'entrustId' ||
+        item.name === 'companyId'
+      ) {
+        item.options =
+          item.name === 'customerId'
+            ? customerData
+            : item.name === 'salespersonId'
+            ? userData
+            : item.name === 'entrustId'
+            ? contractingData
+            : payerUnitData
+      }
+    })
+    return arr
+  }
+
+  const selectChange = (
+    item: Omit<CustomColumn, 'selectFetch' | 'hiddenItem'>
+  ) => {
+    if (item.name !== 'customerId') return
+    else {
+      let company = getBusinessEnquiryForm().find(
+        (item) => item.name === 'customerId'
+      )?.options as any[]
+      form.setFieldsValue({
+        ...form.getFieldsValue(),
+        companyId: company?.find(
+          (el) => el.id === form.getFieldValue('customerId')
+        )?.companyId,
+      })
+    }
+  }
 
   const onConfirm = () => {
     form
@@ -59,8 +111,14 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
         <Form.Item name="id" hidden>
           <Input disabled />
         </Form.Item>
+        <Form.Item name="status" hidden>
+          <Input disabled />
+        </Form.Item>
+        <Form.Item name="isInquiry" hidden>
+          <Input disabled />
+        </Form.Item>
         <Row gutter={24}>
-          {AddBusinessEnquiryForm.map((item) => (
+          {getBusinessEnquiryForm().map((item) => (
             <Col span={item.span} key={item.name}>
               <Form.Item
                 label={item.label}
@@ -83,12 +141,14 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
                   <Input
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
+                    allowClear
                   />
                 )}
                 {item.formType === 'textarea' && (
                   <Input.TextArea
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
+                    allowClear
                   />
                 )}
                 {item.formType === 'select' && (
@@ -102,12 +162,15 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
                         value: 'value',
                       }
                     }
+                    allowClear
+                    onChange={() => selectChange(item)}
                   />
                 )}
                 {item.formType === 'date-picker' && (
                   <DatePicker
                     placeholder={`请选择${item.label}`}
                     style={{ width: '100%' }}
+                    allowClear
                   />
                 )}
               </Form.Item>

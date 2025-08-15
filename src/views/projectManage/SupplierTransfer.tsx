@@ -1,25 +1,26 @@
-import DragModal from '@/components/modal/DragModal'
-import { getSupplierList } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
-import { Transfer, TransferProps } from 'antd'
 import React, { memo, useEffect, useState } from 'react'
+import { Transfer, TransferProps } from 'antd'
+import DragModal from '@/components/modal/DragModal'
+import { getSupplier } from '@/services/supplierManage/Supplier/SupplierApi'
 
 export type SupplierTransferProps = {
   params: {
     visible: boolean
     selected: string[] | null
   }
+  projectId: string
   onOk: (params: string[]) => void
   onCancel: () => void
 }
 
 type RecordType = {
   title: string
-  supplierNo: string
-  supplierName: string
+  name: string
+  id: string
 }
 
 const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
-  ({ params, onOk, onCancel }) => {
+  ({ params, projectId, onOk, onCancel }) => {
     const { visible, selected } = params
 
     const [mockData, setMockData] = useState<RecordType[]>([])
@@ -31,26 +32,28 @@ const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
     }, [visible])
 
     const loadAllSupplier = async () => {
-      const res = await getSupplierList()
+      const res = await getSupplier({})
       let newRes = res.map((item: RecordType) => {
         return {
           ...item,
-          key: item.supplierNo,
-          title: item.supplierName,
+          key: item.id,
+          title: item.name,
         }
       })
       setMockData(newRes)
-      setTargetKeys(['P202507007'])
+      console.log('selected', selected)
     }
 
     const onChange: TransferProps['onChange'] = (newTargetKeys) => {
       setTargetKeys(newTargetKeys)
     }
 
-    const onConfirm = () => {}
+    const onConfirm = () => {
+      onOk(targetKeys as string[])
+    }
 
     const filterOption = (input: string, item: RecordType) =>
-      item.supplierNo?.includes(input) || item.supplierName?.includes(input)
+      item.name?.includes(input)
 
     return (
       <DragModal

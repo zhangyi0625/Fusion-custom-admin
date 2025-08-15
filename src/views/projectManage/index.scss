@@ -1,3 +1,44 @@
 .ant-row {
   // row-gap: 20px !important;
 }
+
+.ant-tabs-tab-disabled {
+  display: none !important;
+}
+
+.enquiry-record {
+  .ant-timeline-item-content {
+    padding: 0 10px !important;
+  }
+  .ant-timeline-item-head {
+    transform: translate(-20%, -30%) !important;
+  }
+  .ant-timeline-item-tail {
+    inset-inline-start: 14px !important;
+  }
+}
+
+.enquiry-product {
+  background: #fafafa;
+}
+
+.editable-row {
+  .ant-table-cell:nth-of-type(1) {
+    border-radius: unset !important;
+  }
+  .ant-table-cell-fix-right {
+    border-radius: unset !important;
+  }
+  .ant-table-container {
+    border-radius: unset !important;
+  }
+  .ant-table-header {
+    border-radius: unset !important;
+    .ant-table-selection-column {
+      border-radius: unset !important;
+    }
+    .ant-table-cell-fix-right {
+      border-radius: unset !important;
+    }
+  }
+}

@@ -1,35 +1,28 @@
 import { useState } from 'react'
 import {
   App,
-  Image,
   Button,
   Card,
   ConfigProvider,
-  GetProp,
   Space,
   TablePaginationConfig,
   TableProps,
-  UploadProps,
 } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import useParentSize from '@/hooks/useParentSize'
 import { filterKeys } from '@/utils/tool'
-import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 import {
-  addSupplier,
-  deleteSupplier,
-  getSupplierByPage,
-  updateSupplier,
-} from '@/services/supplierManage/Supplier/SupplierApi'
-import AddSupplier from './AddSupplier'
-import SupplierRecord from './SupplierRecord'
-import { SupplierSearchColumns } from '../config'
-import { postPreviewFile } from '@/services/upload/UploadApi'
+  addPayerUnit,
+  deletePayerUnit,
+  getPayerUnitByPage,
+  updatePayerUnit,
+} from '@/services/customerManage/PayerUnit/PayerUnitApi'
+import AddPayerUnit from './AddPayerUnit'
+import { PayerUnitType } from '@/services/customerManage/PayerUnit/PayerUnitModel'
+import { PayerUnitSearchColumns } from '../config'
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
-
-const Supplier: React.FC = () => {
+const PayerUnit: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { modal, message } = App.useApp()
@@ -41,77 +34,34 @@ const Supplier: React.FC = () => {
 
   const [params, setParams] = useState<{
     visible: boolean
-    currentRow: SupplierType | null
+    currentRow: PayerUnitType | null
   }>({
     visible: false,
     currentRow: null,
   })
 
-  const [supplierDrawer, setSupplierDrawer] = useState<{
-    visible: boolean
-    id: string
-  }>({
-    visible: false,
-    id: '',
-  })
-
-  const [previewImage, setPreviewImage] = useState('')
-
-  const [previewOpen, setPreviewOpen] = useState(false)
-
   const tableColumns: TableProps['columns'] = [
     {
-      title: '供应商',
+      title: '单位名称',
       key: 'name',
-      align: 'center',
-      width: 150,
-      render(value) {
-        return (
-          <div
-            className="text-blue-500 cursor-pointer"
-            onClick={() => setSupplierDrawer({ visible: true, id: value.id })}
-          >
-            {value.name}
-          </div>
-        )
-      },
-    },
-    {
-      title: 'logo',
-      key: 'logoName',
+      dataIndex: 'name',
       align: 'center',
       width: 200,
-      render(value) {
-        return (
-          <div
-            className="text-gray-500 cursor-pointer underline"
-            onClick={() => preview(value.logo)}
-          >
-            {value.logoName}
-          </div>
-        )
-      },
     },
     {
       title: '社会统一信用代码',
       key: 'code',
       dataIndex: 'code',
       align: 'center',
-      width: 200,
+      width: 350,
     },
     {
-      title: '主联系人',
-      key: 'contactName',
-      dataIndex: 'contactName',
+      title: '状态',
+      key: 'status',
       align: 'center',
-      width: 100,
-    },
-    {
-      title: '手机号',
-      key: 'contactPhone',
-      dataIndex: 'contactPhone',
-      align: 'center',
-      width: 100,
+      render(value) {
+        return <div>{value.status ? '有效' : '无效'}</div>
+      },
     },
     {
       title: '创建日期',
@@ -151,29 +101,13 @@ const Supplier: React.FC = () => {
     },
   ]
 
-  const preview = (id: string) => {
-    postPreviewFile(id).then(async (resp) => {
-      const file = await getBase64(resp as unknown as FileType)
-      setPreviewImage(file)
-      setPreviewOpen(true)
-    })
-  }
-
-  const getBase64 = (file: FileType): Promise<string> =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader()
-      reader.readAsDataURL(file)
-      reader.onload = () => resolve(reader.result as string)
-      reader.onerror = (error) => reject(error)
-    })
-
   const deleteItem = (id: string) => {
     modal.confirm({
-      title: '删除该供应商',
+      title: '删除该付款单位',
       icon: <ExclamationCircleFilled />,
-      content: '确定删除该供应商吗？数据删除后将无法恢复！',
+      content: '确定删除该付款单位吗？数据删除后将无法恢复！',
       onOk() {
-        deleteSupplier(id).then(() => {
+        deletePayerUnit(id).then(() => {
           message.success('删除成功')
           // 刷新表格数据
           onUpdateSearch(searchDefaultForm)
@@ -193,14 +127,14 @@ const Supplier: React.FC = () => {
     })
   }
 
-  const onEditOk = async (customerRow: SupplierType) => {
+  const onEditOk = async (customerRow: PayerUnitType) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addSupplier(customerRow)
+        await addPayerUnit(customerRow)
       } else {
         // 编辑数据
-        await updateSupplier(customerRow)
+        await updatePayerUnit(customerRow)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
@@ -216,14 +150,13 @@ const Supplier: React.FC = () => {
       limit: pagination.pageSize as number,
     })
   }
-
   return (
     <>
       {/* 菜单检索条件栏 */}
       <ConfigProvider>
         <Card>
           <SearchForm
-            columns={SupplierSearchColumns}
+            columns={PayerUnitSearchColumns}
             gutterWidth={24}
             labelPosition="left"
             showRow={2}
@@ -257,7 +190,7 @@ const Supplier: React.FC = () => {
             style={{ zIndex: 99 }}
             onClick={() => setParams({ visible: true, currentRow: null })}
           >
-            新增供应商
+            新增付款单位
           </Button>
         </Space>
         <SearchTable
@@ -268,35 +201,20 @@ const Supplier: React.FC = () => {
           totalKey="count"
           fetchResultKey="list"
           scroll={{ x: 'max-content', y: height - 168 }}
-          fetchData={getSupplierByPage}
+          fetchData={getPayerUnitByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}
           isPagination={true}
           onUpdatePagination={onUpdatePagination}
         />
       </Card>
-      <AddSupplier
+      <AddPayerUnit
         params={params}
         onOk={onEditOk}
         onCancel={() => setParams({ visible: false, currentRow: null })}
       />
-      <SupplierRecord
-        params={supplierDrawer}
-        onCancel={() => setSupplierDrawer({ visible: false, id: '' })}
-      />
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: 'none' }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(''),
-          }}
-          src={previewImage}
-        />
-      )}
     </>
   )
 }
 
-export default Supplier
+export default PayerUnit

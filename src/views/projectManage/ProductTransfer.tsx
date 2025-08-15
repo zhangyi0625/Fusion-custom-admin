@@ -2,25 +2,24 @@ import React, { useEffect, useState } from 'react'
 import DragModal from '@/components/modal/DragModal'
 import { Table, Transfer } from 'antd'
 import type { GetProp, TableColumnsType, TableProps, TransferProps } from 'antd'
-import { getProductList } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import { getProductList } from '@/services/productManage/productManageApi'
+import { ProductManageType } from '@/services/productManage/productManageModel'
+import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type ProductTransferProps = {
   params: {
     visible: boolean
-    selected: string[] | null
+    selected: BussinesEnquiryProductType[] | null
   }
-  onOk: (params: string[]) => void
+  projectId: string
+  onOk: (params: BussinesEnquiryProductType[]) => void
   onCancel: () => void
 }
 
 type TransferItem = GetProp<TransferProps, 'dataSource'>[number]
 type TableRowSelection<T extends object> = TableProps<T>['rowSelection']
 
-type DataSourceType = {
-  productName: string
-  productNo: string
-  productSpecifications: string
-}
+type DataSourceType = ProductManageType
 
 interface TableTransferProps extends TransferProps<TransferItem> {
   dataSource: DataSourceType[]
@@ -30,6 +29,7 @@ interface TableTransferProps extends TransferProps<TransferItem> {
 
 const ProductTransfer: React.FC<ProductTransferProps> = ({
   params,
+  projectId,
   onOk,
   onCancel,
 }) => {
@@ -39,27 +39,50 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
 
   const [mockData, setMockData] = useState<DataSourceType[]>([])
 
+  const [selectedArr, setSelectedArr] = useState<BussinesEnquiryProductType[]>(
+    []
+  )
+
   useEffect(() => {
     if (!visible) return
     loadAllProduct()
   }, [visible])
 
   const loadAllProduct = async () => {
-    const res = await getProductList()
+    const res = await getProductList({})
     let newRes = res.map((item: DataSourceType) => {
       return {
         ...item,
-        key: item.productNo,
-        title: item.productName,
+        key: item.name,
+        title: item.name,
       }
     })
+    let ids = selected?.map((item) => item.productName)
+    setTargetKeys(ids)
+    setSelectedArr(selected ?? [])
     setMockData(newRes)
-    setTargetKeys(['P202507007'])
   }
 
   const onConfirm = () => {
-    console.log(targetKeys, 'targetKeys')
-    onOk(targetKeys as string[])
+    let newArr: BussinesEnquiryProductType[] = []
+    let filterArr = mockData.filter(
+      (item) =>
+        targetKeys?.includes(item.name) &&
+        !selectedArr.map((el) => el.productName).includes(item.name)
+    )
+    filterArr.map((item) => {
+      newArr.push({
+        productName: item.name,
+        productSpec: item.spec,
+        productUnit: item.unit,
+        productModel: item.model,
+        qty: 0,
+        projectId: projectId,
+      })
+    })
+    setSelectedArr(newArr.concat(selected as BussinesEnquiryProductType[]))
+    // console.log(targetKeys, 'targetKeys', selectedArr, newArr, selected)
+    onOk(newArr.concat(selected as BussinesEnquiryProductType[]))
   }
 
   const TableTransfer: React.FC<TableTransferProps> = (props) => {
@@ -94,7 +117,7 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
               columns={columns}
               dataSource={filteredItems}
               size="small"
-              rowKey="productNo"
+              rowKey="name"
               style={{ pointerEvents: listDisabled ? 'none' : undefined }}
               onRow={({ key, disabled: itemDisabled }) => ({
                 onClick: () => {
@@ -116,23 +139,18 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
   }
 
   const filterOption = (input: string, item: DataSourceType) =>
-    item.productName?.includes(input) || item.productNo?.includes(input)
+    item.name?.includes(input) || item.pinyin?.includes(input)
 
   const columns: TableColumnsType<DataSourceType> = [
     {
-      dataIndex: 'productName',
-      key: 'productName',
+      dataIndex: 'name',
+      key: 'name',
       title: '产品名称',
     },
     {
-      dataIndex: 'productNo',
-      key: 'productNo',
-      title: '产品编号',
-    },
-    {
-      dataIndex: 'productSpecifications',
-      key: 'productSpecifications',
-      title: '规格型号',
+      dataIndex: 'pinyin',
+      key: 'pinyin',
+      title: '拼音码',
     },
   ]
 
@@ -145,6 +163,7 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
       onCancel={onCancel}
     >
       <TableTransfer
+        // disabled={disabled}
         dataSource={mockData}
         targetKeys={targetKeys}
         showSearch

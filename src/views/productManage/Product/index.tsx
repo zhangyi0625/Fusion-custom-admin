@@ -125,7 +125,7 @@ const Product: React.FC = () => {
       key: 'status',
       align: 'center',
       render(value) {
-        return <div>{value.status ? '启用' : '禁用'}</div>
+        return <div>{value.status ? '启用' : '不启用'}</div>
       },
       width: 100,
     },

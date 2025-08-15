@@ -26,7 +26,7 @@ export const postUploadFile = (params: FormData) => {
  * 下载文件
  */
 export const postDownlFile = (id: string) => {
-  return HttpRequest.post(
+  return HttpRequest.get(
     {
       url: UploadApi.downloadFile + id,
       responseType: 'blob',

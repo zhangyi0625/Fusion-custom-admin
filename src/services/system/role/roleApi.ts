@@ -213,7 +213,7 @@ export const assignRoleUser = (params: any) => {
  * @param params 角色参数
  * @returns 结果
  */
-export const getRoleUser = (params: SysUserParams) => {
+export const getRoleUser = (params: Partial<SysUserParams>) => {
   return HttpRequest.get(
     {
       url: RoleApi.RoleUser,

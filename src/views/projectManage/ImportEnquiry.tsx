@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import {
   ConfigProvider,
   Form,
+  GetProp,
   Input,
   Upload,
   UploadFile,
@@ -9,6 +10,7 @@ import {
 } from 'antd'
 import DragModal from '@/components/modal/DragModal'
 import ImportIcon from '@/assets/svg/icon/import.svg'
+import { postUploadFile } from '@/services/upload/UploadApi'
 
 export type ImportEnquiryProps = {
   params: {
@@ -18,6 +20,8 @@ export type ImportEnquiryProps = {
   onOk: (params: any) => void
   onCancel: () => void
 }
+
+type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
   params,
@@ -41,9 +45,18 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
       return false
     },
     onChange(info) {
-      console.log(info, 'info')
       if (info.file.status !== 'uploading') {
         !info.fileList.length && setFileList([])
+      }
+      if (info.fileList.length) {
+        const formdata = new FormData()
+        formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
+        postUploadFile(formdata).then((resp) => {
+          form.setFieldsValue({
+            ...form.getFieldsValue(),
+            inquiryFile: resp.data.id,
+          })
+        })
       }
     },
     progress: {
@@ -66,7 +79,9 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk({ ...form.getFieldsValue(), file: fileList[0] })
+        console.log(form.getFieldsValue(), 'form.getFieldsValue()')
+        return
+        onOk({ ...form.getFieldsValue() })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段

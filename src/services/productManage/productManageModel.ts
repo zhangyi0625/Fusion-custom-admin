@@ -7,6 +7,7 @@ export interface ProductManageType {
   remark: string
   status: boolean | number
   sort: string
+  unit: string
 }
 
 export interface ProductManageParams extends Partial<ProductManageType> {

@@ -11,6 +11,23 @@ export enum CustomerManageApi {
 }
 
 /**
+ * 获取全部客户管理列表
+ * @param params 客户管理参数
+ * @returns 客户管理列表
+ */
+export const getCustomerList = (params: Partial<CustomerParams>) => {
+  return HttpRequest.get(
+    {
+      url: CustomerManageApi.CustomerManage,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
  * 分页获取客户管理列表
  * @param params 客户管理参数
  * @returns 客户管理列表

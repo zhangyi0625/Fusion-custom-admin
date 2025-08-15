@@ -62,7 +62,7 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
       } else {
         // 清空表单数据，表示新增
         form.resetFields()
-        form.setFieldsValue({ parentId: response[0].menuId })
+        form.setFieldsValue({ parentId: response[0].menuId, menuType: 1 })
       }
     })
     setLoading(false)

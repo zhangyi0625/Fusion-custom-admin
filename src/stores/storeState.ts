@@ -1,12 +1,11 @@
 /**
  * 全局的状态（如系统设置、主题等）
  */
-
-import type { RouteMangeType } from '@/services/customerInformation/routeManage/routeManageModel'
-import type { CarrierManageType } from '@/services/essential/carrierManage/carrierManageModel'
-import type { CustomerManageType } from '@/services/essential/customerManage/customerManageModel'
-import type { PortManageType } from '@/services/essential/portManage/portManageApi'
-import type { ServiceSettingType } from '@/services/setting/serviceSettingModel'
+import type { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
+import type { PayerUnitType } from '@/services/customerManage/PayerUnit/PayerUnitModel'
+import type { ProductManageClassType } from '@/services/productManage/productManageModel'
+import type { ContractsType } from '@/services/supplierManage/Contracts/ContractsModel'
+import type { SysUserType } from '@/services/system/role/roleModel'
 import type {
   BreadcrumbStyleType,
   BuiltinThemeType,
@@ -299,18 +298,29 @@ export interface sysSettingPreferences {
  */
 
 export interface essentailPreferences {
-  /** 细分航线缓存 */
-  routeData: RouteMangeType[] | undefined
-  /** 起运港缓存 */
-  porPortData: PortManageType[] | undefined
-  /** 目的港缓存 */
-  fndPortData: PortManageType[] | undefined
-  /** 船司数据缓存 */
-  carrierData: CarrierManageType[] | undefined
+  // /** 细分航线缓存 */
+  // routeData: RouteMangeType[] | undefined
+  // /** 起运港缓存 */
+  // porPortData: PortManageType[] | undefined
+  // /** 目的港缓存 */
+  // fndPortData: PortManageType[] | undefined
+  // /** 船司数据缓存 */
+  // carrierData: CarrierManageType[] | undefined
+  // /** 客户数据缓存 */
+  // customerData: CustomerManageType[] | undefined
+  // /** 关联服务缓存 */
+  // relevanceService: ServiceSettingType[] | undefined
+  /** 产品分类 */
+  productClass: ProductManageClassType[] | undefined
+  productDetailClass: Record<string, ProductManageClassType[]> | undefined
   /** 客户数据缓存 */
-  customerData: CustomerManageType[] | undefined
-  /** 关联服务缓存 */
-  relevanceService: ServiceSettingType[] | undefined
+  customerData: CustomerType[] | undefined
+  /** 系统用户数据缓存 */
+  userData: SysUserType[] | undefined
+  /** 签约单位缓存 */
+  contractingData: ContractsType[] | undefined
+  /** 付款单位缓存 */
+  payerUnitData: PayerUnitType[] | undefined
   [key: string]: any
 }
 
