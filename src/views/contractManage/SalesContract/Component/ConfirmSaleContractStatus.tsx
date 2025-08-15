@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from 'react'
-import { Form, Select, SelectProps } from 'antd'
+import { Form, Select } from 'antd'
 import DragModal from '@/components/modal/DragModal'
 import { AddSalesContractForm } from '../../config'
 import { SaleContractType } from '@/services/contractManage/SalesContract/SalesContractModel'

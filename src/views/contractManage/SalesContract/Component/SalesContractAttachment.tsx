@@ -1,12 +1,14 @@
+import React, { memo, useEffect, useState } from 'react'
+import { App, Button, Space, Table, TableProps } from 'antd'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 import {
+  addContractAttachment,
   deleteContractAttachment,
   getContractAttachment,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
 import { SaleContractAttachmentType } from '@/services/contractManage/SalesContract/SalesContractModel'
 import { postDownlFile } from '@/services/upload/UploadApi'
-import { ExclamationCircleFilled } from '@ant-design/icons'
-import { App, Button, Space, Table, TableProps } from 'antd'
-import React, { memo, useEffect, useState } from 'react'
+import AttachemntModal from '@/components/AttachementModal'
 
 export type SalesContractAttachmentProps = {
   detailId: string
@@ -25,6 +27,8 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       visible: false,
       currentRow: null,
     })
+
+    const [visible, setVisible] = useState<boolean>(false)
 
     useEffect(() => {
       detailId && loadContractAttachment()
@@ -111,14 +115,22 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       })
     }
 
+    const importAttachmentSuccess = (current: any) => {
+      addContractAttachment({
+        contractId: detailId,
+        fileId: current['fileId'],
+      }).then(() => {
+        message.success('添加成功')
+        setVisible(false)
+        loadContractAttachment()
+      })
+    }
+
     return (
       <>
         <div className="w-full flex items-center justify-end mb-[8px]">
           <Space>
-            <Button
-              onClick={() => setParams({ visible: true, currentRow: null })}
-              type="primary"
-            >
+            <Button onClick={() => setVisible(true)} type="primary">
               添加附件
             </Button>
           </Space>
@@ -133,6 +145,14 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
             scroll={{ x: 'max-content', y: 208 }}
           />
         )}
+        <AttachemntModal
+          title="添加附件"
+          visible={visible}
+          uploadFileKey="fileId"
+          onCancel={() => setVisible(false)}
+          onOk={importAttachmentSuccess}
+          uploadAccept={['.doc', '.docx', '.pdf ', '.jpg']}
+        />
       </>
     )
   }
