@@ -17,7 +17,7 @@ import DragModal from '@/components/modal/DragModal'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/stores/store'
 import type { SaleContractType } from '@/services/contractManage/SalesContract/SalesContractModel'
-import { AddSalesContractForm } from '../config'
+import { AddPurchaseContractForm, AddSalesContractForm } from '../config'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 import { getBusinessEnquiryList } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
@@ -29,6 +29,7 @@ export type AddSalesContractProps = {
     currentRow: SaleContractType | null
     source: string
   }
+  contractType: 'PurchaseContract' | 'SalesContract'
   onOk: (params: SaleContractType) => void
   onCancel: () => void
 }
@@ -37,6 +38,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const AddSalesContract: React.FC<AddSalesContractProps> = ({
   params,
+  contractType,
   onOk,
   onCancel,
 }) => {
@@ -46,7 +48,11 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
 
   const essential = useSelector((state: RootState) => state.essentail)
 
-  const [formMap, setFormMap] = useState(AddSalesContractForm)
+  const [formMap, setFormMap] = useState(
+    contractType === 'SalesContract'
+      ? AddSalesContractForm
+      : AddPurchaseContractForm
+  )
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
@@ -75,20 +81,23 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
   }, [visible])
 
   const init = async () => {
-    let { userData, customerData, payerUnitData } = essential
+    let { userData, customerData, payerUnitData, supplierData } = essential
     const res = await getBusinessEnquiryList({ isInquiry: 0 })
     formMap.map((item) => {
       if (
         item.name === 'customerId' ||
         item.name === 'salespersonId' ||
-        item.name === 'companyId'
+        item.name === 'companyId' ||
+        item.name === 'supplierId'
       )
         item.options =
           item.name === 'customerId'
             ? customerData
             : item.name === 'salespersonId'
             ? userData
-            : payerUnitData
+            : item.name === 'companyId'
+            ? payerUnitData
+            : supplierData
       if (item.name === 'salesProjectId') item.options = res
     })
     setFormMap([...formMap])

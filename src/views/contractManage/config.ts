@@ -75,6 +75,72 @@ export const SalesContractSearchColumns: CustomColumn[] = [
   },
 ]
 
+export const PurchaseContractSearchColumns: CustomColumn[] = [
+  {
+    label: null,
+    name: 'keyword',
+    formType: 'input',
+    customPlaceholder: '请输入合同编号或合同名称',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'supplierId',
+    customPlaceholder: '请输入供应商名称',
+    formType: 'normalSelect',
+    options: [],
+    span: 6,
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'projectName',
+    formType: 'input',
+    customPlaceholder: '请输入项目名称',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'status',
+    formType: 'normalSelect',
+    customPlaceholder: '请选择状态',
+    options: [
+      {
+        label: '执行中',
+        value: 'EXECUTING',
+      },
+      {
+        label: '执行完',
+        value: 'COMPLETED',
+      },
+      {
+        label: '关闭',
+        value: 'CLOSED',
+      },
+    ],
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'createTime',
+    formType: 'date-picker',
+    span: 6,
+    hiddenItem: false,
+    selectFetch: false,
+  },
+]
+
 export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
   {
     label: '合同编号',
@@ -198,6 +264,115 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
       value: 'userId',
     },
     span: 12,
+    hiddenItem: false,
+  },
+  {
+    label: '日期',
+    name: 'contractTime',
+    formType: 'date-picker',
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+]
+
+export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
+  {
+    label: '合同编号',
+    name: 'number',
+    formType: 'input',
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '项目名称',
+    name: 'salesProjectId',
+    formType: 'select',
+    span: 12,
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    isRules: false,
+    hiddenItem: false,
+  },
+  {
+    label: '合同名称',
+    name: 'name',
+    formType: 'input',
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '供应商',
+    name: 'supplierId',
+    formType: 'select',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '合同类型',
+    name: 'type',
+    formType: 'select',
+    options: [
+      {
+        label: '框架合同',
+        value: 'FRAMEWORK',
+      },
+      {
+        label: '即期合同',
+        value: 'SPOT',
+      },
+    ],
+    selectFileldName: {
+      label: 'label',
+      value: 'value',
+    },
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '合同金额',
+    name: 'price',
+    formType: 'input',
+    span: 12,
+    isRules: true,
+    hiddenItem: false,
+  },
+  {
+    label: '合同状态',
+    name: 'status',
+    formType: 'select',
+    options: [
+      {
+        label: '执行中',
+        value: 'EXECUTING',
+      },
+      {
+        label: '执行完',
+        value: 'COMPLETED',
+      },
+      {
+        label: '关闭',
+        value: 'CLOSED',
+      },
+    ],
+    selectFileldName: {
+      label: 'label',
+      value: 'value',
+    },
+    span: 12,
+    isRules: true,
     hiddenItem: false,
   },
   {

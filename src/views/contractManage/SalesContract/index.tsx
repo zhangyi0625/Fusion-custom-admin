@@ -5,9 +5,7 @@ import {
   Card,
   ConfigProvider,
   Dropdown,
-  Form,
   MenuProps,
-  Select,
   Space,
   TablePaginationConfig,
   TableProps,
@@ -423,6 +421,7 @@ const SalesContract: React.FC = () => {
             source: 'SaleProject',
           })
         }
+        contractType="SalesContract"
         onOk={onEditOk}
       />
       <SalesContractDrawer
