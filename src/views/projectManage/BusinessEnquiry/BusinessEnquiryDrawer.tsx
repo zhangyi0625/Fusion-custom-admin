@@ -176,7 +176,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     {
       label: drawer.source === 'SaleProject' ? '销售合同' : '采购合同',
       key: 'SalesContract',
-      children: <SalesContract />,
+      children: <SalesContract projectId={detailId as string} />,
       disabled: drawer.source === 'BusinessEnquiry',
     },
     {

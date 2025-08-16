@@ -358,7 +358,7 @@ export const downloadBusinessEnquiry = (
 }
 
 /**
- * 商机询价生成询价表
+ * 导入商机询价生成询价表
  * @param params 商机询价参数
  * @returns 商机询价列表
  */
@@ -375,7 +375,7 @@ export const importBusinessEnquiry = (params: BussinesEnquiryImportType) => {
 }
 
 /**
- * 商机询价生成询价表
+ * 确认商机询价生成询价表
  * @param params 商机询价参数
  * @returns 商机询价列表
  */

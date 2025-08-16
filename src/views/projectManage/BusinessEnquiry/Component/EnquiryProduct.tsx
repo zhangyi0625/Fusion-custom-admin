@@ -350,6 +350,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
             rowKey={'id'}
             size="small"
             dataSource={dataSource}
+            scroll={{ x: 'max-content', y: 258 }}
             columns={mergedColumns as ColumnTypes}
           />
         </div>

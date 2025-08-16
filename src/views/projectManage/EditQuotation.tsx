@@ -4,7 +4,7 @@ import React from 'react'
 
 export type EditQuotationProps = {
   visible: boolean
-  onOk: (params: { id: string }) => void
+  onOk: (params: { modifyReason: string }) => void
   onCancel: () => void
 }
 
@@ -39,7 +39,7 @@ const EditQuotation: React.FC<EditQuotationProps> = ({
       <Form form={form} labelCol={{ span: 3 }}>
         <Form.Item
           label="理由"
-          name="reason"
+          name="modifyReason"
           rules={[{ required: true, message: '请输入你修改报价表的理由' }]}
         >
           <Input.TextArea placeholder="请输入你修改报价表的理由" allowClear />

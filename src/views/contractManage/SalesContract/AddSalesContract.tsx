@@ -54,11 +54,15 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
     if (!visible) return
     if (source === 'SaleProject') {
       formMap.map((item) => {
-        let filterKeys = ['projectNo', 'customerId', 'payer', 'business']
+        let filterKeys = [
+          'salesProjectId',
+          'customerId',
+          'companyId',
+          'salespersonId',
+        ]
         if (filterKeys.includes(item.name)) item.hiddenItem = true
       })
       setFormMap([...formMap])
-      console.log(formMap, 'formMap')
     } else {
       init()
     }

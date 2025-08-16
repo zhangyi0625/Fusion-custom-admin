@@ -11,13 +11,15 @@ import {
 import DragModal from '@/components/modal/DragModal'
 import ImportIcon from '@/assets/svg/icon/import.svg'
 import { postUploadFile } from '@/services/upload/UploadApi'
+import { loadAnalysis } from './loadAnalysis'
+import type { BussinesEnquiryImportType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type ImportEnquiryProps = {
   params: {
     visible: boolean
     isFirst: boolean
   }
-  onOk: (params: any) => void
+  onOk: (params: Omit<BussinesEnquiryImportType, 'id'>) => void
   onCancel: () => void
 }
 
@@ -36,10 +38,12 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
+  const [fileResults, setFileResults] = useState([])
+
   const DraggerProps: UploadProps = {
     name: 'file',
     multiple: false,
-    accept: '.xlsx',
+    accept: '.xlsx,.xls',
     beforeUpload(file) {
       setFileList([file])
       return false
@@ -56,6 +60,10 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
             ...form.getFieldsValue(),
             inquiryFile: resp.data.id,
           })
+          console.log(form.getFieldsValue())
+
+          // 解析xlsx内容
+          loadAnalysis(info.file as FileType, setFileResults, 'ImportEnquiry')
         })
       }
     },
@@ -72,6 +80,7 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
 
   useEffect(() => {
     if (!visible) return
+    form.resetFields()
     setFileList([])
   }, [visible])
 
@@ -79,9 +88,11 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
     form
       .validateFields()
       .then(() => {
-        console.log(form.getFieldsValue(), 'form.getFieldsValue()')
-        return
-        onOk({ ...form.getFieldsValue() })
+        console.log(
+          { ...form.getFieldsValue(), products: fileResults },
+          'form.getFieldsValue()'
+        )
+        onOk({ ...form.getFieldsValue(), products: fileResults })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -98,8 +109,11 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
       onOk={onConfirm}
       onCancel={onCancel}
     >
-      {!isFirst && (
-        <Form form={form} labelCol={{ span: 3 }}>
+      <Form form={form} labelCol={{ span: 3 }}>
+        <Form.Item name="inquiryFile" hidden>
+          <Input disabled />
+        </Form.Item>
+        {!isFirst && (
           <Form.Item
             label="理由"
             name="reason"
@@ -112,8 +126,9 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
               allowClear
             />
           </Form.Item>
-        </Form>
-      )}
+        )}
+      </Form>
+
       <ConfigProvider
         theme={{
           components: {

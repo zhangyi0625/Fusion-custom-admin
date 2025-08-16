@@ -6,6 +6,7 @@ import {
   addBatchBusinessSupplier,
   confirmBussinesSupplier,
   getBusinessSupplier,
+  importBusinessEnquiry,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import SupplierTransfer from '../../SupplierTransfer'
 import ImportEnquiry from '../../ImportEnquiry'
@@ -13,7 +14,10 @@ import MakeQuotationModal from '../../MakeQuotationModal'
 import EditQuotation from '../../EditQuotation'
 import ConfirmQuotation from '../../ConfirmQuotation'
 import { deleteSaleProjectList } from '@/services/projectManage/SaleProject/SaleProjectApi'
-import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type {
+  BusinessEnquiryType,
+  BussinesEnquiryImportType,
+} from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type SupplierInfoProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -222,7 +226,28 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       } catch (error) {}
     }
 
-    const confirmEditQuotation = () => {}
+    const confirmEditQuotation = (params: { modifyReason: string }) => {
+      // confirmBussinesSupplier({
+      //   projectId: projectId,
+      //   supplierId: params.supplierId,
+      // }).then(() => {
+      //   message.success('确认报价成功')
+      //   setEditModal({ ...editModal, editQuotation: false })
+      //   loadSupplierInfo()
+      // })
+    }
+
+    const confirmImportEnquiry = (
+      current: Omit<BussinesEnquiryImportType, 'id'>
+    ) => {
+      importBusinessEnquiry({ id: projectId, ...current }).then(() => {
+        message.success('上传成功')
+        setEnquiryModal({ visible: false, isFirst: true })
+        loadSupplierInfo()
+      })
+    }
+
+    const confirmQuotationModal = () => {}
 
     return (
       <>
@@ -271,12 +296,12 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         <ImportEnquiry
           params={enquiryModal}
           onCancel={() => setEnquiryModal({ visible: false, isFirst: true })}
-          onOk={confirmEditQuotation}
+          onOk={confirmImportEnquiry}
         />
         <MakeQuotationModal
           params={quotationModal}
           onCancel={() => setQuotationModal({ visible: false })}
-          onOk={confirmEditQuotation}
+          onOk={confirmQuotationModal}
         />
         <EditQuotation
           visible={editModal.editQuotation}
