@@ -18,6 +18,7 @@ import type {
   BusinessEnquiryType,
   BussinesEnquiryImportType,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { getSupplierDetail } from '@/services/supplierManage/Supplier/SupplierApi'
 
 export type SupplierInfoProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -40,16 +41,22 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       selected: null,
     })
 
+    const [supplierName, setSupplierName] = useState<string | null>(null)
+
     useEffect(() => {
+      setSupplierName(null)
       projectId && loadSupplierInfo()
-    }, [])
+      detail.confirmSupplierId && loadSupplierDetail()
+    }, [projectId, detail.confirmSupplierId])
 
     const [enquiryModal, setEnquiryModal] = useState<{
       visible: boolean
       isFirst: boolean
+      id: string | null
     }>({
       visible: false,
       isFirst: true,
+      id: null,
     })
 
     const [quotationModal, setQuotationModal] = useState<{
@@ -143,6 +150,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                   setEnquiryModal({
                     visible: true,
                     isFirst: !_.inquiryFile,
+                    id: _.id,
                   })
                 }
                 type="link"
@@ -188,7 +196,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       setDataSource(res)
     }
 
-    const importSuccess = (params: { supplierId: string }) => {
+    const ConfirmQuotationBySupplier = (params: { supplierId: string }) => {
       confirmBussinesSupplier({
         projectId: projectId,
         supplierId: params.supplierId,
@@ -237,23 +245,26 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       // })
     }
 
-    const confirmImportEnquiry = (
-      current: Omit<BussinesEnquiryImportType, 'id'>
-    ) => {
-      importBusinessEnquiry({ id: projectId, ...current }).then(() => {
+    const confirmImportEnquiry = (current: BussinesEnquiryImportType) => {
+      importBusinessEnquiry({ ...current }).then(() => {
         message.success('上传成功')
-        setEnquiryModal({ visible: false, isFirst: true })
+        setEnquiryModal({ visible: false, isFirst: true, id: null })
         loadSupplierInfo()
       })
     }
 
     const confirmQuotationModal = () => {}
 
+    const loadSupplierDetail = async () => {
+      const res = await getSupplierDetail(detail.confirmSupplierId as string)
+      setSupplierName(res.name ?? '')
+    }
+
     return (
       <>
         <div className="w-full flex items-center justify-end mb-[8px]">
           <Space>
-            {source === 'SaleProject' && (
+            {source === 'SaleProject' && !detail.confirmSupplierId && (
               <Button
                 onClick={() =>
                   setEditModal({ editQuotation: false, confirmQuotation: true })
@@ -263,10 +274,14 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                 确认报价
               </Button>
             )}
-            {source === 'SaleProject' && (
+            {source === 'SaleProject' && detail.confirmSupplierId && (
               <div className="flex items-center text-green-500">
                 <CheckCircleOutlined twoToneColor="#52C41A" />
-                <p className="ml-[12px]">已确认该XXXXXXX的报价</p>
+                <p className="ml-[12px]">
+                  已确认该
+                  {supplierName}
+                  的报价
+                </p>
               </div>
             )}
             <Button
@@ -295,7 +310,9 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         />
         <ImportEnquiry
           params={enquiryModal}
-          onCancel={() => setEnquiryModal({ visible: false, isFirst: true })}
+          onCancel={() =>
+            setEnquiryModal({ visible: false, isFirst: true, id: null })
+          }
           onOk={confirmImportEnquiry}
         />
         <MakeQuotationModal
@@ -313,7 +330,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           onCancel={() =>
             setEditModal({ ...editModal, confirmQuotation: false })
           }
-          onOk={importSuccess}
+          onOk={ConfirmQuotationBySupplier}
         />
       </>
     )

@@ -16,6 +16,7 @@ export const initEssential: essentailPreferences = {
   userData: undefined,
   contractingData: undefined,
   payerUnitData: undefined,
+  supplierData: undefined,
 }
 
 export const essentialSlice = createSlice({

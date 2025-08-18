@@ -5,6 +5,7 @@ import type { CustomerType } from '@/services/customerManage/Customer/CustomerMo
 import type { PayerUnitType } from '@/services/customerManage/PayerUnit/PayerUnitModel'
 import type { ProductManageClassType } from '@/services/productManage/productManageModel'
 import type { ContractsType } from '@/services/supplierManage/Contracts/ContractsModel'
+import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 import type { SysUserType } from '@/services/system/role/roleModel'
 import type {
   BreadcrumbStyleType,
@@ -321,6 +322,8 @@ export interface essentailPreferences {
   contractingData: ContractsType[] | undefined
   /** 付款单位缓存 */
   payerUnitData: PayerUnitType[] | undefined
+  /** 供应商数据缓存 */
+  supplierData: SupplierType[] | undefined
   [key: string]: any
 }
 
