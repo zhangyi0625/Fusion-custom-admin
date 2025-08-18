@@ -1,3 +1,5 @@
+import { MakeQuotationTableType } from '../SaleProject/SaleProjectModel'
+
 export interface BusinessEnquiryType {
   number: string
   name: string
@@ -31,6 +33,12 @@ export interface BussinesOperationRecordType {
   createName: string
   createTime: string
   content: string
+}
+
+export interface BussinesEnquiryRecordType extends BussinesOperationRecordType {
+  isInquery: boolean
+  fileId: string
+  fileName: string
 }
 
 export interface BussinesEnquiryProductType {
@@ -69,7 +77,7 @@ export interface BussinesEnquiryProduct extends BussinesEnquiryProductType {
 export interface BussinesEnquiryDownloadType {
   id: string
   modifyReason?: string
-  products: BussinesEnquiryProduct[]
+  products: MakeQuotationTableType[]
 }
 
 export interface BussinesEnquiryImportType {

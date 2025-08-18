@@ -6,8 +6,8 @@ import type {
   BussinesEnquiryImportType,
   BussinesEnquiryProductType,
   BussinesFollowRecordType,
-  BussinesSupplierType,
 } from './BusinessEnquiryModel'
+import { MakeQuotationTableType } from '../SaleProject/SaleProjectModel'
 
 /**
  * 枚举商机询价相关的api
@@ -26,6 +26,8 @@ export enum BusinessEnquiryApi {
   bussinesDownloadEnquiry = '/business/project-supplier/download/quotation',
   bussinesImportEnquiry = '/business/project-supplier/inquiry',
   confirmBussinesSupplier = '/business/project-supplier/confirmSupplier',
+  bussinessProductList = '/business/project-supplier/product',
+  batchBussinessProductList = '/business/project-supplier/product/batch',
 }
 
 /**
@@ -169,7 +171,7 @@ export const getBusinessOperationRecord = (id: string | number) => {
  */
 export const getBusinessEnquiryRecord = (
   id: string | number,
-  params: { isInquery: boolean | null }
+  params: { isInquery: boolean | string }
 ) => {
   return HttpRequest.get(
     {
@@ -323,6 +325,22 @@ export const getBusinessSupplier = (id: string) => {
 }
 
 /**
+ * 删除商机询价供应商
+ * @param params 商机询价参数
+ * @returns 商机询价列表
+ */
+export const deleteBusinessSupplier = (id: string) => {
+  return HttpRequest.delete(
+    {
+      url: BusinessEnquiryApi.bussinesSupplier + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
  * 批量添加商机询价供应商
  * @param params 商机询价参数
  * @returns 商机询价列表
@@ -354,6 +372,7 @@ export const downloadBusinessEnquiry = (
     {
       url: BusinessEnquiryApi.bussinesDownloadEnquiry,
       data: params,
+      responseType: 'blob',
     },
     {
       successMessageMode: 'none',
@@ -390,6 +409,41 @@ export const confirmBussinesSupplier = (params: {
   return HttpRequest.post(
     {
       url: BusinessEnquiryApi.confirmBussinesSupplier,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 商机询价全部供应商产品
+ * @param params 商机询价参数
+ * @returns 商机询价列表
+ */
+export const getBusinessSupplierProduct = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: BusinessEnquiryApi.bussinessProductList + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改商机询价全部供应商产品
+ * @param params 商机询价参数
+ * @returns 商机询价列表
+ */
+export const putBusinessSupplierProduct = (
+  params: MakeQuotationTableType[]
+) => {
+  return HttpRequest.put(
+    {
+      url: BusinessEnquiryApi.batchBussinessProductList,
       data: params,
     },
     {

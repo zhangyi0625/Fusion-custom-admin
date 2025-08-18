@@ -24,14 +24,16 @@ import {
 } from 'antd'
 import { debounce, sum } from 'lodash-es'
 import { getSaleProjectQuotation } from '@/services/projectManage/SaleProject/SaleProjectApi'
-import { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
+import type { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
+import { getBusinessSupplierProduct } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 
 export type MakeQuotationModalProps = {
   params: {
     visible: boolean
+    supplierId: string | null
   }
-  onOk: (params: any) => void
+  onOk: (products: { data: MakeQuotationTableType[]; type: string }) => void
   onCancel: () => void
 }
 
@@ -65,7 +67,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   onOk,
   onCancel,
 }) => {
-  const { visible } = params
+  const { visible, supplierId } = params
 
   const { message } = App.useApp()
 
@@ -90,12 +92,14 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   )
 
   const loadQuotation = async () => {
-    const res = await getSaleProjectQuotation()
+    const res = await getBusinessSupplierProduct(supplierId as string)
     let newData = res.map((item: MakeQuotationTableType) => {
       return {
         ...item,
-        changePrice: item.price,
-        changePriceSum: Number(item.pricesSum).toFixed(1),
+        adjPrice: item.adjPrice ? item.adjPrice : item.price,
+        adjAmount: item.adjAmount
+          ? item.adjAmount
+          : Number(item.amount).toFixed(1),
       }
     })
     setQuotationData(newData)
@@ -113,20 +117,20 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
     },
     {
       title: '规格或型号',
-      key: 'name',
-      dataIndex: 'name',
+      key: 'productName',
+      dataIndex: 'productName',
       align: 'left',
     },
     {
       title: '单位',
-      key: 'unit',
-      dataIndex: 'unit',
+      key: 'productUnit',
+      dataIndex: 'productUnit',
       align: 'center',
     },
     {
       title: '数量',
-      key: 'count',
-      dataIndex: 'count',
+      key: 'qty',
+      dataIndex: 'qty',
       align: 'center',
     },
     {
@@ -138,23 +142,23 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
     },
     {
       title: '产品金额(元)',
-      key: 'pricesSum',
-      dataIndex: 'pricesSum',
+      key: 'amount',
+      dataIndex: 'amount',
       align: 'center',
       width: 150,
     },
     {
       title: '调整后单价(元)',
-      key: 'changePrice',
-      dataIndex: 'changePrice',
+      key: 'adjPrice',
+      dataIndex: 'adjPrice',
       align: 'center',
       width: 150,
       editable: true,
     },
     {
       title: '调整后金额(元)',
-      key: 'changePriceSum',
-      dataIndex: 'changePriceSum',
+      key: 'adjAmount',
+      dataIndex: 'adjAmount',
       width: 150,
       align: 'center',
     },
@@ -230,9 +234,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         handleSave({
           ...record,
           ...values,
-          changePriceSum: (record.count * Number(values.changePrice)).toFixed(
-            1
-          ),
+          adjAmount: (record.qty * Number(values.adjPrice)).toFixed(1),
         })
       } catch (errInfo) {
         console.log('Save failed:', errInfo)
@@ -281,7 +283,9 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
     console.log(value)
   }, 300)
 
-  const onConfirm = () => {}
+  const onConfirm = () => {
+    onOk({ data: quotationData, type: 'submit' })
+  }
 
   const rowSelection: TableProps['rowSelection'] = {
     selectedRowKeys,
@@ -293,7 +297,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   const getSum = useMemo(() => {
     const value = quotationData.reduce(
       (total: number, item: MakeQuotationTableType) => {
-        return total + Number(item.pricesSum)
+        return total + Number(item.amount)
       },
       0
     )
@@ -303,7 +307,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   const getChangeSum = useMemo(() => {
     const sum = quotationData.reduce(
       (total: number, item: MakeQuotationTableType) => {
-        return total + Number(item.changePriceSum)
+        return total + Number(item.adjAmount)
       },
       0
     )
@@ -317,8 +321,8 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
       const newData = [...quotationData].map((item) => {
         return {
           ...item,
-          changePrice: item.price,
-          changePriceSum: item.pricesSum,
+          adjPrice: item.price,
+          adjAmount: item.amount,
         }
       })
       // 清空所有调整后的单价和总价
@@ -330,18 +334,16 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         if (radioDefaultValue === 'price') {
           if (selectedRowKeys.includes(item.id)) return
           // 非锁定行单价上调
-          item.changePrice = (
+          item.adjPrice = (
             Number(item.price) +
             Number(item.price) * (Number(inputNumberVal.price) / 100)
           ).toFixed(2)
-          item.changePriceSum = (item.count * Number(item.changePrice)).toFixed(
-            1
-          )
+          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(1)
         } else {
           // 非锁定行分摊总价
           if (selectedRowKeys.includes(item.id)) {
-            unselectedSum += Number(item.pricesSum)
-          } else selectedSum += Number(item.pricesSum)
+            unselectedSum += Number(item.amount)
+          } else selectedSum += Number(item.amount)
           half = Number(
             (
               (Number(inputNumberVal.sumPrice) - unselectedSum) /
@@ -352,10 +354,8 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
       })
       radioDefaultValue === 'sumPrice' &&
         newData.map((item) => {
-          item.changePrice = (Number(item.price) * half).toFixed(2)
-          item.changePriceSum = (item.count * Number(item.changePrice)).toFixed(
-            1
-          )
+          item.adjPrice = (Number(item.price) * half).toFixed(2)
+          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(1)
         })
       setQuotationData(newData)
     }
@@ -426,7 +426,9 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
 
   const onPreview = () => {}
 
-  const downloadEnquiry = () => {}
+  const downloadEnquiry = () => {
+    onOk({ data: quotationData, type: 'download' })
+  }
 
   return (
     <DragModal

@@ -5,8 +5,11 @@ import { SearchTable } from 'customer-search-form-table'
 import {
   addBatchBusinessSupplier,
   confirmBussinesSupplier,
+  deleteBusinessSupplier,
+  downloadBusinessEnquiry,
   getBusinessSupplier,
   importBusinessEnquiry,
+  putBusinessSupplierProduct,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import SupplierTransfer from '../../SupplierTransfer'
 import ImportEnquiry from '../../ImportEnquiry'
@@ -19,6 +22,8 @@ import type {
   BussinesEnquiryImportType,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { getSupplierDetail } from '@/services/supplierManage/Supplier/SupplierApi'
+import { postDownlFile } from '@/services/upload/UploadApi'
+import { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
 
 export type SupplierInfoProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -43,10 +48,15 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
 
     const [supplierName, setSupplierName] = useState<string | null>(null)
 
+    const [editProducts, setEditProducts] = useState<MakeQuotationTableType[]>(
+      []
+    )
+
     useEffect(() => {
       setSupplierName(null)
       projectId && loadSupplierInfo()
       detail.confirmSupplierId && loadSupplierDetail()
+      setEditProducts([])
     }, [projectId, detail.confirmSupplierId])
 
     const [enquiryModal, setEnquiryModal] = useState<{
@@ -61,8 +71,12 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
 
     const [quotationModal, setQuotationModal] = useState<{
       visible: boolean
+      supplierId: string | null
+      edit: boolean
     }>({
       visible: false,
+      supplierId: null,
+      edit: false,
     })
 
     const [editModal, setEditModal] = useState<{
@@ -94,8 +108,11 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                   ? 'text-blue-500 cursor-pointer'
                   : 'text-dull-grey'
               }
+              onClick={() =>
+                downLoadFile(value.inquiryFile, value.inquiryFileName)
+              }
             >
-              {value.inquiryFile ?? '未上传'}
+              {value.inquiryFileName ?? '未上传'}
             </div>
           )
         },
@@ -117,12 +134,15 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           return (
             <div
               className={
-                value.inquiryFile
+                value.quotationFile
                   ? 'text-blue-500 cursor-pointer'
                   : 'text-dull-grey'
               }
+              onClick={() =>
+                downLoadFile(value.quotationFile, value.quotationFileName)
+              }
             >
-              {value.quotationFile ?? '未生成'}
+              {value.quotationFileName ?? '未生成'}
             </div>
           )
         },
@@ -159,7 +179,13 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
               </Button>
               {source === 'SaleProject' && !_.quotationFile && (
                 <Button
-                  onClick={() => setQuotationModal({ visible: true })}
+                  onClick={() =>
+                    setQuotationModal({
+                      visible: true,
+                      supplierId: _.id,
+                      edit: false,
+                    })
+                  }
                   type="link"
                 >
                   制作报价
@@ -168,9 +194,10 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
               {source === 'SaleProject' && _.quotationFile && (
                 <Button
                   onClick={() => {
-                    setEditModal({
-                      editQuotation: true,
-                      confirmQuotation: false,
+                    setQuotationModal({
+                      visible: true,
+                      supplierId: _.id,
+                      edit: true,
                     })
                   }}
                   type="link"
@@ -190,6 +217,20 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         },
       },
     ]
+
+    const downLoadFile = (fileId: string, fileName: string) => {
+      if (!fileId) return
+      postDownlFile(fileId).then((resp) => {
+        let blobUrl = window.URL.createObjectURL(resp)
+        const aElement = document.createElement('a')
+        document.body.appendChild(aElement)
+        aElement.style.display = 'none'
+        aElement.href = blobUrl
+        aElement.download = fileName
+        aElement.click()
+        document.body.removeChild(aElement)
+      })
+    }
 
     const loadSupplierInfo = async () => {
       const res = await getBusinessSupplier(projectId)
@@ -213,7 +254,8 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         content:
           '供应商下的询价表和报价表，将随供应商一并删除。是否确定删除此供应商？！',
         onOk() {
-          deleteSaleProjectList(id).then(() => {
+          deleteBusinessSupplier(id).then(() => {
+            message.success('删除成功')
             loadSupplierInfo()
           })
         },
@@ -235,14 +277,15 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
     }
 
     const confirmEditQuotation = (params: { modifyReason: string }) => {
-      // confirmBussinesSupplier({
-      //   projectId: projectId,
-      //   supplierId: params.supplierId,
-      // }).then(() => {
-      //   message.success('确认报价成功')
-      //   setEditModal({ ...editModal, editQuotation: false })
-      //   loadSupplierInfo()
-      // })
+      downloadBusinessEnquiry({
+        id: quotationModal.supplierId as string,
+        products: editProducts,
+        modifyReason: params.modifyReason,
+      }).then(() => {
+        message.success('修改报价成功')
+        setEditModal({ ...editModal, editQuotation: false })
+        loadSupplierInfo()
+      })
     }
 
     const confirmImportEnquiry = (current: BussinesEnquiryImportType) => {
@@ -253,7 +296,33 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       })
     }
 
-    const confirmQuotationModal = () => {}
+    const confirmQuotationModal = (products: {
+      data: MakeQuotationTableType[]
+      type: string
+    }) => {
+      if (products.type === 'submit') {
+        putBusinessSupplierProduct(products.data).then(() => {
+          message.success('修改成功')
+          setQuotationModal({ visible: false, supplierId: null, edit: false })
+          loadSupplierInfo()
+        })
+      } else {
+        setEditProducts(products.data)
+        if (quotationModal.edit) {
+          setEditModal({
+            editQuotation: true,
+            confirmQuotation: false,
+          })
+        } else {
+          downloadBusinessEnquiry({
+            id: quotationModal.supplierId as string,
+            products: products.data,
+          }).then((resp) => {
+            console.log(resp, 'resp')
+          })
+        }
+      }
+    }
 
     const loadSupplierDetail = async () => {
       const res = await getSupplierDetail(detail.confirmSupplierId as string)
@@ -285,7 +354,14 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
               </div>
             )}
             <Button
-              onClick={() => setParams({ visible: true, selected: null })}
+              onClick={() =>
+                setParams({
+                  visible: true,
+                  selected: dataSource.map(
+                    (item: { supplierId: string }) => item.supplierId
+                  ),
+                })
+              }
               type="primary"
             >
               新增供应商
@@ -317,7 +393,9 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         />
         <MakeQuotationModal
           params={quotationModal}
-          onCancel={() => setQuotationModal({ visible: false })}
+          onCancel={() =>
+            setQuotationModal({ visible: false, supplierId: null, edit: false })
+          }
           onOk={confirmQuotationModal}
         />
         <EditQuotation
