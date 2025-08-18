@@ -41,7 +41,7 @@ const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
         }
       })
       setMockData(newRes)
-      console.log('selected', selected)
+      selected?.length && setTargetKeys(selected)
     }
 
     const onChange: TransferProps['onChange'] = (newTargetKeys) => {

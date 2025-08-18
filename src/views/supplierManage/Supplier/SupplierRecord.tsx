@@ -45,13 +45,13 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
 
   useEffect(() => {
     if (!visible) return
-    init()
+    init(defaultActiveKey)
   }, [visible])
 
-  const init = () => {
+  const init = (key: string) => {
     Promise.all([
       getSupplierDetail(id),
-      defaultActiveKey === 'editRecord' && getSupplierRecord(id),
+      key === 'editRecord' && getSupplierRecord(id),
     ]).then((resp) => {
       let newLine = resp[1]
         ? resp[1].map(
@@ -86,7 +86,7 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
       contactId: id[0],
     } as SupplierType).then(() => {
       message.success('设置成功')
-      init()
+      init(defaultActiveKey)
     })
   }
 
@@ -95,7 +95,11 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
       label: '联系人',
       key: 'contracts',
       children: (
-        <SupplierContracts id={id} onUpdateContract={onUpdateContract} />
+        <SupplierContracts
+          id={id}
+          contactId={supplierTypeInfo.info?.contactId as string}
+          onUpdateContract={onUpdateContract}
+        />
       ),
     },
     {
@@ -107,7 +111,7 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
 
   const tabsChange = (key: string) => {
     setdefaultActiveKey(key)
-    if (key === 'editRecord') init()
+    if (key === 'editRecord') init(key)
   }
 
   return (
@@ -134,7 +138,7 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
         </p>
       </div>
       <Tabs
-        defaultActiveKey={defaultActiveKey}
+        activeKey={defaultActiveKey}
         items={components}
         onChange={tabsChange}
       />

@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { App, Button, Space, TableProps } from 'antd'
 import { SearchTable } from 'customer-search-form-table'
-import { ContractsType } from '@/services/supplierManage/Contracts/ContractsModel'
+import type { ContractsType } from '@/services/supplierManage/Contracts/ContractsModel'
 import { getSupplierContracts } from '@/services/supplierManage/Supplier/SupplierApi'
 import AddContract from '../Contracts/AddContracts'
 import {
@@ -11,14 +11,16 @@ import {
 
 export type SupplierContractsProps = {
   id: string
+  contactId: string | null
   onUpdateContract: (id: string[]) => void
 }
 
 const SupplierContracts: React.FC<SupplierContractsProps> = ({
   id,
+  contactId,
   onUpdateContract,
 }) => {
-  const { modal, message } = App.useApp()
+  const { message } = App.useApp()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<
     Pick<ContractsType, 'supplierId'>
@@ -26,9 +28,17 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
     supplierId: id,
   })
 
-  const [immediate, setImmediate] = useState<boolean>(false)
+  const [immediate, setImmediate] = useState<boolean>(true)
 
   const [selected, setSelected] = useState<string[]>([])
+
+  useEffect(() => {
+    setImmediate(true)
+    if (!id) return
+    setTimeout(() => {
+      setImmediate(false)
+    }, 300)
+  }, [id])
 
   const [params, setParams] = useState<{
     visible: boolean
@@ -61,7 +71,7 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
       align: 'center',
       width: 100,
       render(value) {
-        return <div>{value.contactKeyword ? '是' : '否'}</div>
+        return <div>{value.id === contactId ? '是' : '否'}</div>
       },
     },
   ]
@@ -71,6 +81,9 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
       message.error('至少选择一个联系人！')
     }
     onUpdateContract(selected)
+    setTimeout(() => {
+      setSearchDefaultForm({ ...searchDefaultForm })
+    }, 300)
   }
 
   const onEditOk = async (customerRow: ContractsType) => {
@@ -117,6 +130,7 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
         fetchData={getSupplierContracts}
         searchFilter={searchDefaultForm}
         immediate={immediate}
+        multipleSelected={[contactId] as string[]}
         isSelection={true}
         isPagination={false}
         selectionParentType="radio"
