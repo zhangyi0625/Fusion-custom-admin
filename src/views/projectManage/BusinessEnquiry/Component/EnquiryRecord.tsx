@@ -5,6 +5,8 @@ import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
 import PurchaseIcon from '@/assets/svg/icon/purchase-cion.png'
 import LinkIcon from '@/assets/svg/icon/link.svg'
 import { getBusinessEnquiryRecord } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import { BussinesEnquiryRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { postDownlFile, postPreviewFile } from '@/services/upload/UploadApi'
 
 export type EnquiryRecordProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -13,11 +15,9 @@ export type EnquiryRecordProps = {
 
 const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
   ({ source, projectId }) => {
-    const preview = () => {}
+    const [recordType, setRecordType] = useState<boolean | string>('')
 
-    const download = () => {}
-
-    const [recordType, setRecordType] = useState<string>('')
+    const [enquiryRecord, setEnquiryRecord] = useState([])
 
     const recordTypeOptions = [
       {
@@ -25,82 +25,97 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
         value: '',
       },
       {
-        label: '询价记录',
-        value: 0,
+        label: '报价记录',
+        value: false,
       },
       {
-        label: '报价记录',
-        value: 1,
+        label: '询价记录',
+        value: true,
       },
     ]
 
     useEffect(() => {
-      projectId && loadBusinessEnquiryRecord()
+      projectId && loadBusinessEnquiryRecord('')
     }, [source, projectId])
 
-    const loadBusinessEnquiryRecord = () => {
-      getBusinessEnquiryRecord(projectId, {
-        isInquery: !!recordType ? Boolean(recordType) : null,
-      }).then((resp) => {
-        console.log('getBusinessEnquiryRecord', projectId, resp)
+    const preview = (fileId: string, fileName: string) => {
+      if (!fileId) return
+      postPreviewFile(fileId).then(async (resp) => {
+        // const file = await getBase64(resp as unknown as FileType)
+        // setPreviewImage(file)
+        // setPreviewOpen(true)
       })
     }
 
-    const enquiryRecord = [
-      {
-        dot: (
-          <div>
-            <img src={EnquiryIcon} className="w-[36px] h-[36px]" alt="" />
-          </div>
-        ),
-        children: (
-          <div className="text-gray-400 ml-[16px] text-sm">
-            2015-08-22 12:00:00<span className="ml-[16px]">赛锦悦</span>
-            <p className="text-dull-grey my-[8px]">
-              上传供应商“真和物流科技”询价表
-            </p>
-            <div className="flex items-center justify-between w-[636px] bg-neutral-100 px-[12px] rounded-[8px] h-[44px] leading-[44px]">
-              <div className="flex items-center">
-                <img src={LinkIcon} className="w-[16px] h-[16px]" alt="" />
-                <p className="ml-[3px] text-dull-grey">这是附件的名称.doc</p>
-              </div>
-              <div>
-                <Space>
-                  <Button onClick={preview} type="link">
-                    预览
-                  </Button>
-                  <Button onClick={download} type="link">
-                    下载
-                  </Button>
-                </Space>
-              </div>
-            </div>
-          </div>
-        ),
-      },
-      {
-        dot: <img src={QuotationIcon} className="w-[36px] h-[36px]" alt="" />,
-        children: (
-          <div className="text-gray-400 ml-[16px] text-sm">
-            2015-08-22 12:00:00<span className="ml-[16px]">赛锦悦</span>
-            <p className="text-dull-grey">上传供应商“真和物流科技”询价表</p>
-          </div>
-        ),
-      },
-      {
-        dot: <img src={PurchaseIcon} className="w-[36px] h-[36px]" alt="" />,
-        children: (
-          <div className="text-gray-400 ml-[16px] text-sm">
-            2015-08-22 12:00:00<span className="ml-[16px]">赛锦悦</span>
-            <p className="text-dull-grey">上传供应商“真和物流科技”询价表</p>
-          </div>
-        ),
-      },
-    ]
+    const download = (fileId: string, fileName: string) => {
+      if (!fileId) return
+      postDownlFile(fileId).then((resp) => {
+        let blobUrl = window.URL.createObjectURL(resp)
+        const aElement = document.createElement('a')
+        document.body.appendChild(aElement)
+        aElement.style.display = 'none'
+        aElement.href = blobUrl
+        aElement.download = fileName
+        aElement.click()
+        document.body.removeChild(aElement)
+      })
+    }
 
-    const changeType = (type: string) => {
+    const loadBusinessEnquiryRecord = (type: boolean | string) => {
+      getBusinessEnquiryRecord(projectId, {
+        isInquery: type,
+      }).then((resp) => {
+        let data = resp.map((item: BussinesEnquiryRecordType) => {
+          return {
+            dot: (
+              <div>
+                <img
+                  src={item.isInquery ? EnquiryIcon : QuotationIcon}
+                  className="w-[36px] h-[36px]"
+                  alt=""
+                />
+              </div>
+            ),
+            children: (
+              <>
+                <div className="text-gray-400 ml-[16px] text-sm">
+                  {item.createTime}
+                  <span className="ml-[16px]">{item.createName}</span>
+                  <p className="text-dull-grey my-[8px]">{item.content}</p>
+                </div>
+                <div className="flex items-center justify-between w-[636px] ml-[16px] bg-neutral-100 px-[12px] rounded-[8px] h-[44px] leading-[44px]">
+                  <div className="flex items-center">
+                    <img src={LinkIcon} className="w-[16px] h-[16px]" alt="" />
+                    <p className="ml-[3px] text-dull-grey">{item.fileName}</p>
+                  </div>
+                  <div>
+                    <Space>
+                      <Button
+                        onClick={() => preview(item.fileId, item.fileName)}
+                        type="link"
+                      >
+                        预览
+                      </Button>
+                      <Button
+                        onClick={() => download(item.fileId, item.fileName)}
+                        type="link"
+                      >
+                        下载
+                      </Button>
+                    </Space>
+                  </div>
+                </div>
+              </>
+            ),
+          }
+        })
+        setEnquiryRecord(data)
+      })
+    }
+
+    const changeType = (type: boolean | string) => {
       setRecordType(type)
-      loadBusinessEnquiryRecord()
+      loadBusinessEnquiryRecord(type)
     }
 
     return (
@@ -114,7 +129,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
                 placeholder="请选择"
                 showSearch
                 value={recordType}
-                onChange={(e: string) => changeType(e)}
+                onChange={(e: boolean | string) => changeType(e)}
                 options={recordTypeOptions}
                 filterOption={(input, option) =>
                   String(option?.label ?? '')

@@ -269,9 +269,9 @@ const SaleProject: React.FC = () => {
             </Button>
             <Button
               onClick={() =>
-                _.status === '待采购'
+                _.status === 'PENDING_PURCHASE'
                   ? deleteSaleProject(_.id)
-                  : stopSaleProject(_.id)
+                  : stopSaleProject(_)
               }
               disabled={
                 ProjectStatusOptions.findIndex(
@@ -281,7 +281,7 @@ const SaleProject: React.FC = () => {
               color="danger"
               variant="link"
             >
-              {_.status === '待采购' ? '删除' : '中止'}
+              {_.status === 'PENDING_PURCHASE' ? '删除' : '中止'}
             </Button>
           </Space>
         )
@@ -289,7 +289,14 @@ const SaleProject: React.FC = () => {
     },
   ]
 
-  const stopSaleProject = (id: string) => {}
+  const stopSaleProject = (customerRow: BusinessEnquiryType) => {
+    updateBusinessEnquiryList({ ...customerRow, status: 'TERMINATED' }).then(
+      () => {
+        message.success('中止成功')
+        onUpdateSearch(searchDefaultForm)
+      }
+    )
+  }
 
   const deleteSaleProject = (id: string) => {
     modal.confirm({

@@ -7,6 +7,7 @@ import AddSalesContract, {
 } from '@/views/contractManage/SalesContract/AddSalesContract'
 import {
   addContractManage,
+  deleteContractManage,
   getContractManage,
   updateContractManage,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
@@ -14,12 +15,15 @@ import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 import { AddSalesContractForm } from '@/views/contractManage/config'
 import { postDownlFile } from '@/services/upload/UploadApi'
+import { ExclamationCircleFilled } from '@ant-design/icons'
+import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type SalesContractProps = {
   projectId: string
+  detail: BusinessEnquiryType
 }
 
-const SalesContract: React.FC<SalesContractProps> = ({ projectId }) => {
+const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
   const [immediate, setImmediate] = useState<boolean>(false)
 
   const { modal, message } = App.useApp()
@@ -172,13 +176,24 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId }) => {
   }
 
   const onEditOk = async (customerRow: SaleContractType) => {
+    console.log(customerRow, 'currentRow', detail)
+    let filterRow = filterKeys(
+      detail,
+      ['salesProjectId', 'customerId', 'companyId', 'salespersonId'],
+      true
+    )
+    let info = {
+      ...customerRow,
+      ...filterRow,
+      salesProjectId: projectId,
+    }
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addContractManage({ ...customerRow, source: 'S' })
+        await addContractManage(info)
       } else {
         // 编辑数据
-        await updateContractManage({ ...customerRow, source: 'S' })
+        await updateContractManage(info)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
@@ -202,7 +217,20 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId }) => {
     })
   }
 
-  const deleteItem = (id: string) => {}
+  const deleteItem = (id: string) => {
+    modal.confirm({
+      title: '删除该销售合同',
+      icon: <ExclamationCircleFilled />,
+      content: '确定删除该销售合同吗？数据删除后将无法恢复！',
+      onOk() {
+        deleteContractManage(id).then(() => {
+          message.success('删除成功')
+          // 刷新表格数据
+          onUpdateSearch(searchDefaultForm)
+        })
+      },
+    })
+  }
 
   return (
     <>
@@ -246,6 +274,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId }) => {
             source: 'SaleProject',
           })
         }
+        contractType="SalesContract"
         onOk={onEditOk}
       />
     </>

@@ -319,10 +319,10 @@ const PurchaseContract: React.FC = () => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addContractManage(customerRow)
+        await addContractManage({ ...customerRow, source: 'P' })
       } else {
         // 编辑数据
-        await updateContractManage(customerRow)
+        await updateContractManage({ ...customerRow, source: 'P' })
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据

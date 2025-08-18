@@ -58,26 +58,33 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
 
   useEffect(() => {
     if (!visible) return
+    setFileList([])
     if (source === 'SaleProject') {
-      formMap.map((item) => {
-        let filterKeys = [
-          'salesProjectId',
-          'customerId',
-          'companyId',
-          'salespersonId',
-        ]
-        if (filterKeys.includes(item.name)) item.hiddenItem = true
+      let filterKeys = [
+        'salesProjectId',
+        'customerId',
+        'companyId',
+        'salespersonId',
+      ]
+      let newForm = formMap.filter((item) => {
+        if (!filterKeys.includes(item.name)) {
+          console.log(item, 'item')
+          return item
+        }
       })
-      setFormMap([...formMap])
+      setFormMap([...newForm])
     } else {
       init()
     }
     !currentRow && form.resetFields()
-    currentRow &&
+    if (currentRow) {
       form.setFieldsValue({
         ...currentRow,
         contractTime: dayjs(currentRow.contractTime),
       })
+      currentRow.fileIds &&
+        setFileList([{ uid: currentRow.fileIds[0], name: '销售合同' }])
+    }
   }, [visible])
 
   const init = async () => {
@@ -147,10 +154,16 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
   }
 
   const onConfirm = () => {
+    console.log({ ...form.getFieldsValue(), source: 'S' })
+
     form
       .validateFields()
       .then(() => {
-        onOk({ ...form.getFieldsValue(), source: 'S' })
+        onOk({
+          ...form.getFieldsValue(),
+          source: 'S',
+          // contractTime: dayjs(form.getFieldsValue().contractTime),
+        })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段

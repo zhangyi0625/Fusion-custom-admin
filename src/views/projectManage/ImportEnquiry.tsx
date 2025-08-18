@@ -18,8 +18,9 @@ export type ImportEnquiryProps = {
   params: {
     visible: boolean
     isFirst: boolean
+    id: string | null
   }
-  onOk: (params: Omit<BussinesEnquiryImportType, 'id'>) => void
+  onOk: (params: BussinesEnquiryImportType) => void
   onCancel: () => void
 }
 
@@ -30,7 +31,7 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
   onCancel,
   onOk,
 }) => {
-  const { visible, isFirst } = params
+  const { visible, isFirst, id } = params
 
   const [form] = Form.useForm()
 
@@ -61,7 +62,6 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
             inquiryFile: resp.data.id,
           })
           console.log(form.getFieldsValue())
-
           // 解析xlsx内容
           loadAnalysis(info.file as FileType, setFileResults, 'ImportEnquiry')
         })
@@ -89,10 +89,10 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
       .validateFields()
       .then(() => {
         console.log(
-          { ...form.getFieldsValue(), products: fileResults },
+          { ...form.getFieldsValue(), products: fileResults, id: id },
           'form.getFieldsValue()'
         )
-        onOk({ ...form.getFieldsValue(), products: fileResults })
+        onOk({ ...form.getFieldsValue(), products: fileResults, id: id })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -116,7 +116,7 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
         {!isFirst && (
           <Form.Item
             label="理由"
-            name="reason"
+            name="modifyReason"
             rules={[
               { required: true, message: '请输入你重新上传询价表的理由' },
             ]}

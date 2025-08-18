@@ -311,14 +311,14 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
               <Button onClick={downloadTable} type="default">
                 下载询价表
               </Button>
-              <Button
+              {/* <Button
                 onClick={() =>
                   setImportModal({ visible: true, source: 'BusinessEnquiry' })
                 }
                 type="default"
               >
                 导入产品
-              </Button>
+              </Button> */}
               <Button
                 onClick={() =>
                   setParams({ visible: true, selected: dataSource })
@@ -352,6 +352,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
             dataSource={dataSource}
             scroll={{ x: 'max-content', y: 258 }}
             columns={mergedColumns as ColumnTypes}
+            pagination={false}
           />
         </div>
         <ProductTransfer

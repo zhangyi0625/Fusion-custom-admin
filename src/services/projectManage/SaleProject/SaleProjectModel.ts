@@ -1,10 +1,10 @@
 export interface MakeQuotationTableType {
   id: string
-  name: string
-  unit: string
-  count: number
+  productName: string
+  productUnit: string
+  qty: number
   price: string
-  pricesSum: string
-  changePrice: string | number | null
-  changePriceSum: string | number | null
+  amount: string
+  adjAmount: string | number | null
+  adjPrice: string | number | null
 }

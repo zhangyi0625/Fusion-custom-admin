@@ -20,7 +20,7 @@ type RecordType = {
 }
 
 const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
-  ({ params, projectId, onOk, onCancel }) => {
+  ({ params, onOk, onCancel }) => {
     const { visible, selected } = params
 
     const [mockData, setMockData] = useState<RecordType[]>([])

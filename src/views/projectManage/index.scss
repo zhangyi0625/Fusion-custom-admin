@@ -22,6 +22,12 @@
   background: #fafafa;
 }
 
+.ant-drawer-body {
+  .ant-tabs-nav-operations {
+    display: none !important;
+  }
+}
+
 .editable-row {
   .ant-table-cell:nth-of-type(1) {
     border-radius: unset !important;

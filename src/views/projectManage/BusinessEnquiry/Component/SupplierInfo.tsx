@@ -16,7 +16,6 @@ import ImportEnquiry from '../../ImportEnquiry'
 import MakeQuotationModal from '../../MakeQuotationModal'
 import EditQuotation from '../../EditQuotation'
 import ConfirmQuotation from '../../ConfirmQuotation'
-import { deleteSaleProjectList } from '@/services/projectManage/SaleProject/SaleProjectApi'
 import type {
   BusinessEnquiryType,
   BussinesEnquiryImportType,

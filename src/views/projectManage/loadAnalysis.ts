@@ -59,7 +59,8 @@ export function loadAnalysis(
     const jsonData: [string][] = XLSX.utils.sheet_to_json(worksheet, {
       header: 1,
     })
-
+    // 截取头部询价编号
+    let no = jsonData[0] as unknown as string[][5]
     // 去除头部标题和尾部栏目(表格内容一定包含序号)
     let sliceJsonData = jsonData.filter(
       (item) => item[0] && !isString(item[0]) && Number(item[0])
@@ -86,15 +87,19 @@ export function loadAnalysis(
         }
         if (params['productModel/productSpec']) {
           params = {
-            ...filterKeys(params, ['productUnit', 'qty'], true),
+            ...filterKeys(
+              params,
+              ['productUnit', 'qty', 'price', 'amount'],
+              true
+            ),
             productModel: params['productModel/productSpec']?.split('/')[0],
             productSpec: params['productModel/productSpec']?.split('/')[1],
-            // projectSupplierId: '1955089688276529153',
+            productName: params['productModel/productSpec'],
           }
         }
         arr.push(params)
       })
-      console.log(sliceJsonData.slice(1), 'jsonData', sliceJsonData, arr)
+      console.log(sliceJsonData.slice(1), 'jsonData', sliceJsonData, arr, no)
       callback(arr)
     }
   }
