@@ -17,6 +17,7 @@ export interface BusinessEnquiryType {
   createName: string
   createTime: string
   entrustName: string
+  confirmSupplierId: string | null
 }
 
 export interface BusinessEnquiryParams extends Partial<BusinessEnquiryType> {

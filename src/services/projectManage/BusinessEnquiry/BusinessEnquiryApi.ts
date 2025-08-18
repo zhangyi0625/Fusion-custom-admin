@@ -167,10 +167,14 @@ export const getBusinessOperationRecord = (id: string | number) => {
  * @param params 商机询价参数
  * @returns 商机询价列表
  */
-export const getBusinessEnquiryRecord = (id: string | number) => {
+export const getBusinessEnquiryRecord = (
+  id: string | number,
+  params: { isInquery: boolean | null }
+) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesEnquiryRecord + '/' + id,
+      url: BusinessEnquiryApi.bussinesEnquiryRecord + id,
+      params: params,
     },
     {
       successMessageMode: 'none',

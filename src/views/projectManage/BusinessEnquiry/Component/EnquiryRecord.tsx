@@ -1,5 +1,5 @@
-import { Button, Select, Space, Timeline } from 'antd'
 import { memo, useEffect, useState } from 'react'
+import { Button, Select, Space, Timeline } from 'antd'
 import EnquiryIcon from '@/assets/svg/icon/enquiry-icon.svg'
 import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
 import PurchaseIcon from '@/assets/svg/icon/purchase-cion.png'
@@ -18,6 +18,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
     const download = () => {}
 
     const [recordType, setRecordType] = useState<string>('')
+
     const recordTypeOptions = [
       {
         label: '全部记录',
@@ -25,11 +26,11 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
       },
       {
         label: '询价记录',
-        value: 1,
+        value: 0,
       },
       {
         label: '报价记录',
-        value: 2,
+        value: 1,
       },
     ]
 
@@ -38,8 +39,11 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
     }, [source, projectId])
 
     const loadBusinessEnquiryRecord = () => {
-      console.log('getBusinessEnquiryRecord', projectId)
-      getBusinessEnquiryRecord(projectId).then((resp) => {})
+      getBusinessEnquiryRecord(projectId, {
+        isInquery: !!recordType ? Boolean(recordType) : null,
+      }).then((resp) => {
+        console.log('getBusinessEnquiryRecord', projectId, resp)
+      })
     }
 
     const enquiryRecord = [
@@ -94,6 +98,11 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
       },
     ]
 
+    const changeType = (type: string) => {
+      setRecordType(type)
+      loadBusinessEnquiryRecord()
+    }
+
     return (
       <>
         <div className="flex flex-col enquiry-record">
@@ -105,7 +114,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
                 placeholder="请选择"
                 showSearch
                 value={recordType}
-                onChange={(e: string) => setRecordType(e)}
+                onChange={(e: string) => changeType(e)}
                 options={recordTypeOptions}
                 filterOption={(input, option) =>
                   String(option?.label ?? '')
