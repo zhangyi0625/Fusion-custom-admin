@@ -1,7 +1,6 @@
 import { memo, useEffect, useState } from 'react'
 import { App, Button, Space, Table, TableProps } from 'antd'
 import { CheckCircleOutlined, ExclamationCircleFilled } from '@ant-design/icons'
-import { SearchTable } from 'customer-search-form-table'
 import {
   addBatchBusinessSupplier,
   confirmBussinesSupplier,

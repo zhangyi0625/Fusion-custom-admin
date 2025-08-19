@@ -24,8 +24,6 @@ export type SalesContractProps = {
 }
 
 const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
-  const [immediate, setImmediate] = useState<boolean>(false)
-
   const { modal, message } = App.useApp()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState({
@@ -257,7 +255,6 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
         rowKey="id"
         totalKey="total"
         fetchResultKey="data"
-        immediate={immediate}
         searchFilter={searchDefaultForm}
         fetchData={getContractManage}
         isSelection={false}

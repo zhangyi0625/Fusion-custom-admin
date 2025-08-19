@@ -1,12 +1,4 @@
-import React, {
-  memo,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import DragModal from '@/components/modal/DragModal'
 import {
   App,
@@ -22,8 +14,7 @@ import {
   Table,
   TableProps,
 } from 'antd'
-import { debounce, sum } from 'lodash-es'
-import { getSaleProjectQuotation } from '@/services/projectManage/SaleProject/SaleProjectApi'
+import { debounce } from 'lodash-es'
 import type { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
 import { getBusinessSupplierProduct } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'

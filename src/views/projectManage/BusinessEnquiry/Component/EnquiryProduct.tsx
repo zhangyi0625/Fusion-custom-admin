@@ -21,7 +21,6 @@ import type { BussinesEnquiryProductType } from '@/services/projectManage/Busine
 import ProductTransfer from '../../ProductTransfer'
 import ImportProduct from '../../ImportProduct'
 import { debounce } from 'lodash-es'
-import { postDownlFile } from '@/services/upload/UploadApi'
 
 export type EnquiryProductProps = {
   projectId: string

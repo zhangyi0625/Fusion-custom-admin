@@ -12,11 +12,7 @@ import {
 } from 'antd'
 import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
-import {
-  AddSalesContractForm,
-  PurchaseContractSearchColumns,
-  SalesContractSearchColumns,
-} from '../config'
+import { AddSalesContractForm, PurchaseContractSearchColumns } from '../config'
 import useParentSize from '@/hooks/useParentSize'
 import type {
   SaleContractParams,
@@ -38,7 +34,6 @@ import { RootState, setEssentail } from '@/stores/store'
 import { filterKeys } from '@/utils/tool'
 import { getRoleUser } from '@/services/system/role/roleApi'
 import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
-import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 import { formatTime } from '@/utils/format'
 import { getSupplier } from '@/services/supplierManage/Supplier/SupplierApi'
 

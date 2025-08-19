@@ -1,5 +1,5 @@
 import '../index.scss'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Drawer, Space, Tabs, TabsProps } from 'antd'
 import BaseInfoCom from './Component/BaseInfo'
 import EnquiryProductCom from './Component/EnquiryProduct'
@@ -36,10 +36,6 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('BaseInfoCom')
-
-  const projectId = useMemo(() => {
-    return !drawerShow ? '' : detailId
-  }, [drawerShow])
 
   const [enquiryDrawerInfo, setEnquiryDrawerInfo] = useState<{
     detail: BusinessEnquiryType | null
