@@ -1,0 +1,13 @@
+
+.freviewFile .vue-office-excel{
+    min-height: 700px;
+    /* max-height: 500px; */
+    width: 100%;
+    min-width: 700px;
+    overflow-x: hidden;
+}
+.freviewFile  .x-spreadsheet-toolbar{
+    width: 100%;
+    overflow-x: auto;
+
+}
