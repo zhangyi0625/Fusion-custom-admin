@@ -28,6 +28,7 @@ const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
 
     useEffect(() => {
       if (!visible) return
+      setTargetKeys([])
       loadAllSupplier()
     }, [visible])
 

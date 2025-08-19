@@ -45,6 +45,7 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
 
   useEffect(() => {
     if (!visible) return
+    setTargetKeys([])
     loadAllProduct()
   }, [visible])
 
