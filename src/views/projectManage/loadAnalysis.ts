@@ -60,7 +60,7 @@ export function loadAnalysis(
       header: 1,
     })
     // 截取头部询价编号
-    let no = jsonData[0] as unknown as string[][5]
+    let inquiryNumber = jsonData[0] as unknown as string[]
     // 去除头部标题和尾部栏目(表格内容一定包含序号)
     let sliceJsonData = jsonData.filter(
       (item) => item[0] && !isString(item[0]) && Number(item[0])
@@ -95,11 +95,18 @@ export function loadAnalysis(
             productModel: params['productModel/productSpec']?.split('/')[0],
             productSpec: params['productModel/productSpec']?.split('/')[1],
             productName: params['productModel/productSpec'],
+            inquiryNumber: inquiryNumber[5],
           }
         }
         arr.push(params)
       })
-      console.log(sliceJsonData.slice(1), 'jsonData', sliceJsonData, arr, no)
+      console.log(
+        sliceJsonData.slice(1),
+        'jsonData',
+        sliceJsonData,
+        arr,
+        inquiryNumber[5]
+      )
       callback(arr)
     }
   }

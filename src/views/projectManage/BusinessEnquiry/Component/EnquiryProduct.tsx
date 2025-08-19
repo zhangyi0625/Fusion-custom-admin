@@ -14,12 +14,14 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import {
   batchBusinessEnquiryProduct,
   deleteBusinessEnquiryProduct,
+  downloadBusinessProject,
   getBusinessEnquiryProduct,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import ProductTransfer from '../../ProductTransfer'
 import ImportProduct from '../../ImportProduct'
 import { debounce } from 'lodash-es'
+import { postDownlFile } from '@/services/upload/UploadApi'
 
 export type EnquiryProductProps = {
   projectId: string
@@ -276,6 +278,16 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
 
     const downloadTable = () => {
       console.log(dataSource, 'dataSource')
+      downloadBusinessProject(projectId).then((resp) => {
+        let blobUrl = window.URL.createObjectURL(resp)
+        const aElement = document.createElement('a')
+        document.body.appendChild(aElement)
+        aElement.style.display = 'none'
+        aElement.href = blobUrl
+        aElement.download = '下载询价表' + '.xlsx'
+        aElement.click()
+        document.body.removeChild(aElement)
+      })
     }
 
     const importSuccess = () => {}

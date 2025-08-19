@@ -28,6 +28,7 @@ export enum BusinessEnquiryApi {
   confirmBussinesSupplier = '/business/project-supplier/confirmSupplier',
   bussinessProductList = '/business/project-supplier/product',
   batchBussinessProductList = '/business/project-supplier/product/batch',
+  downloadbusinessProject = '/business/project-inquiry-product/download/',
 }
 
 /**
@@ -372,7 +373,6 @@ export const downloadBusinessEnquiry = (
     {
       url: BusinessEnquiryApi.bussinesDownloadEnquiry,
       data: params,
-      responseType: 'blob',
     },
     {
       successMessageMode: 'none',
@@ -448,6 +448,24 @@ export const putBusinessSupplierProduct = (
     },
     {
       successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 下载商机询价表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
+ */
+export const downloadBusinessProject = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: BusinessEnquiryApi.downloadbusinessProject + '/' + id,
+      responseType: 'blob',
+    },
+    {
+      successMessageMode: 'none',
+      isTransformResponse: true,
     }
   )
 }

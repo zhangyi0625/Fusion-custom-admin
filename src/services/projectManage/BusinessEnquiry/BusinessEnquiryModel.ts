@@ -72,6 +72,7 @@ export interface BussinesEnquiryProduct extends BussinesEnquiryProductType {
   adjPrice?: number | string
   amount: string
   price: string
+  inquiryNumber?: string
 }
 
 export interface BussinesEnquiryDownloadType {
@@ -83,5 +84,6 @@ export interface BussinesEnquiryDownloadType {
 export interface BussinesEnquiryImportType {
   id: string
   inquiryFile: string
+  inquiryNumber: string
   products: BussinesEnquiryProduct[]
 }

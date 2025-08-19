@@ -97,6 +97,8 @@ export const transform: AxiosTransform = {
     // 不进行任何处理，直接返回响应数据
     if (!isTransformResponse) {
       return res.data
+    } else {
+      if (res.config.responseType === 'blob') return res.data
     }
     // 错误的时候返回
     const { data } = res
@@ -104,6 +106,7 @@ export const transform: AxiosTransform = {
       throw new Error('api接口请求失败，没有返回数据')
     }
     const { code, data: rtn, message: msg } = data
+
     // 系统默认200状态码为正常成功请求，可在枚举中配置自己的
     const hasSuccess =
       data && Reflect.has(data, 'code') && code === HttpCodeEnum.SUCCESS

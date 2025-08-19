@@ -56,7 +56,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       projectId && loadSupplierInfo()
       detail.confirmSupplierId && loadSupplierDetail()
       setEditProducts([])
-    }, [projectId, detail.confirmSupplierId])
+    }, [projectId])
 
     const [enquiryModal, setEnquiryModal] = useState<{
       visible: boolean
@@ -103,15 +103,15 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           return (
             <div
               className={
-                value.inquiryFile
+                value.inquiryNumber
                   ? 'text-blue-500 cursor-pointer'
                   : 'text-dull-grey'
               }
               onClick={() =>
-                downLoadFile(value.inquiryFile, value.inquiryFileName)
+                downLoadFile(value.inquiryFile, value.inquiryNumber)
               }
             >
-              {value.inquiryFileName ?? '未上传'}
+              {value.inquiryNumber ?? '未上传'}
             </div>
           )
         },
@@ -133,7 +133,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           return (
             <div
               className={
-                value.quotationFile
+                value.quotationNumber
                   ? 'text-blue-500 cursor-pointer'
                   : 'text-dull-grey'
               }
@@ -141,7 +141,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                 downLoadFile(value.quotationFile, value.quotationFileName)
               }
             >
-              {value.quotationFileName ?? '未生成'}
+              {value.quotationNumber ?? '未生成'}
             </div>
           )
         },
@@ -225,7 +225,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         document.body.appendChild(aElement)
         aElement.style.display = 'none'
         aElement.href = blobUrl
-        aElement.download = fileName
+        aElement.download = fileName + '.xlsx'
         aElement.click()
         document.body.removeChild(aElement)
       })
@@ -280,15 +280,19 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         id: quotationModal.supplierId as string,
         products: editProducts,
         modifyReason: params.modifyReason,
-      }).then(() => {
+      }).then((resp) => {
         message.success('修改报价成功')
         setEditModal({ ...editModal, editQuotation: false })
         loadSupplierInfo()
+        resp && downLoadFile(resp, '生成报价表')
       })
     }
 
     const confirmImportEnquiry = (current: BussinesEnquiryImportType) => {
-      importBusinessEnquiry({ ...current }).then(() => {
+      importBusinessEnquiry({
+        ...current,
+        inquiryNumber: current.products[0].inquiryNumber as string,
+      }).then(() => {
         message.success('上传成功')
         setEnquiryModal({ visible: false, isFirst: true, id: null })
         loadSupplierInfo()
@@ -317,7 +321,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
             id: quotationModal.supplierId as string,
             products: products.data,
           }).then((resp) => {
-            console.log(resp, 'resp')
+            resp && downLoadFile(resp, '生成报价表')
           })
         }
       }

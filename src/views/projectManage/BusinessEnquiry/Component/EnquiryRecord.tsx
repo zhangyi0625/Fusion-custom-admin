@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Button, Select, Space, Timeline } from 'antd'
 import EnquiryIcon from '@/assets/svg/icon/enquiry-icon.svg'
 import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
@@ -6,7 +6,8 @@ import PurchaseIcon from '@/assets/svg/icon/purchase-cion.png'
 import LinkIcon from '@/assets/svg/icon/link.svg'
 import { getBusinessEnquiryRecord } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import { BussinesEnquiryRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import { postDownlFile, postPreviewFile } from '@/services/upload/UploadApi'
+import { postDownlFile } from '@/services/upload/UploadApi'
+import PreviewFile from '@/components/PreviewFile'
 
 export type EnquiryRecordProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -34,16 +35,32 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
       },
     ]
 
+    const [fileParams, setFileParams] = useState<{
+      code: string
+      fileId: string
+    }>({
+      code: '',
+      fileId: '',
+    })
+
+    const handleContextMenu = useCallback((event: MouseEvent) => {
+      event.preventDefault() // 阻止默认的上下文菜单
+    }, [])
+
+    const onClosePreviewFile = () => {
+      setFileParams({ code: '', fileId: '' })
+      document.removeEventListener('contextmenu', handleContextMenu)
+    }
+
     useEffect(() => {
       projectId && loadBusinessEnquiryRecord('')
     }, [source, projectId])
 
     const preview = (fileId: string, fileName: string) => {
       if (!fileId) return
-      postPreviewFile(fileId).then(async (resp) => {
-        // const file = await getBase64(resp as unknown as FileType)
-        // setPreviewImage(file)
-        // setPreviewOpen(true)
+      setFileParams({
+        code: fileName,
+        fileId: fileId,
       })
     }
 
@@ -141,6 +158,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
           </div>
           <Timeline items={enquiryRecord} />
         </div>
+        <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
   }
