@@ -26,8 +26,7 @@ import {
   editRole,
   getRoleListByPage,
 } from '@/services/system/role/roleApi'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { SelectRoleOptions } from './config'
 import RoleInfoModal from './RoleInfoModal'
 import RoleMenuDrawer from './RoleMenuDrawer'
@@ -275,6 +274,7 @@ const Role: React.FC = () => {
           <SearchForm
             columns={SelectRoleOptions}
             gutterWidth={24}
+            iconHidden={true}
             labelPosition="left"
             btnSeparate={false}
             isShowReset={true}
@@ -316,6 +316,9 @@ const Role: React.FC = () => {
           bordered
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="roleId"
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           fetchData={getRoleListByPage}
           searchFilter={searchDefaultForm}
           isSelection={true}

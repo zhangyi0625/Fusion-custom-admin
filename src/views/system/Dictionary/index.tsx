@@ -27,9 +27,9 @@ import type {
   SysDictionaryParams,
   SysDictionaryType,
 } from '@/services/system/dictionary/dictionaryModel'
-import SearchForm, { CustomColumn } from '@/components/searchForm'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 import DictonaryModal from './DictonaryModal'
-import SearchTable from '@/components/searchTable'
 import { filterKeys } from '@/utils/tool'
 import useParentSize from '@/hooks/useParentSize'
 
@@ -74,6 +74,7 @@ const Dictionary: React.FC = () => {
     let res = await getDictionaryList()
     let newArr = res.map((item: SysDictionaryClassType) => {
       return {
+        ...item,
         id: item.dictId,
         name: item.dictName,
       }
@@ -152,16 +153,24 @@ const Dictionary: React.FC = () => {
     {
       label: '标签分类',
       name: 'dictId',
-      formType: 'select',
+      formType: 'normalSelect',
       options: dictionaryClass,
+      selectFileldName: {
+        label: 'dictName',
+        value: 'dictId',
+      },
       defaultValue: searchDefaultForm?.dictId,
       span: 6,
+      selectFetch: false,
+      hiddenItem: false,
     },
     {
       label: '字典项名称',
       name: 'dictDataName',
       formType: 'input',
       span: 6,
+      selectFetch: false,
+      hiddenItem: false,
     },
   ]
 
@@ -240,10 +249,21 @@ const Dictionary: React.FC = () => {
             <SearchForm
               columns={SelectDictionaryOptions}
               gutterWidth={24}
+              iconHidden={true}
               labelPosition="left"
               btnSeparate={false}
               isShowReset={true}
               isShowExpend={false}
+              defaultFormItemLayout={{
+                labelCol: {
+                  xs: { span: 24 },
+                  sm: { span: 8 },
+                },
+                wrapperCol: {
+                  xs: { span: 24 },
+                  sm: { span: 16 },
+                },
+              }}
               onUpdateSearch={onUpdateSearch}
             />
           )}
@@ -280,6 +300,8 @@ const Dictionary: React.FC = () => {
           columns={columns}
           bordered
           rowKey="dictDataId"
+          totalKey="count"
+          fetchResultKey="list"
           fetchData={getDictionaryListByIdPage}
           searchFilter={searchDefaultForm}
           scroll={{ x: 'max-content', y: height - 158 }}
@@ -296,7 +318,7 @@ const Dictionary: React.FC = () => {
         dictionaryClass={dictionaryClass}
         defaultdictId={
           SelectDictionaryOptions.find((item) => item.name === 'dictId')
-            ?.defaultValue ?? null
+            ?.defaultValue as string
         }
         onCancel={() =>
           setParams({ visible: false, currentRow: null, view: false })

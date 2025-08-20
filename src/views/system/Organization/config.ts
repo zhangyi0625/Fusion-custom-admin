@@ -1,4 +1,4 @@
-import { CustomColumn } from '@/components/searchForm'
+import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectOrganizationOptions: CustomColumn[] = [
   {
@@ -6,5 +6,7 @@ export const SelectOrganizationOptions: CustomColumn[] = [
     name: 'organizationName',
     formType: 'input',
     span: 6,
+    selectFetch: false,
+    hiddenItem: false,
   },
 ]

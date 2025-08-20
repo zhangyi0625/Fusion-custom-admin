@@ -23,8 +23,7 @@ import {
   deleteOrganization,
   deleteBatchOrganization,
 } from '@/services/system/organization/organization'
-import SearchForm from '@/components/searchForm'
-import SearchTable from '@/components/searchTable'
+import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddOrganization from './AddOrganization'
 import { filterKeys } from '@/utils/tool'
 import type {
@@ -214,6 +213,7 @@ const Organization: React.FC = () => {
             columns={SelectOrganizationOptions}
             gutterWidth={24}
             labelPosition="left"
+            iconHidden={true}
             btnSeparate={false}
             isShowReset={true}
             isShowExpend={false}
@@ -250,6 +250,9 @@ const Organization: React.FC = () => {
           size="middle"
           columns={columns}
           bordered
+          totalKey="count"
+          fetchResultKey="list"
+          isPagination={true}
           rowKey="organizationId"
           scroll={{ x: 'max-content', y: height - 158 }}
           fetchData={getOrganizationListByPage}
