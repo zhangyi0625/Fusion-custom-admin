@@ -276,7 +276,6 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
     }
 
     const downloadTable = () => {
-      console.log(dataSource, 'dataSource')
       downloadBusinessProject(projectId).then((resp) => {
         let blobUrl = window.URL.createObjectURL(resp)
         const aElement = document.createElement('a')

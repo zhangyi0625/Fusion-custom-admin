@@ -137,7 +137,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                   : 'text-dull-grey'
               }
               onClick={() =>
-                downLoadFile(value.quotationFile, value.quotationFileName)
+                downLoadFile(value.quotationFile, value.quotationNumber)
               }
             >
               {value.quotationNumber ?? '未生成'}

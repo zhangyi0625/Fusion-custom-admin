@@ -217,6 +217,11 @@ const Supplier: React.FC = () => {
     })
   }
 
+  const cancelSupplier = () => {
+    setSupplierDrawer({ visible: false, id: '' })
+    onUpdateSearch(searchDefaultForm)
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -280,10 +285,7 @@ const Supplier: React.FC = () => {
         onOk={onEditOk}
         onCancel={() => setParams({ visible: false, currentRow: null })}
       />
-      <SupplierRecord
-        params={supplierDrawer}
-        onCancel={() => setSupplierDrawer({ visible: false, id: '' })}
-      />
+      <SupplierRecord params={supplierDrawer} onCancel={cancelSupplier} />
       {previewImage && (
         <Image
           wrapperStyle={{ display: 'none' }}
