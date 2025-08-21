@@ -4,21 +4,35 @@ import EnquiryIcon from '@/assets/svg/icon/enquiry-icon.svg'
 import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
 // import PurchaseIcon from '@/assets/svg/icon/purchase-cion.png'
 import LinkIcon from '@/assets/svg/icon/link.svg'
-import { getBusinessEnquiryRecord } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import {
+  getBusinessEnquiryRecord,
+  getBusinessSupplier,
+} from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import { BussinesEnquiryRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postDownlFile } from '@/services/upload/UploadApi'
 import PreviewFile from '@/components/PreviewFile'
+import { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 
 export type EnquiryRecordProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
   projectId: string
 }
 
+type RecordType = {
+  isInquery: string | boolean
+  supplierId: string
+}
+
 const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
   ({ source, projectId }) => {
-    const [recordType, setRecordType] = useState<boolean | string>('')
+    const [searchDefaultForm, setSearchDefaultForm] = useState<RecordType>({
+      isInquery: '',
+      supplierId: '',
+    })
 
     const [enquiryRecord, setEnquiryRecord] = useState([])
+
+    const [supplier, setSupplier] = useState<SupplierType[]>([])
 
     const recordTypeOptions = [
       {
@@ -53,7 +67,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
     }
 
     useEffect(() => {
-      projectId && loadBusinessEnquiryRecord('')
+      projectId && loadBusinessEnquiryRecord()
     }, [source, projectId])
 
     const preview = (fileId: string, fileName: string) => {
@@ -78,61 +92,71 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
       })
     }
 
-    const loadBusinessEnquiryRecord = (type: boolean | string) => {
-      getBusinessEnquiryRecord(projectId, {
-        isInquery: type,
-      }).then((resp) => {
-        let data = resp.map((item: BussinesEnquiryRecordType) => {
-          return {
-            dot: (
-              <div>
-                <img
-                  src={item.isInquery ? EnquiryIcon : QuotationIcon}
-                  className="w-[36px] h-[36px]"
-                  alt=""
-                />
-              </div>
-            ),
-            children: (
-              <>
-                <div className="text-gray-400 ml-[16px] text-sm">
-                  {item.createTime}
-                  <span className="ml-[16px]">{item.createName}</span>
-                  <p className="text-dull-grey my-[8px]">{item.content}</p>
+    const loadBusinessEnquiryRecord = async (type?: RecordType) => {
+      await loadSupplierList()
+      getBusinessEnquiryRecord(projectId, type ? type : searchDefaultForm).then(
+        (resp) => {
+          let data = resp.map((item: BussinesEnquiryRecordType) => {
+            return {
+              dot: (
+                <div>
+                  <img
+                    src={item.isInquery ? EnquiryIcon : QuotationIcon}
+                    className="w-[36px] h-[36px]"
+                    alt=""
+                  />
                 </div>
-                <div className="flex items-center justify-between w-[636px] ml-[16px] bg-neutral-100 px-[12px] rounded-[8px] h-[44px] leading-[44px]">
-                  <div className="flex items-center">
-                    <img src={LinkIcon} className="w-[16px] h-[16px]" alt="" />
-                    <p className="ml-[3px] text-dull-grey">{item.fileName}</p>
+              ),
+              children: (
+                <>
+                  <div className="text-gray-400 ml-[16px] text-sm">
+                    {item.createTime}
+                    <span className="ml-[16px]">{item.createName}</span>
+                    <p className="text-dull-grey my-[8px]">{item.content}</p>
                   </div>
-                  <div>
-                    <Space>
-                      <Button
-                        onClick={() => preview(item.fileId, item.fileName)}
-                        type="link"
-                      >
-                        预览
-                      </Button>
-                      <Button
-                        onClick={() => download(item.fileId, item.fileName)}
-                        type="link"
-                      >
-                        下载
-                      </Button>
-                    </Space>
+                  <div className="flex items-center justify-between w-[636px] ml-[16px] bg-neutral-100 px-[12px] rounded-[8px] h-[44px] leading-[44px]">
+                    <div className="flex items-center">
+                      <img
+                        src={LinkIcon}
+                        className="w-[16px] h-[16px]"
+                        alt=""
+                      />
+                      <p className="ml-[3px] text-dull-grey">{item.fileName}</p>
+                    </div>
+                    <div>
+                      <Space>
+                        <Button
+                          onClick={() => preview(item.fileId, item.fileName)}
+                          type="link"
+                        >
+                          预览
+                        </Button>
+                        <Button
+                          onClick={() => download(item.fileId, item.fileName)}
+                          type="link"
+                        >
+                          下载
+                        </Button>
+                      </Space>
+                    </div>
                   </div>
-                </div>
-              </>
-            ),
-          }
-        })
-        setEnquiryRecord(data)
-      })
+                </>
+              ),
+            }
+          })
+          setEnquiryRecord(data)
+        }
+      )
     }
 
-    const changeType = (type: boolean | string) => {
-      setRecordType(type)
-      loadBusinessEnquiryRecord(type)
+    const loadSupplierList = async () => {
+      const res = await getBusinessSupplier(projectId)
+      setSupplier(res)
+    }
+
+    const changeType = (type: boolean | string, key: string) => {
+      setSearchDefaultForm({ ...searchDefaultForm, [key]: type })
+      loadBusinessEnquiryRecord({ ...searchDefaultForm, [key]: type })
     }
 
     return (
@@ -145,14 +169,29 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
                 allowClear
                 placeholder="请选择"
                 showSearch
-                value={recordType}
-                onChange={(e: boolean | string) => changeType(e)}
+                value={searchDefaultForm.isInquery}
+                onChange={(e: boolean | string) => changeType(e, 'isInquery')}
                 options={recordTypeOptions}
                 filterOption={(input, option) =>
                   String(option?.label ?? '')
                     .toLowerCase()
                     .includes(input.toLowerCase())
                 }
+              />
+            )}
+            {source === 'SaleProject' && (
+              <Select
+                style={{ width: '272px', marginLeft: '20px' }}
+                allowClear
+                placeholder="请选择"
+                showSearch
+                value={searchDefaultForm.supplierId}
+                onChange={(e: boolean | string) => changeType(e, 'supplierId')}
+                options={supplier}
+                fieldNames={{
+                  label: 'supplierName',
+                  value: 'id',
+                }}
               />
             )}
           </div>

@@ -77,6 +77,7 @@ const BusinessEnquiry: React.FC = () => {
     drawerShow: boolean
     detailId: string | null
     source: 'BusinessEnquiry'
+    index?: number
   }>({
     drawerShow: false,
     detailId: null,
@@ -201,9 +202,18 @@ const BusinessEnquiry: React.FC = () => {
     {
       title: '询价供应商',
       key: 'supplierCount',
-      dataIndex: 'supplierCount',
       align: 'center',
       width: 150,
+      render(value) {
+        return (
+          <div
+            className="text-blue-500 cursor-pointer"
+            onClick={() => jumpDetail(value.id, 2)}
+          >
+            {value.supplierCount}
+          </div>
+        )
+      },
     },
     {
       title: '预计采购日期',
@@ -226,10 +236,12 @@ const BusinessEnquiry: React.FC = () => {
       },
     },
     {
-      title: '金额',
+      title: '预估金额',
       key: 'price',
-      dataIndex: 'price',
       align: 'center',
+      render(value) {
+        return <div>{value.price}万元</div>
+      },
     },
     {
       title: '付款方式',
@@ -354,8 +366,13 @@ const BusinessEnquiry: React.FC = () => {
     } catch (error) {}
   }
 
-  const jumpDetail = (no: string) => {
-    setDrawer({ drawerShow: true, detailId: no, source: 'BusinessEnquiry' })
+  const jumpDetail = (no: string, index?: number) => {
+    setDrawer({
+      drawerShow: true,
+      detailId: no,
+      source: 'BusinessEnquiry',
+      index: index ? 3 : undefined,
+    })
   }
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {

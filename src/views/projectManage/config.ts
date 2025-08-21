@@ -129,7 +129,7 @@ export const AddBusinessEnquiryForm: Omit<
     isRules: true,
   },
   {
-    label: '金额',
+    label: '预估金额(万元)',
     name: 'price',
     formType: 'input',
     span: 12,

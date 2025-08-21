@@ -18,6 +18,7 @@ export type BusinessEnquiryDrawerProps = {
     drawerShow: boolean
     detailId: string | null
     source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
+    index?: number
   }
   onCancel: () => void
 }
@@ -32,7 +33,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
   drawer,
   onCancel,
 }) => {
-  const { drawerShow, detailId } = drawer
+  const { drawerShow, detailId, index } = drawer
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('BaseInfoCom')
@@ -42,18 +43,6 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
   }>({
     detail: null,
   })
-
-  useEffect(() => {
-    if (!drawerShow) return
-    loadEnquiryDetail()
-    console.log(defaultActiveKey, 'defaultActiveKey')
-  }, [drawerShow])
-
-  const loadEnquiryDetail = () => {
-    getBusinessEnquiryDetail(detailId as string).then((resp) => {
-      setEnquiryDrawerInfo({ ...enquiryDrawerInfo, detail: resp })
-    })
-  }
 
   const baseInfo = useCallback(() => {
     return [
@@ -195,8 +184,25 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     },
   ]
 
+  const loadEnquiryDetail = () => {
+    getBusinessEnquiryDetail(detailId as string).then((resp) => {
+      setEnquiryDrawerInfo({ ...enquiryDrawerInfo, detail: resp })
+      if (index) {
+        let key = components[index as number].key
+        console.log(defaultActiveKey, 'defaultActiveKey', index, key)
+        setDefaultActiveKey(key)
+      }
+    })
+  }
+
+  useEffect(() => {
+    if (!drawerShow) return
+    loadEnquiryDetail()
+  }, [drawerShow])
+
   const onChange = (value: string) => {
     setDefaultActiveKey(value)
+    console.log(value, 'value', detailId)
   }
 
   const onClose = () => {
