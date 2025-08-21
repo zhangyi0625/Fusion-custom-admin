@@ -2280,7 +2280,7 @@ export default defineMock([
             menuId: '1958344315654656002',
             parentId: '1958344031041769474',
             title: '产品分类',
-            path: '/productManage/productClas2',
+            path: '/productManage/productClass',
             component: 'productManage/ProductClass',
             menuType: 1,
             sortNumber: 52,

@@ -1,6 +1,6 @@
 export interface SysOrganizationType {
   organizationId: string | null
-  parentId: string
+  parentId: string | null
   organizationTypeName: string
   organizationName: string | null
   organizationFullName: string
@@ -9,7 +9,7 @@ export interface SysOrganizationType {
 }
 
 export interface SysOrganizationParams
-  extends Pick<SysOrganizationType, 'organizationName'> {
+  extends Pick<SysOrganizationType, 'organizationName' | 'parentId'> {
   page: number
   limit: number
 }
