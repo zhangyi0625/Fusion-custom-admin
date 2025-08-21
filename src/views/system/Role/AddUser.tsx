@@ -11,10 +11,22 @@ import {
   TreeSelectProps,
 } from 'antd'
 import DragModal from '@/components/modal/DragModal'
-import { getRoleList } from '@/services/system/role/roleApi'
+import { editRole, getRoleList } from '@/services/system/role/roleApi'
 import { getOrganizationList } from '@/services/system/organization/organization'
 import type { SysRoleType, SysUserType } from '@/services/system/role/roleModel'
 import { buildTree } from '@/utils/tool'
+
+export interface AddUserProps {
+  open: {
+    visible: boolean
+    editRow: SysUserType | null
+  }
+  // 当前角色
+  roleId: string | null
+  // 点击确定(选中的数量)
+  onOk: (params: SysUserType) => void
+  onCancel: () => void
+}
 
 type DefaultOptionType = GetProp<TreeSelectProps, 'treeData'>[number]
 
@@ -46,8 +58,9 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
       })
     } else {
       form.resetFields()
-      form.setFieldsValue({ roles: [roleId] })
+      form.setFieldsValue({ roles: roleId ? [roleId] : [] })
     }
+    console.log(open.editRow, form.getFieldsValue())
   }, [open.visible])
 
   const init = () => {
@@ -197,12 +210,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item
-              className="mb-0"
-              label="角色"
-              name="roles"
-              rules={[{ required: true, message: '请选择角色' }]}
-            >
+            <Form.Item className="mb-0" label="角色" name="roles">
               <Select
                 mode="multiple"
                 options={role.map((item: SysRoleType) => ({
@@ -241,15 +249,3 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
   )
 }
 export default AddUser
-
-export interface AddUserProps {
-  open: {
-    visible: boolean
-    editRow: SysUserType | null
-  }
-  // 当前角色
-  roleId: string
-  // 点击确定(选中的数量)
-  onOk: (params: SysUserType) => void
-  onCancel: () => void
-}

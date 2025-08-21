@@ -182,8 +182,6 @@ const Role: React.FC = () => {
   ]
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
-    console.log(height, 'height')
-
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
