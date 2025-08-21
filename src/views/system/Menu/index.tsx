@@ -1,19 +1,5 @@
-import {
-  DeleteOutlined,
-  ExclamationCircleFilled,
-  PlusOutlined,
-  RedoOutlined,
-  SearchOutlined,
-} from '@ant-design/icons'
-import {
-  addMenu,
-  deleteMenu,
-  deleteMenuBatch,
-  // getAllMenus,
-  // getMenusByPage,
-  getMenusList,
-  updateMenu,
-} from '@/services/system/menu/menuApi'
+import { useEffect, useState } from 'react'
+import './menu.scss'
 import {
   App,
   Button,
@@ -30,14 +16,24 @@ import {
   Tag,
   Upload,
 } from 'antd'
-import type React from 'react'
-import { useEffect, useState } from 'react'
+import {
+  DeleteOutlined,
+  ExclamationCircleFilled,
+  PlusOutlined,
+  RedoOutlined,
+  SearchOutlined,
+} from '@ant-design/icons'
+import {
+  addMenu,
+  deleteMenu,
+  deleteMenuBatch,
+  getMenusList,
+  updateMenu,
+} from '@/services/system/menu/menuApi'
 import MenuInfoModal from './MenuInfoModal'
-import './menu.scss'
 import useParentSize from '@/hooks/useParentSize'
 import { addIcon } from '@/utils/utils'
 import { buildTree } from '@/utils/tool'
-import { MenuModel } from '@/services/system/menu/menuModel'
 
 /**
  * 系统菜单维护
@@ -201,9 +197,7 @@ const Menu: React.FC = () => {
     // 调用查询
     getMenusList(queryCondition)
       .then((response) => {
-        // 内部数据需要处理，内部的children如果没有数据，需要转变为null
-        const data = transformMenuData(response)
-        setTableData(data)
+        setTableData(buildTree(response, 'menuId'))
       })
       .finally(() => {
         setLoading(false)
@@ -322,18 +316,6 @@ const Menu: React.FC = () => {
                   />
                 </Form.Item>
               </Col>
-              {/* <Col span={6}>
-                <Form.Item name="status" label="状态" colon={false}>
-                  <Select
-                    allowClear
-                    options={[
-                      { value: '', label: '请选择', disabled: true },
-                      { value: 1, label: '启用' },
-                      { value: 0, label: '停用' },
-                    ]}
-                  />
-                </Form.Item>
-              </Col> */}
               <Col span={6} style={{ textAlign: 'right' }}>
                 <Space>
                   <Button
@@ -402,7 +384,6 @@ const Menu: React.FC = () => {
           rowSelection={{ ...rowSelection }}
         />
       </Card>
-
       {/* 新增、编辑弹窗 */}
       <MenuInfoModal
         visible={openEditModal}

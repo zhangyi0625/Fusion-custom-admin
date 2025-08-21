@@ -324,7 +324,6 @@ const Role: React.FC = () => {
           onUpdateSelection={(options: string[]) => setSelectedRows(options)}
         />
       </Card>
-
       {/* 编辑弹窗 */}
       <RoleInfoModal params={params} onCancel={onCancel} onOk={onEditOk} />
       {/* 权限分配抽屉 */}
