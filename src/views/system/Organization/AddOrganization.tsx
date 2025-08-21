@@ -11,7 +11,7 @@ export interface AddOrganizationProps {
     // 弹窗需要的数据
     currentRow: SysOrganizationType | null
   }
-
+  parentId: string | null
   // 点击确定的回调
   onOk: (params: SysOrganizationType) => void
   // 点击取消的回调
@@ -20,6 +20,7 @@ export interface AddOrganizationProps {
 
 const AddOrganization: React.FC<AddOrganizationProps> = ({
   params,
+  parentId,
   onOk,
   onCancel,
 }) => {
@@ -43,6 +44,9 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
     } else {
       // 清空表单数据，表示新增
       form.resetFields()
+      form.setFieldsValue({
+        parentId: parentId ?? null,
+      })
     }
   }, [currentRow, visible])
 

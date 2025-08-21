@@ -156,7 +156,6 @@ const Organization: React.FC = () => {
       ).organizationId
       setTreeData(buildTree(newArr, 'organizationId') as any)
       setSearchDefaultForm({ ...searchDefaultForm, parentId: parId })
-      console.log(searchDefaultForm, 'searchDefaultForm', parId)
     })
     setTimeout(() => {
       setImmediate(false)
@@ -255,7 +254,7 @@ const Organization: React.FC = () => {
                 switcherIcon={<DownOutlined />}
                 treeData={treeData}
                 onSelect={treeClick}
-                defaultCheckedKeys={[searchDefaultForm.parentId] as string[]}
+                defaultSelectedKeys={[searchDefaultForm.parentId] as string[]}
               />
             </div>
             <div className="flex-1 ml-[24px] h-full">
@@ -278,12 +277,6 @@ const Organization: React.FC = () => {
                   </Col>
                   <Col span={8}>
                     <Space>
-                      <Button
-                        type="primary"
-                        onClick={() => onUpdateSearch(searchDefaultForm)}
-                      >
-                        查询
-                      </Button>
                       <Button type="primary" onClick={addRow}>
                         新增
                       </Button>
@@ -312,48 +305,8 @@ const Organization: React.FC = () => {
           </div>
         </Card>
       </ConfigProvider>
-      {/* <Card
-        style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
-        styles={{ body: { height: '100%' } }}
-        ref={parentRef}
-      >
-        <Space className="mb-[8px]">
-          <Button
-            type="primary"
-            icon={<PlusOutlined />}
-            onClick={() =>
-              setParams({ visible: true, currentRow: null, view: false })
-            }
-          >
-            新增
-          </Button>
-          <Button
-            type="default"
-            danger
-            icon={<DeleteOutlined />}
-            disabled={selRows.length === 0}
-            onClick={() => deleteDic(selRows, 'batch')}
-          >
-            批量删除
-          </Button>
-        </Space>
-        <SearchTable
-          size="middle"
-          columns={columns}
-          bordered
-          totalKey="count"
-          fetchResultKey="list"
-          isPagination={true}
-          rowKey="organizationId"
-          scroll={{ x: 'max-content', y: height - 158 }}
-          fetchData={getOrganizationListByPage}
-          searchFilter={searchDefaultForm}
-          isSelection={true}
-          onUpdatePagination={onUpdatePagination}
-          onUpdateSelection={(options: string[]) => setSelectedRows(options)}
-        />
-      </Card> */}
       <AddOrganization
+        parentId={searchDefaultForm.parentId}
         params={params}
         onCancel={() => setParams({ visible: false, currentRow: null })}
         onOk={onEditOk}
