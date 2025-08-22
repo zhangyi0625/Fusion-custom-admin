@@ -179,20 +179,20 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
               name="password"
               rules={[
                 { required: true },
-                {
-                  validator: (_, value) => {
-                    if (
-                      value &&
-                      !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
-                    ) {
-                      return Promise.reject('密码需包含字母和数字且至少6位')
-                    }
-                    return Promise.resolve()
-                  },
-                },
+                // {
+                //   validator: (_, value) => {
+                //     if (
+                //       value &&
+                //       !/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(value)
+                //     ) {
+                //       return Promise.reject('密码需包含字母和数字且至少6位')
+                //     }
+                //     return Promise.resolve()
+                //   },
+                // },
               ]}
             >
-              <Input
+              <Input.Password
                 placeholder="请输入登录密码"
                 allowClear
                 autoComplete="off"

@@ -310,7 +310,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
       <>
         <div className="flex items-center justify-between">
           <Input.Search
-            placeholder="请输入产品名称/规格型号"
+            placeholder="请输入产品名称"
             onChange={(e) => searchValueChange(e.target.value)}
             onSearch={() => loadEnquiryProduct()}
             style={{ width: '272px' }}
@@ -346,7 +346,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
             铜价：
           </p>
           <Input
-            placeholder="请输入当前铜价/规格型号"
+            placeholder="请输入当前铜价"
             value={copperPrice}
             onChange={(e) => setCopperPrice(e.target.value)}
             style={{ width: '240px' }}

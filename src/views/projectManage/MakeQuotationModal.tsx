@@ -456,7 +456,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
           铜价：
         </p>
         <Input
-          placeholder="请输入当前铜价/规格型号"
+          placeholder="请输入当前铜价"
           onChange={(e) => searchValueChange(e.target.value)}
           style={{ width: '240px' }}
         />

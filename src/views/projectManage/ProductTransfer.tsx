@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DragModal from '@/components/modal/DragModal'
-import { Table, Transfer } from 'antd'
+import { App, Table, Transfer } from 'antd'
 import type { GetProp, TableColumnsType, TableProps, TransferProps } from 'antd'
 import { getProductList } from '@/services/productManage/productManageApi'
 import { ProductManageType } from '@/services/productManage/productManageModel'
@@ -35,6 +35,8 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
 }) => {
   const { visible, selected } = params
 
+  const { message } = App.useApp()
+
   const [targetKeys, setTargetKeys] = useState<TransferProps['targetKeys']>([])
 
   const [mockData, setMockData] = useState<DataSourceType[]>([])
@@ -66,6 +68,10 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
 
   const onConfirm = () => {
     let newArr: BussinesEnquiryProductType[] = []
+    if (targetKeys?.length === 0) {
+      message.error('至少选择一个产品！')
+      return
+    }
     let filterArr = mockData.filter(
       (item) =>
         targetKeys?.includes(item.name) &&

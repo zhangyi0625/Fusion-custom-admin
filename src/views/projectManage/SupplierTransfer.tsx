@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from 'react'
-import { Transfer, TransferProps } from 'antd'
+import { App, Transfer, TransferProps } from 'antd'
 import DragModal from '@/components/modal/DragModal'
 import { getSupplier } from '@/services/supplierManage/Supplier/SupplierApi'
 
@@ -23,7 +23,10 @@ const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
   ({ params, onOk, onCancel }) => {
     const { visible, selected } = params
 
+    const { message } = App.useApp()
+
     const [mockData, setMockData] = useState<RecordType[]>([])
+
     const [targetKeys, setTargetKeys] = useState<React.Key[]>([])
 
     useEffect(() => {
@@ -50,6 +53,10 @@ const SupplierTransfer: React.FC<SupplierTransferProps> = memo(
     }
 
     const onConfirm = () => {
+      if (targetKeys?.length === 0) {
+        message.error('至少选择一个供应商！')
+        return
+      }
       onOk(targetKeys as string[])
     }
 

@@ -51,7 +51,13 @@ const AddProduct: React.FC<AddProductProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk({ ...form.getFieldsValue() })
+        let name =
+          form.getFieldValue('model') +
+          '-' +
+          form.getFieldValue('volt') +
+          '-' +
+          form.getFieldValue('spec')
+        onOk({ ...form.getFieldsValue(), name: name })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -69,6 +75,9 @@ const AddProduct: React.FC<AddProductProps> = ({
     >
       <Form form={form} labelCol={{ span: 8 }} layout="vertical">
         <Form.Item name="id" hidden>
+          <Input disabled />
+        </Form.Item>
+        <Form.Item name="name" hidden>
           <Input disabled />
         </Form.Item>
         <Row gutter={24}>
