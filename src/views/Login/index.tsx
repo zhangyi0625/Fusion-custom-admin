@@ -14,9 +14,8 @@ import { useDispatch } from 'react-redux'
 import { setMenus } from '@/stores/store'
 import { HttpCodeEnum } from '@/enums/httpEnum'
 import { antdUtils } from '@/utils/antdUtil'
-import { MenuModel } from '@/services/system/menu/menuModel'
-import { buildTree } from '@/utils/tool'
-import { getRoleMenu } from '@/services/system/role/roleApi'
+import { getMenuListByUser } from '@/services/system/menu/menuApi'
+import { filterTree } from '@/utils/utils'
 
 /**
  * 登录模块
@@ -94,9 +93,8 @@ const Login: React.FC = () => {
             sessionStorage.setItem('roleId', roleId)
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', data.user?.username)
-            const menu = await getRoleMenu(roleId)
-            // return
-            dispatch(setMenus(buildTree(menu, 'menuId')))
+            const menu = await getMenuListByUser()
+            dispatch(setMenus(filterTree(2, menu)))
             // 判断是否配置了默认跳转的首页地址
             if (!homePath) {
               // 获取第一个是路由的地址

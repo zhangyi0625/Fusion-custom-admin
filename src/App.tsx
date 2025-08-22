@@ -1,14 +1,13 @@
-import { RootState, setMenus } from '@/stores/store'
+import { setMenus } from '@/stores/store'
 import { Spin, App as AntdApp, Skeleton } from 'antd'
 import type React from 'react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Router } from '@/router/router'
 import { antdUtils } from '@/utils/antdUtil'
-import { getRoleMenu } from './services/system/role/roleApi'
-import { buildTree } from './utils/tool'
-import type { RouteItem } from './types/route'
+import { getMenuListByUser } from './services/system/menu/menuApi'
+import { filterTree } from './utils/utils'
 
 /**
  * 主应用
@@ -28,14 +27,9 @@ const App: React.FC = () => {
    * 查询用户的菜单信息
    */
   const getMenuData = useCallback(async () => {
-    const roleId = sessionStorage.getItem('roleId') || ''
     try {
-      const menu = await getRoleMenu(roleId)
-      const treeMenu = menu.filter(
-        (item: RouteItem) => item.menuType !== 2 && !item.hide
-      )
-      const build = buildTree(treeMenu, 'menuId')
-      dispatch(setMenus(build)) // 更新 Redux 状态
+      const menu = await getMenuListByUser()
+      dispatch(setMenus(filterTree(2, menu))) // 更新 Redux 状态
     } catch (e: unknown) {
       notification.error({
         message: '菜单加载失败',

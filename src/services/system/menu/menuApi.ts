@@ -21,6 +21,8 @@ export enum Api {
   importMenus = '/system/menu/import',
   // 验证菜单权限
   checkPermission = '/system/menu/checkPermission',
+  // 用户下面菜单列表
+  userMenuList = '/user/auth/menu',
 }
 
 /**
@@ -161,4 +163,18 @@ export const checkPermission = (params: any) => {
     url: Api.checkPermission,
     data: params,
   })
+}
+
+/**
+ * 根据用户获取菜单
+ * @param params
+ * @returns
+ */
+export const getMenuListByUser = () => {
+  return HttpRequest.get(
+    {
+      url: Api.userMenuList,
+    },
+    { successMessageMode: 'none' }
+  )
 }

@@ -150,3 +150,27 @@ export const addKeyToData = (data: any[], key: string) => {
     return newItem
   })
 }
+
+export const filterTree = (
+  keyword: number = 2,
+  treeData: RouteItem[] = []
+): RouteItem[] => {
+  if (!treeData.length) return []
+  return treeData.reduce((result: RouteItem[], node: RouteItem) => {
+    // 检查当前节点是否匹配
+    const isMatch = node.menuType !== keyword
+
+    // 递归处理子节点
+    const children = filterTree(keyword, node.children || [])
+
+    // 如果当前节点匹配或有匹配的子节点，则保留该节点
+    if (isMatch || children.length) {
+      result.push({
+        ...node,
+        children: children.length ? children : undefined,
+      })
+    }
+
+    return result
+  }, [])
+}

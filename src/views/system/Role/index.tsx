@@ -143,10 +143,10 @@ const Role: React.FC = () => {
               type="link"
               size="small"
               onClick={() => {
-                setParams({ visible: true, currentRow: record, view: true })
+                setParams({ visible: true, currentRow: record, view: false })
               }}
             >
-              详情
+              编辑
             </Button>
             <Button
               type="link"

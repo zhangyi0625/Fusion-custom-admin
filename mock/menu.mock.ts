@@ -2006,7 +2006,7 @@ export default defineMock([
           {
             menuId: '1958344031041769474',
             parentId: '0',
-            title: '产品商管理',
+            title: '产品管理',
             path: '/productManage',
             component: null,
             menuType: 1,
