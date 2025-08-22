@@ -16,6 +16,7 @@ import {
   deleteBusinessEnquiryProduct,
   downloadBusinessProject,
   getBusinessEnquiryProduct,
+  putBusinessEnquiryProduct,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import ProductTransfer from '../../ProductTransfer'
@@ -77,7 +78,9 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
       const res = await getBusinessEnquiryProduct(projectId, {
         keyword: searchValue ?? null,
       })
-      setDataSource(res)
+      setDataSource(
+        res.sort((a: { sort: number }, b: { sort: number }) => a.sort - b.sort)
+      )
     }
 
     const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
@@ -240,15 +243,19 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
       }
     })
     const handleSave = (row: any) => {
-      const newData = [...dataSource]
-      const index = newData.findIndex((item) => row.id === item.id)
-      const item = newData[index]
-      newData.splice(index, 1, {
-        ...item,
-        ...row,
+      // const newData = [...dataSource]
+      // const index = newData.findIndex((item) => row.id === item.id)
+      // const item = newData[index]
+      putBusinessEnquiryProduct(row).then(() => {
+        message.success('修改成功')
+        loadEnquiryProduct()
       })
-      newData.sort((a, b) => a.sort - b.sort)
-      setDataSource(newData)
+      // newData.splice(index, 1, {
+      //   ...item,
+      //   ...row,
+      // })
+      // newData.sort((a, b) => a.sort - b.sort)
+      // setDataSource(newData)
     }
 
     const components = {
@@ -360,7 +367,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
             rowKey={'id'}
             size="small"
             dataSource={dataSource}
-            scroll={{ x: 'max-content', y: 258 }}
+            scroll={{ x: 'max-content', y: 298 }}
             columns={mergedColumns as ColumnTypes}
             pagination={false}
           />

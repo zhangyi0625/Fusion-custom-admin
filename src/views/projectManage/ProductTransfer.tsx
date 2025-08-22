@@ -73,9 +73,9 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
       return
     }
     let filterArr = mockData.filter(
-      (item) =>
-        targetKeys?.includes(item.name) &&
-        !selectedArr.map((el) => el.productName).includes(item.name)
+      (item) => targetKeys?.includes(item.name)
+      // &&
+      //   !selectedArr.map((el) => el.productName).includes(item.name)
     )
     filterArr.map((item) => {
       newArr.push({
@@ -88,8 +88,11 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
       })
     })
     setSelectedArr(newArr.concat(selected as BussinesEnquiryProductType[]))
+    // console.log(newArr, 'newArr', selectedArr, filterArr, targetKeys)
+    onOk(newArr)
+    // return
     // console.log(targetKeys, 'targetKeys', selectedArr, newArr, selected)
-    onOk(newArr.concat(selected as BussinesEnquiryProductType[]))
+    // onOk(newArr.concat(selected as BussinesEnquiryProductType[]))
   }
 
   const TableTransfer: React.FC<TableTransferProps> = (props) => {

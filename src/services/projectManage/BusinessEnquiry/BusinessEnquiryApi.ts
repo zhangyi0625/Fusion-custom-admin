@@ -19,7 +19,7 @@ export enum BusinessEnquiryApi {
   bussinesOperationRecord = '/business/project-event/',
   bussinesEnquiryRecord = '/business/project-inquiry-quote/',
   bussinesEnquiryProduct = '/business/project-inquiry-product',
-  bussinesBatchEnquiryProduct = '/business/project-inquiry-product/batch',
+  bussinesBatchEnquiryProduct = '/business/project-inquiry-product/allot',
   bussinesFollowRecord = '/business/project-follow',
   bussinesSupplier = '/business/project-supplier',
   bussinesBatchSupplier = '/business/project-supplier/allot',
@@ -197,6 +197,25 @@ export const getBusinessEnquiryProduct = (
   return HttpRequest.get(
     {
       url: BusinessEnquiryApi.bussinesEnquiryProduct + '/' + id,
+      params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 获取全部询价产品列表
+ * @param params 商机询价参数
+ * @returns 商机询价列表
+ */
+export const putBusinessEnquiryProduct = (
+  params: BussinesEnquiryProductType
+) => {
+  return HttpRequest.put(
+    {
+      url: BusinessEnquiryApi.bussinesEnquiryProduct,
       params: params,
     },
     {
