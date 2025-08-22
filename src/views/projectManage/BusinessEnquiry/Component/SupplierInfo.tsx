@@ -31,7 +31,7 @@ export type SupplierInfoProps = {
 }
 
 const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
-  ({ source, projectId, detail, onFreshDetail }) => {
+  ({ projectId, detail, onFreshDetail }) => {
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState([])
@@ -126,7 +126,6 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         title: '最新报价表',
         key: 'quotationFile',
         align: 'center',
-        hidden: source !== 'SaleProject',
         width: 150,
         render(value) {
           return (
@@ -149,7 +148,6 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         title: '报价生成时间',
         key: 'quotationTime',
         align: 'center',
-        hidden: source !== 'SaleProject',
         render(value) {
           return <div>{value.quotationTime ?? '-'}</div>
         },
@@ -175,7 +173,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
               >
                 上传询价表
               </Button>
-              {source === 'SaleProject' && !_.quotationFile && (
+              {!_.quotationFile && (
                 <Button
                   onClick={() =>
                     setQuotationModal({
@@ -189,7 +187,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                   制作报价
                 </Button>
               )}
-              {source === 'SaleProject' && _.quotationFile && (
+              {_.quotationFile && (
                 <Button
                   onClick={() => {
                     setQuotationModal({
@@ -228,6 +226,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         aElement.click()
         document.body.removeChild(aElement)
       })
+      loadSupplierInfo()
     }
 
     const loadSupplierInfo = async () => {
@@ -335,7 +334,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       <>
         <div className="w-full flex items-center justify-end mb-[8px]">
           <Space>
-            {source === 'SaleProject' && !detail.confirmSupplierId && (
+            {!detail.confirmSupplierId && (
               <Button
                 onClick={() =>
                   setEditModal({ editQuotation: false, confirmQuotation: true })
@@ -345,7 +344,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                 确认报价
               </Button>
             )}
-            {source === 'SaleProject' && detail.confirmSupplierId && (
+            {detail.confirmSupplierId && (
               <div className="flex items-center text-green-500">
                 <CheckCircleOutlined twoToneColor="#52C41A" />
                 <p className="ml-[12px]">
@@ -410,6 +409,9 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           onCancel={() =>
             setEditModal({ ...editModal, confirmQuotation: false })
           }
+          options={dataSource.filter(
+            (item: { quotationNumber: string }) => item.quotationNumber
+          )}
           onOk={ConfirmQuotationBySupplier}
         />
       </>

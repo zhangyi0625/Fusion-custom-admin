@@ -1,33 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Form, Select } from 'antd'
 import DragModal from '@/components/modal/DragModal'
-import { getSupplier } from '@/services/supplierManage/Supplier/SupplierApi'
-import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 
 export type ConfirmQuotationProps = {
   visible: boolean
+  options: any
   onOk: (params: { supplierId: string }) => void
   onCancel: () => void
 }
 
 const ConfirmQuotation: React.FC<ConfirmQuotationProps> = ({
   visible,
+  options,
   onOk,
   onCancel,
 }) => {
   const [form] = Form.useForm()
 
-  const [supplierOptions, setsupplierOptions] = useState<SupplierType[]>([])
-
   useEffect(() => {
     if (!visible) return
-    loadSupplierOptions()
   }, [visible])
-
-  const loadSupplierOptions = async () => {
-    const res = await getSupplier({})
-    setsupplierOptions(res)
-  }
 
   const onConfirm = () => {
     form
@@ -65,13 +57,13 @@ const ConfirmQuotation: React.FC<ConfirmQuotationProps> = ({
             allowClear
             placeholder="请选择确认报价的供应商"
             showSearch
-            options={supplierOptions}
+            options={options}
             fieldNames={{
-              label: 'name',
-              value: 'id',
+              label: 'supplierName',
+              value: 'supplierId',
             }}
             filterOption={(input, option) =>
-              String(option?.name ?? '')
+              String(option?.supplierName ?? '')
                 .toLowerCase()
                 .includes(input.toLowerCase())
             }

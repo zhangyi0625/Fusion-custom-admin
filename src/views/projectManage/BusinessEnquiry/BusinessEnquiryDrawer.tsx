@@ -153,9 +153,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     },
     {
       label:
-        drawer.source === 'BusinessEnquiry'
-          ? '询价记录'
-          : drawer.source === 'SaleProject'
+        drawer.source === 'SaleProject' || drawer.source === 'BusinessEnquiry'
           ? '询报价记录'
           : '议价记录',
       key: 'EnquiryRecordCom',
@@ -187,9 +185,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
           projectId={detailId as string}
         />
       ),
-      disabled:
-        drawer.source === 'BusinessEnquiry' ||
-        drawer.source === 'PurchaseBargain',
+      disabled: drawer.source === 'PurchaseBargain',
     },
     {
       label: '操作记录',

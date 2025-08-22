@@ -25,7 +25,7 @@ export type EnquiryRecordProps = {
 
 type RecordType = {
   isInquery: string | boolean
-  supplierId: string
+  projectSupplierId: string
 }
 
 export type EnquiryRecordRef = {
@@ -36,7 +36,7 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
   ({ source, projectId }, ref) => {
     const [searchDefaultForm, setSearchDefaultForm] = useState<RecordType>({
       isInquery: '',
-      supplierId: '',
+      projectSupplierId: '',
     })
 
     const [enquiryRecord, setEnquiryRecord] = useState([])
@@ -200,8 +200,10 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
                 allowClear
                 placeholder="请选择"
                 showSearch
-                value={searchDefaultForm.supplierId}
-                onChange={(e: boolean | string) => changeType(e, 'supplierId')}
+                value={searchDefaultForm.projectSupplierId}
+                onChange={(e: boolean | string) =>
+                  changeType(e, 'projectSupplierId')
+                }
                 options={supplier}
                 fieldNames={{
                   label: 'supplierName',
