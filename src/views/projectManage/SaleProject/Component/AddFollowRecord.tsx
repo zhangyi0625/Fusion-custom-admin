@@ -9,6 +9,8 @@ import {
   Row,
   Select,
   Space,
+  TreeSelect,
+  TreeSelectProps,
   Upload,
   UploadFile,
   UploadProps,
@@ -16,8 +18,6 @@ import {
 import { UploadOutlined } from '@ant-design/icons'
 import DragModal from '@/components/modal/DragModal'
 import { AddFollowRecordForm } from '../../config'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/stores/store'
 import { BussinesFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import dayjs from 'dayjs'
@@ -27,6 +27,7 @@ export type AddFollowRecordProps = {
     visible: boolean
     currentRow: BussinesFollowRecordType
   }
+  supplier: TreeSelectProps['treeData']
   onOk: (params: BussinesFollowRecordType) => void
   onCancel: () => void
 }
@@ -35,12 +36,11 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
   params,
+  supplier,
   onOk,
   onCancel,
 }) => {
   const { visible, currentRow } = params
-
-  const essential = useSelector((state: RootState) => state.essentail)
 
   const [form] = Form.useForm()
 
@@ -52,6 +52,7 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
       form.setFieldsValue({
         ...currentRow,
         followedAt: dayjs(currentRow.followedAt),
+        supplierId: currentRow.supplierId ?? currentRow.customerId,
       })
       setFileList([{ name: currentRow.fileName, uid: currentRow.fileId }])
     } else {
@@ -88,12 +89,11 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
 
   const getFollowRecordForm = useCallback(() => {
     const arr = [...AddFollowRecordForm]
-    let { customerData = [] } = essential
     arr.map((item) => {
-      if (item.name === 'customerId') item.options = customerData
+      if (item.name === 'supplierId') item.options = supplier as any
     })
     return arr
-  }, [essential])
+  }, [supplier])
 
   const onConfirm = () => {
     form
@@ -173,6 +173,13 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
                     <DatePicker
                       placeholder={`请选择${item.label}`}
                       style={{ width: '100%' }}
+                    />
+                  )}
+                  {item.formType === 'treeSelect' && (
+                    <TreeSelect
+                      placeholder={`请选择${item.label}`}
+                      treeData={item.options as TreeSelectProps['treeData']}
+                      treeDefaultExpandAll
                     />
                   )}
                 </Form.Item>

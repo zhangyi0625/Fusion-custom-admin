@@ -1,21 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { App, Button, Space, Table, TableProps } from 'antd'
+import { App, Button, Space, Table, TableProps, TreeSelectProps } from 'antd'
 import {
   addBusinessFollowRecord,
   deleteBusinessFollowRecord,
   getBusinessFollowRecord,
+  getBusinessSupplier,
   updateBusinessFollowRecord,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import AddFollowRecord from './AddFollowRecord'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import type { BussinesFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postDownlFile } from '@/services/upload/UploadApi'
+import { filterKeys } from '@/utils/tool'
 
 export type FollowRecordProps = {
   projectId: string
+  detail: {
+    customerId: string
+    customerName: string
+  }
 }
 
-const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
+const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
   const { modal, message } = App.useApp()
 
   const [dataSource, setDataSource] = useState([])
@@ -28,9 +34,12 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
     currentRow: null,
   })
 
+  const [supplier, setSupplier] = useState<TreeSelectProps['treeData']>([])
+
   useEffect(() => {
     if (projectId) {
       loadFollowRecord()
+      loadSupplierList()
       setParams({ visible: false, currentRow: null })
     }
   }, [projectId])
@@ -39,9 +48,11 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
     {
       title: '对接方',
       key: 'customerName',
-      dataIndex: 'customerName',
       align: 'center',
       width: 120,
+      render(value) {
+        return <div>{value.customerName ?? value.supplierName}</div>
+      },
     },
     {
       title: '跟进时间',
@@ -107,6 +118,31 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
     },
   ]
 
+  const loadSupplierList = async () => {
+    const res = await getBusinessSupplier(projectId)
+    const newArr: TreeSelectProps['treeData'] = [
+      {
+        value: detail.customerId,
+        title: detail.customerName,
+        children: [],
+      },
+      {
+        value: '',
+        title: '供应商',
+        children: [],
+      },
+    ]
+    res.map((item: { supplierId: string; supplierName: string }) => {
+      if (newArr[1].children) {
+        newArr[1].children.push({
+          value: item.supplierId,
+          title: item.supplierName,
+        })
+      }
+    })
+    setSupplier(newArr)
+  }
+
   const loadFollowRecord = async () => {
     const res = await getBusinessFollowRecord(projectId)
     setDataSource(res)
@@ -140,19 +176,26 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
   }
 
   const onEditOk = async (customerRow: BussinesFollowRecordType) => {
+    let isSupplier = (supplier || []).find(
+      (item) => item.value === customerRow.supplierId
+    )
+      ? 'customerId'
+      : 'supplierId'
+    let info = {
+      ...filterKeys(customerRow, ['supplierId'], false),
+      projectId: projectId,
+      [isSupplier]:
+        isSupplier === 'customerId'
+          ? detail.customerId
+          : customerRow.supplierId,
+    }
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addBusinessFollowRecord({
-          ...customerRow,
-          projectId: projectId,
-        })
+        await addBusinessFollowRecord(info)
       } else {
         // 编辑数据
-        await updateBusinessFollowRecord({
-          ...customerRow,
-          projectId: projectId,
-        })
+        await updateBusinessFollowRecord(info)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
@@ -165,6 +208,7 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
     <>
       <AddFollowRecord
         params={params}
+        supplier={supplier}
         onCancel={() =>
           setParams({ ...params, visible: false, currentRow: null })
         }

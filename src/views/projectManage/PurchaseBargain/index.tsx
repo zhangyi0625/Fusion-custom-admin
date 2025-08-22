@@ -18,7 +18,6 @@ import { filterKeys } from '@/utils/tool'
 import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { getBusinessEnquiryListPage } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import BusinessEnquiryDrawer from '../BusinessEnquiry/BusinessEnquiryDrawer'
-import AddBusinessEnquiry from '../BusinessEnquiry/AddBusinessEnquiry'
 import {
   addSaleProjectList,
   updateSaleProjectList,

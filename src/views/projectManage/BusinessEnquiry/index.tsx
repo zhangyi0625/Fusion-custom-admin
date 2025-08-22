@@ -36,7 +36,6 @@ import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
 import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
 import { formatTime } from '@/utils/format'
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
-import { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
 
 const BusinessEnquiry: React.FC = () => {
   const { parentRef, height } = useParentSize()

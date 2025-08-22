@@ -165,7 +165,8 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
 
     const loadSupplierList = async () => {
       const res = await getBusinessSupplier(projectId)
-      setSupplier(res)
+      const newArr = [{ supplierName: '全部供应商', id: '' }].concat(res)
+      setSupplier(newArr as unknown as SupplierType[])
     }
 
     const changeType = (type: boolean | string, key: string) => {

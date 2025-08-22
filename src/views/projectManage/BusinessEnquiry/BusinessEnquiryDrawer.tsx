@@ -181,7 +181,12 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     {
       label: '跟进记录',
       key: 'FollowRecord',
-      children: <FollowRecord projectId={detailId as string} />,
+      children: (
+        <FollowRecord
+          detail={enquiryDrawerInfo.detail as BusinessEnquiryType}
+          projectId={detailId as string}
+        />
+      ),
       disabled:
         drawer.source === 'BusinessEnquiry' ||
         drawer.source === 'PurchaseBargain',

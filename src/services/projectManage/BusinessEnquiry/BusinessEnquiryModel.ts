@@ -54,6 +54,7 @@ export interface BussinesEnquiryProductType {
 export interface BussinesFollowRecordType {
   id?: string
   projectId: string
+  supplierId: string
   customerId: string
   followedAt: string
   content: string

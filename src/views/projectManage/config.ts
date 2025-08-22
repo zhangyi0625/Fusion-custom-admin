@@ -179,8 +179,8 @@ export const AddFollowRecordForm: Omit<
 >[] = [
   {
     label: '对接方',
-    name: 'customerId',
-    formType: 'select',
+    name: 'supplierId',
+    formType: 'treeSelect',
     options: [],
     selectFileldName: {
       label: 'name',
