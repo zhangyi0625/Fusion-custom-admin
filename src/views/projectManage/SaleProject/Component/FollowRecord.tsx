@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { App, Button, Space, Table, TableProps } from 'antd'
-import { SearchTable } from 'customer-search-form-table'
 import {
   addBusinessFollowRecord,
   deleteBusinessFollowRecord,
@@ -144,7 +143,10 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId }) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addBusinessFollowRecord({ ...customerRow, projectId: projectId })
+        await addBusinessFollowRecord({
+          ...customerRow,
+          projectId: projectId,
+        })
       } else {
         // 编辑数据
         await updateBusinessFollowRecord({

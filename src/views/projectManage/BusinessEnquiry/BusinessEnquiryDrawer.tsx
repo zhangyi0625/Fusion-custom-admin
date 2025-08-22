@@ -1,10 +1,12 @@
 import '../index.scss'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import { Button, Drawer, Space, Tabs, TabsProps } from 'antd'
 import BaseInfoCom from './Component/BaseInfo'
 import EnquiryProductCom from './Component/EnquiryProduct'
-import EnquiryRecordCom from './Component/EnquiryRecord'
-import OperationRecordCom from './Component/OperationRecord'
+import EnquiryRecordCom, { EnquiryRecordRef } from './Component/EnquiryRecord'
+import OperationRecordCom, {
+  OperationRecordRef,
+} from './Component/OperationRecord'
 import SupplierInfoCom from './Component/SupplierInfo'
 import SalesContract from '../SaleProject/Component/SalesContract'
 import FollowRecord from '../SaleProject/Component/FollowRecord'
@@ -34,6 +36,12 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
   onCancel,
 }) => {
   const { drawerShow, detailId, index } = drawer
+
+  const [copyDetailId, setCopyDetailId] = useState<string>('')
+
+  const EnquiryRecordComRef = useRef<EnquiryRecordRef>(null)
+
+  const OperationRecordComRef = useRef<OperationRecordRef>(null)
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('BaseInfoCom')
@@ -153,8 +161,9 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
       key: 'EnquiryRecordCom',
       children: (
         <EnquiryRecordCom
+          ref={EnquiryRecordComRef}
           source={drawer.source}
-          projectId={detailId as string}
+          projectId={copyDetailId}
         />
       ),
     },
@@ -180,7 +189,12 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     {
       label: '操作记录',
       key: 'OperationRecordCom',
-      children: <OperationRecordCom projectId={detailId as string} />,
+      children: (
+        <OperationRecordCom
+          ref={OperationRecordComRef}
+          projectId={copyDetailId}
+        />
+      ),
     },
   ]
 
@@ -189,7 +203,6 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
       setEnquiryDrawerInfo({ ...enquiryDrawerInfo, detail: resp })
       if (index) {
         let key = components[index as number].key
-        console.log(defaultActiveKey, 'defaultActiveKey', index, key)
         setDefaultActiveKey(key)
       }
     })
@@ -198,11 +211,16 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
   useEffect(() => {
     if (!drawerShow) return
     loadEnquiryDetail()
+    setCopyDetailId(detailId as string)
   }, [drawerShow])
 
   const onChange = (value: string) => {
     setDefaultActiveKey(value)
-    console.log(value, 'value', detailId)
+    if (value === 'EnquiryRecordCom') {
+      EnquiryRecordComRef.current?.onRefresh()
+    } else if (value === 'OperationRecordCom') {
+      OperationRecordComRef.current?.onRefresh()
+    }
   }
 
   const onClose = () => {

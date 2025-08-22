@@ -1,4 +1,9 @@
-import { memo, useCallback, useEffect, useState } from 'react'
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  useImperativeHandle,
+} from 'react'
 import { Button, Select, Space, Timeline } from 'antd'
 import EnquiryIcon from '@/assets/svg/icon/enquiry-icon.svg'
 import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
@@ -23,8 +28,12 @@ type RecordType = {
   supplierId: string
 }
 
-const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
-  ({ source, projectId }) => {
+export type EnquiryRecordRef = {
+  onRefresh: () => void
+}
+
+const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
+  ({ source, projectId }, ref) => {
     const [searchDefaultForm, setSearchDefaultForm] = useState<RecordType>({
       isInquery: '',
       supplierId: '',
@@ -56,6 +65,11 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
       code: '',
       fileId: '',
     })
+
+    // 暴露方法给父组件
+    useImperativeHandle(ref, () => ({
+      onRefresh: () => loadBusinessEnquiryRecord(),
+    }))
 
     const handleContextMenu = useCallback((event: MouseEvent) => {
       event.preventDefault() // 阻止默认的上下文菜单
@@ -93,7 +107,7 @@ const EnquiryRecordCom: React.FC<EnquiryRecordProps> = memo(
     }
 
     const loadBusinessEnquiryRecord = async (type?: RecordType) => {
-      await loadSupplierList()
+      source === 'SaleProject' && (await loadSupplierList())
       getBusinessEnquiryRecord(projectId, type ? type : searchDefaultForm).then(
         (resp) => {
           let data = resp.map((item: BussinesEnquiryRecordType) => {
