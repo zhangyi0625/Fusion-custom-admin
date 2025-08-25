@@ -55,7 +55,7 @@ const SaleProject: React.FC = () => {
       limit: 10,
       keyword: null,
       customerKeyword: null,
-      isInquiry: 0,
+      isInquiry: false,
       status: null,
     })
 

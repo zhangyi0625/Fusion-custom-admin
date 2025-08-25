@@ -35,12 +35,12 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
       form.resetFields()
       form.setFieldsValue({
         status: 'PENDING_PURCHASE',
-        isInquiry: source === 'BusinessEnquiry' ? 1 : 0,
+        isInquiry: source === 'BusinessEnquiry' ? true : false,
       })
     } else {
       form.setFieldsValue({
         ...currentRow,
-        isInquiry: source === 'BusinessEnquiry' ? 1 : 0,
+        isInquiry: source === 'BusinessEnquiry' ? true : false,
         estimatedPurchaseTime: dayjs(currentRow.estimatedPurchaseTime),
       })
     }

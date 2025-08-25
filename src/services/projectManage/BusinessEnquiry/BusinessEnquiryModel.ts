@@ -14,7 +14,7 @@ export interface BusinessEnquiryType {
   entrustId: string
   salespersonId: string
   remark: string
-  isInquiry: number | boolean
+  isInquiry: boolean
   status: string | null
   createName: string
   createTime: string

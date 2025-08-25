@@ -89,7 +89,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
 
   const init = async () => {
     let { userData, customerData, payerUnitData, supplierData } = essential
-    const res = await getBusinessEnquiryList({ isInquiry: 0 })
+    const res = await getBusinessEnquiryList({ isInquiry: false })
     formMap.map((item) => {
       if (
         item.name === 'customerId' ||

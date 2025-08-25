@@ -54,7 +54,7 @@ const BusinessEnquiry: React.FC = () => {
       limit: 10,
       keyword: null,
       customerKeyword: null,
-      isInquiry: 1,
+      isInquiry: true,
       status: null,
     })
 
@@ -126,8 +126,6 @@ const BusinessEnquiry: React.FC = () => {
         item.options = item.name === 'customerId' ? newData : userData
       }
     })
-    console.log(searchColumns, 'searchColumns')
-
     setSearchColumns([...searchColumns])
     setImmediate(false)
   }

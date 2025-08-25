@@ -11,7 +11,7 @@ import {
   TreeSelectProps,
 } from 'antd'
 import DragModal from '@/components/modal/DragModal'
-import { editRole, getRoleList } from '@/services/system/role/roleApi'
+import { getRoleList } from '@/services/system/role/roleApi'
 import { getOrganizationList } from '@/services/system/organization/organization'
 import type { SysRoleType, SysUserType } from '@/services/system/role/roleModel'
 import { buildTree } from '@/utils/tool'
