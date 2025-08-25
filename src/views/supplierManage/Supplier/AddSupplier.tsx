@@ -6,6 +6,7 @@ import {
   GetProp,
   Input,
   Row,
+  Select,
   Upload,
   UploadFile,
   UploadProps,
@@ -15,6 +16,8 @@ import { AddSupplierForm } from '../config'
 import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 import { UploadOutlined } from '@ant-design/icons'
 import { postUploadFile } from '@/services/upload/UploadApi'
+import { getContracts } from '@/services/supplierManage/Contracts/ContractsApi'
+import { ContractsType } from '@/services/supplierManage/Contracts/ContractsModel'
 
 export type AddSupplierProps = {
   params: {
@@ -38,8 +41,13 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
+  const [formMap, setFormMap] = useState(AddSupplierForm)
+
+  const [contracts, setContracts] = useState<ContractsType[]>([])
+
   useEffect(() => {
     if (!visible) return
+    loadContracts()
     form.resetFields()
     if (currentRow) {
       form.setFieldsValue({ ...currentRow })
@@ -49,6 +57,21 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
       setFileList([])
     }
   }, [visible])
+
+  const loadContracts = async () => {
+    const resp = await getContracts({})
+    setContracts(resp)
+    formMap.map((item) => {
+      if (item.name === 'contactId') item.options = resp
+    })
+    setFormMap([...formMap])
+  }
+
+  const selectChange = (item: string) => {
+    form.setFieldsValue({
+      contactPhone: contracts.find((el) => el.id === item)?.phone ?? '',
+    })
+  }
 
   const uploadProps: UploadProps = {
     name: 'file',
@@ -102,7 +125,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
           <Input disabled />
         </Form.Item>
         <Row gutter={24}>
-          {AddSupplierForm.map((item) => (
+          {formMap.map((item) => (
             <Col span={item.span} key={item.name}>
               <Form.Item
                 label={item.label}
@@ -126,6 +149,21 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
                     allowClear
+                  />
+                )}
+                {item.formType === 'select' && (
+                  <Select
+                    placeholder={`请选择${item.label}`}
+                    filterOption
+                    options={item.options}
+                    fieldNames={
+                      item.selectFileldName ?? {
+                        label: 'labal',
+                        value: 'value',
+                      }
+                    }
+                    allowClear
+                    onChange={(e) => selectChange(e)}
                   />
                 )}
               </Form.Item>

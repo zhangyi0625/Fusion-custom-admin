@@ -77,8 +77,13 @@ export const AddSupplierForm: Omit<
   },
   {
     label: '主联系人',
-    name: 'contactName',
-    formType: 'input',
+    name: 'contactId',
+    formType: 'select',
+    options: [],
+    selectFileldName: {
+      label: 'name',
+      value: 'id',
+    },
     span: 24,
   },
   {
