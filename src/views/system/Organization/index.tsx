@@ -197,7 +197,8 @@ const Organization: React.FC = () => {
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null })
-      onUpdateSearch()
+      // onUpdateSearch()
+      getAllOranization()
     } catch (error) {}
   }
 
