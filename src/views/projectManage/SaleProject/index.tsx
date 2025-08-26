@@ -250,7 +250,7 @@ const SaleProject: React.FC = () => {
       title: '预估金额',
       key: 'price',
       align: 'center',
-      width: 100,
+      width: 150,
       render(value) {
         return <div>{value.price}万元</div>
       },

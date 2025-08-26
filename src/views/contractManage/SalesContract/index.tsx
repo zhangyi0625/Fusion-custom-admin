@@ -102,7 +102,7 @@ const SalesContract: React.FC = () => {
       title: '合同编号',
       key: 'number',
       align: 'center',
-      width: 100,
+      width: 200,
       render(value) {
         return (
           <div
@@ -125,7 +125,7 @@ const SalesContract: React.FC = () => {
       key: 'name',
       dataIndex: 'name',
       align: 'center',
-      width: 100,
+      width: 150,
     },
     {
       title: '客户',
@@ -146,7 +146,7 @@ const SalesContract: React.FC = () => {
       key: 'projectName',
       dataIndex: 'projectName',
       align: 'center',
-      width: 100,
+      width: 150,
     },
     {
       title: '业务员',
@@ -169,7 +169,7 @@ const SalesContract: React.FC = () => {
       key: 'price',
       dataIndex: 'price',
       align: 'center',
-      width: 100,
+      width: 120,
     },
     {
       title: '已执行金额',
@@ -189,7 +189,7 @@ const SalesContract: React.FC = () => {
       title: '合同日期',
       key: 'contractTime',
       align: 'center',
-      width: 100,
+      width: 150,
       render(value) {
         return <div>{formatTime(value.contractTime, 'Y-M-D')}</div>
       },

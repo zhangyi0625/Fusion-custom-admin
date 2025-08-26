@@ -141,7 +141,7 @@ export const getBusinessEnquiryDetail = (id: string | number) => {
 export const upgradeBusinessEnquiry = (id: string | number) => {
   return HttpRequest.put(
     {
-      url: BusinessEnquiryApi.businessUpgrade + '/' + id,
+      url: BusinessEnquiryApi.businessUpgrade + id,
     },
     {
       successMessageMode: 'none',

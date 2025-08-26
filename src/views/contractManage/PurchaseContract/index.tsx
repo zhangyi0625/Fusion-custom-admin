@@ -105,7 +105,7 @@ const PurchaseContract: React.FC = () => {
       title: '合同编号',
       key: 'number',
       align: 'center',
-      width: 100,
+      width: 200,
       render(value) {
         return (
           <div
@@ -135,7 +135,7 @@ const PurchaseContract: React.FC = () => {
       key: 'projectName',
       dataIndex: 'projectName',
       align: 'center',
-      width: 100,
+      width: 150,
     },
     {
       title: '合同类型',
@@ -171,7 +171,7 @@ const PurchaseContract: React.FC = () => {
       title: '合同日期',
       key: 'contractTime',
       align: 'center',
-      width: 100,
+      width: 150,
       render(value) {
         return <div>{formatTime(value.contractTime, 'Y-M-D')}</div>
       },
