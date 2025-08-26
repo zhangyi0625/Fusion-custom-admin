@@ -22,6 +22,7 @@ import {
   addContractManage,
   deleteContractManage,
   getContractManageByPage,
+  getContractManageDetail,
   updateContractManage,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
 import AddSalesContract, { AddSalesContractProps } from './AddSalesContract'
@@ -227,16 +228,7 @@ const SalesContract: React.FC = () => {
       render(_) {
         return (
           <Space>
-            <Button
-              onClick={() =>
-                setParams({
-                  visible: true,
-                  currentRow: _,
-                  source: '',
-                })
-              }
-              type="link"
-            >
+            <Button onClick={() => openSalesContractDetail(_.id)} type="link">
               编辑
             </Button>
             <Dropdown menu={{ items: more(_) }}>
@@ -252,6 +244,16 @@ const SalesContract: React.FC = () => {
       },
     },
   ]
+
+  const openSalesContractDetail = (id: string) => {
+    getContractManageDetail(id).then((resp) => {
+      setParams({
+        visible: true,
+        currentRow: resp,
+        source: '',
+      })
+    })
+  }
 
   const more: (row: any) => MenuProps['items'] = (row) => [
     {

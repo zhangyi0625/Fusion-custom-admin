@@ -9,6 +9,7 @@ import {
   addContractManage,
   deleteContractManage,
   getContractManage,
+  getContractManageDetail,
   updateContractManage,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
 import { filterKeys } from '@/utils/tool'
@@ -119,6 +120,14 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       key: 'createName',
       dataIndex: 'createName',
       align: 'center',
+      width: 100,
+    },
+    {
+      title: '创建时间',
+      key: 'createTime',
+      dataIndex: 'createTime',
+      align: 'center',
+      width: 150,
     },
     {
       title: '操作',
@@ -128,16 +137,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       render(_) {
         return (
           <Space>
-            <Button
-              onClick={() =>
-                setParams({
-                  visible: true,
-                  currentRow: _,
-                  source: 'SaleProject',
-                })
-              }
-              type="link"
-            >
+            <Button onClick={() => openSalesContractDetail(_.id)} type="link">
               编辑
             </Button>
             <Button
@@ -158,6 +158,16 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       },
     },
   ]
+
+  const openSalesContractDetail = (id: string) => {
+    getContractManageDetail(id).then((resp) => {
+      setParams({
+        visible: true,
+        currentRow: resp,
+        source: 'SaleProject',
+      })
+    })
+  }
 
   const downLoadFile = (fileId: string, fileName: string) => {
     if (!fileId) return

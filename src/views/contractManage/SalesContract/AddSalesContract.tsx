@@ -56,6 +56,8 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
+  const [fileIds, setFileIds] = useState<{ fileId: string; uid: string }[]>([])
+
   useEffect(() => {
     if (!visible) return
     setFileList([])
@@ -68,7 +70,6 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
       ]
       let newForm = formMap.filter((item) => {
         if (!filterKeys.includes(item.name)) {
-          console.log(item, 'item')
           return item
         }
       })
@@ -82,8 +83,18 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
         ...currentRow,
         contractTime: dayjs(currentRow.contractTime),
       })
-      currentRow.fileIds &&
-        setFileList([{ uid: currentRow.fileIds[0], name: '销售合同' }])
+    }
+    if (currentRow?.fileIds.length) {
+      let newArr: UploadFile[] = []
+      currentRow.fileIds.map((item) => {
+        newArr.push({
+          uid: item,
+          name: '销售合同' + '-' + item,
+          fileId: item,
+        } as UploadFile & { fileId: string } & { fileId: string }) // Add type assertion for fileId
+      })
+      setFileList(newArr)
+      form.setFieldsValue({ fileIds: newArr })
     }
   }, [visible])
 
@@ -108,7 +119,6 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
       if (item.name === 'salesProjectId') item.options = res
     })
     setFormMap([...formMap])
-    console.log(formMap, 'formMapssss')
   }
 
   const uploadProps: UploadProps = {
@@ -120,16 +130,23 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
       return false
     },
     onChange(info) {
-      if (info.file.status !== 'uploading') {
+      if (info.file.status === 'removed') {
+        setFileList(fileList.filter((item) => info.file.uid !== item.uid))
+        setFileIds(fileIds.filter((item) => info.file.uid !== item.uid))
+      } else if (info.file.status !== 'uploading') {
         !info.fileList.length && setFileList([])
       }
       if (info.fileList.length) {
         const formdata = new FormData()
         formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
         postUploadFile(formdata).then((resp) => {
+          let newArr = fileIds.concat([
+            { uid: info.file.uid, fileId: resp.data.id },
+          ])
+          setFileIds(newArr)
           form.setFieldsValue({
             ...form.getFieldsValue(),
-            fileIds: [resp.data.id],
+            fileIds: newArr,
           })
         })
       }
@@ -154,15 +171,15 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
   }
 
   const onConfirm = () => {
-    console.log({ ...form.getFieldsValue(), source: 'S' })
-
     form
       .validateFields()
       .then(() => {
         onOk({
           ...form.getFieldsValue(),
+          fileIds: form
+            .getFieldValue('fileIds')
+            .map((item: { fileId: string }) => item.fileId),
           source: 'S',
-          // contractTime: dayjs(form.getFieldsValue().contractTime),
         })
       })
       .catch((errorInfo) => {
