@@ -25,7 +25,7 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
   const [searchDefaultForm, setSearchDefaultForm] = useState<
     Pick<ContractsType, 'supplierId'>
   >({
-    supplierId: id,
+    supplierId: '',
   })
 
   const [immediate, setImmediate] = useState<boolean>(true)
@@ -35,6 +35,7 @@ const SupplierContracts: React.FC<SupplierContractsProps> = ({
   useEffect(() => {
     setImmediate(true)
     if (!id) return
+    setSearchDefaultForm({ supplierId: id })
     setTimeout(() => {
       setImmediate(false)
     }, 300)

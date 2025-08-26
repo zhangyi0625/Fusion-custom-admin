@@ -49,6 +49,8 @@ const SupplierRecord: React.FC<SupplierRecordProps> = ({
   }, [visible])
 
   const init = (key: string) => {
+    console.log(id, 'key', key)
+
     Promise.all([
       getSupplierDetail(id),
       key === 'editRecord' && getSupplierRecord(id),

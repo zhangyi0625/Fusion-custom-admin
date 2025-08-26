@@ -107,7 +107,7 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
     }
 
     const loadBusinessEnquiryRecord = async (type?: RecordType) => {
-      source === 'SaleProject' && (await loadSupplierList())
+      await loadSupplierList()
       getBusinessEnquiryRecord(projectId, type ? type : searchDefaultForm).then(
         (resp) => {
           let data = resp.map((item: BussinesEnquiryRecordType) => {
@@ -178,39 +178,36 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
       <>
         <div className="flex flex-col enquiry-record">
           <div className="mb-[20px]">
-            {source === 'SaleProject' && (
-              <Select
-                style={{ width: '272px' }}
-                allowClear
-                placeholder="请选择"
-                showSearch
-                value={searchDefaultForm.isInquery}
-                onChange={(e: boolean | string) => changeType(e, 'isInquery')}
-                options={recordTypeOptions}
-                filterOption={(input, option) =>
-                  String(option?.label ?? '')
-                    .toLowerCase()
-                    .includes(input.toLowerCase())
-                }
-              />
-            )}
-            {source === 'SaleProject' && (
-              <Select
-                style={{ width: '272px', marginLeft: '20px' }}
-                allowClear
-                placeholder="请选择"
-                showSearch
-                value={searchDefaultForm.projectSupplierId}
-                onChange={(e: boolean | string) =>
-                  changeType(e, 'projectSupplierId')
-                }
-                options={supplier}
-                fieldNames={{
-                  label: 'supplierName',
-                  value: 'id',
-                }}
-              />
-            )}
+            <Select
+              style={{ width: '272px' }}
+              allowClear
+              placeholder="请选择"
+              showSearch
+              value={searchDefaultForm.isInquery}
+              onChange={(e: boolean | string) => changeType(e, 'isInquery')}
+              options={recordTypeOptions}
+              filterOption={(input, option) =>
+                String(option?.label ?? '')
+                  .toLowerCase()
+                  .includes(input.toLowerCase())
+              }
+            />
+
+            <Select
+              style={{ width: '272px', marginLeft: '20px' }}
+              allowClear
+              placeholder="请选择"
+              showSearch
+              value={searchDefaultForm.projectSupplierId}
+              onChange={(e: boolean | string) =>
+                changeType(e, 'projectSupplierId')
+              }
+              options={supplier}
+              fieldNames={{
+                label: 'supplierName',
+                value: 'id',
+              }}
+            />
           </div>
           <Timeline items={enquiryRecord} />
         </div>
