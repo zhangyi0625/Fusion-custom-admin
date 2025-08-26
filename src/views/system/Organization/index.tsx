@@ -280,6 +280,14 @@ const Organization: React.FC = () => {
                       <Button type="primary" onClick={addRow}>
                         新增
                       </Button>
+                      <Button
+                        type="default"
+                        danger
+                        disabled={selRows.length === 0}
+                        onClick={() => deleteDic(selRows, 'batch')}
+                      >
+                        批量删除
+                      </Button>
                     </Space>
                   </Col>
                 </Row>
