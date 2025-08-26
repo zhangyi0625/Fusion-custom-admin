@@ -157,9 +157,9 @@ const BusinessEnquiry: React.FC = () => {
           <div>
             <Tooltip
               title={
-                <div className="text-stone-900">
-                  <p>客户付款方:{value.companyName ?? '-'}</p>
-                  <p>我司签约:{value.entrustName ?? '-'}</p>
+                <div className="text-stone-900 p-[10px]">
+                  <p>客户付款方：{value.companyName ?? '-'}</p>
+                  <p>我司签约：{value.entrustName ?? '-'}</p>
                 </div>
               }
               color="white"

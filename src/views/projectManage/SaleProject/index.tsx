@@ -8,6 +8,7 @@ import {
   Space,
   TablePaginationConfig,
   TableProps,
+  Tooltip,
 } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
@@ -146,9 +147,25 @@ const SaleProject: React.FC = () => {
     {
       title: '项目名称',
       key: 'name',
-      dataIndex: 'name',
       align: 'center',
       width: 200,
+      render(value) {
+        return (
+          <div>
+            <Tooltip
+              title={
+                <div className="text-stone-900 p-[10px]">
+                  <p>客户付款方：{value.companyName ?? '-'}</p>
+                  <p>我司签约：{value.entrustName ?? '-'}</p>
+                </div>
+              }
+              color="white"
+            >
+              {value.name}
+            </Tooltip>
+          </div>
+        )
+      },
     },
     {
       title: '客户',
