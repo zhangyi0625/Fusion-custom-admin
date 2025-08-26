@@ -140,10 +140,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
             <Button onClick={() => openSalesContractDetail(_.id)} type="link">
               编辑
             </Button>
-            <Button
-              onClick={() => downLoadFile(_.fileId, _.fileName)}
-              type="link"
-            >
+            <Button onClick={() => downLoadFile(_.id)} type="link">
               下载
             </Button>
             <Button
@@ -169,17 +166,22 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
     })
   }
 
-  const downLoadFile = (fileId: string, fileName: string) => {
-    if (!fileId) return
-    postDownlFile(fileId).then((resp) => {
-      let blobUrl = window.URL.createObjectURL(resp)
-      const aElement = document.createElement('a')
-      document.body.appendChild(aElement)
-      aElement.style.display = 'none'
-      aElement.href = blobUrl
-      aElement.download = fileName
-      aElement.click()
-      document.body.removeChild(aElement)
+  const downLoadFile = (id: string) => {
+    getContractManageDetail(id).then((resp) => {
+      let fileIds = resp.fileIds
+      if (!fileIds || !fileIds.length) return
+      fileIds.map((item: string) => {
+        postDownlFile(item).then((resp) => {
+          let blobUrl = window.URL.createObjectURL(resp)
+          const aElement = document.createElement('a')
+          document.body.appendChild(aElement)
+          aElement.style.display = 'none'
+          aElement.href = blobUrl
+          aElement.download = '销售合同' + '-' + item + '.docx'
+          aElement.click()
+          document.body.removeChild(aElement)
+        })
+      })
     })
   }
 
