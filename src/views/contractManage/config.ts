@@ -142,14 +142,14 @@ export const PurchaseContractSearchColumns: CustomColumn[] = [
 ]
 
 export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
-  {
-    label: '合同编号',
-    name: 'number',
-    formType: 'input',
-    span: 12,
-    isRules: true,
-    hiddenItem: false,
-  },
+  // {
+  //   label: '合同编号',
+  //   name: 'number',
+  //   formType: 'input',
+  //   span: 12,
+  //   isRules: true,
+  //   hiddenItem: false,
+  // },
   {
     label: '项目名称',
     name: 'salesProjectId',
@@ -267,7 +267,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     hiddenItem: false,
   },
   {
-    label: '日期',
+    label: '合同日期',
     name: 'contractTime',
     formType: 'date-picker',
     span: 12,
@@ -277,14 +277,14 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
 ]
 
 export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
-  {
-    label: '合同编号',
-    name: 'number',
-    formType: 'input',
-    span: 12,
-    isRules: true,
-    hiddenItem: false,
-  },
+  // {
+  //   label: '合同编号',
+  //   name: 'number',
+  //   formType: 'input',
+  //   span: 12,
+  //   isRules: true,
+  //   hiddenItem: false,
+  // },
   {
     label: '项目名称',
     name: 'salesProjectId',
@@ -376,7 +376,7 @@ export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     hiddenItem: false,
   },
   {
-    label: '日期',
+    label: '合同日期',
     name: 'contractTime',
     formType: 'date-picker',
     span: 12,

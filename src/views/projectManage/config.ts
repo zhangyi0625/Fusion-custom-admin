@@ -62,13 +62,13 @@ export const AddBusinessEnquiryForm: Omit<
   CustomColumn,
   'selectFetch' | 'hiddenItem'
 >[] = [
-  {
-    label: '项目编号',
-    name: 'number',
-    formType: 'input',
-    span: 12,
-    isRules: true,
-  },
+  // {
+  //   label: '项目编号',
+  //   name: 'number',
+  //   formType: 'input',
+  //   span: 12,
+  //   isRules: true,
+  // },
   {
     label: '项目名称',
     name: 'name',
