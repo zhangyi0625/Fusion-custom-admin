@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Form, Input, Radio, Row, Select } from 'antd'
 import DragModal from '@/components/modal/DragModal'
-import { AddCustomerForm, AddPayerUnitForm } from '../config'
+import { AddCustomerForm } from '../config'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
 import type { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
-import {
-  getPayerUnit,
-  getPayerUnitByPage,
-} from '@/services/customerManage/PayerUnit/PayerUnitApi'
+import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 
 export type AddCustomerProps = {
   params: {
@@ -90,6 +87,12 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
                             item.formType === 'input' ? '输入' : '选择'
                           }${item.label}`,
                         },
+                        item.name === 'phone'
+                          ? {
+                              pattern: /^1[3-9]\d{9}$/,
+                              message: '请输入正确的手机号',
+                            }
+                          : {},
                       ]
                     : undefined
                 }

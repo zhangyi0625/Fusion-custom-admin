@@ -136,8 +136,8 @@ export const AddCustomerForm: Omit<
   },
   {
     label: '状态',
-    isRules: true,
     formType: 'radio',
+    isRules: false,
     span: 24,
     name: 'status',
     options: [

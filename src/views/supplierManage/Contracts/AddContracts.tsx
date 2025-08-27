@@ -89,6 +89,12 @@ const AddContract: React.FC<AddContractProps> = ({
                                 item.formType === 'input' ? '输入' : '选择'
                               }${item.label}`,
                             },
+                            item.name === 'phone'
+                              ? {
+                                  pattern: /^1[3-9]\d{9}$/,
+                                  message: '请输入正确的手机号',
+                                }
+                              : {},
                           ]
                         : undefined
                     }
