@@ -21,16 +21,20 @@ import {
 } from '@/services/customerManage/Customer/CustomerApi'
 import AddCustomer from './AddCustomer'
 import CustomerRecord from './CustomerRecord'
-import type { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
+import type {
+  CustomerParams,
+  CustomerType,
+} from '@/services/customerManage/Customer/CustomerModel'
 
 const Customer: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { modal, message } = App.useApp()
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
+  const [searchDefaultForm, setSearchDefaultForm] = useState<CustomerParams>({
     page: 1,
     limit: 10,
+    sort: 'create_time desc',
   })
 
   const [params, setParams] = useState<{

@@ -11,4 +11,6 @@ export interface SupplierType {
   contactId?: string
 }
 
-export interface SupplierParams extends Partial<SupplierType>, DefaultPaging {}
+export interface SupplierParams extends Partial<SupplierType>, DefaultPaging {
+  sort: string
+}

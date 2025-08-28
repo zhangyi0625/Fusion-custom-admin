@@ -15,7 +15,10 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import useParentSize from '@/hooks/useParentSize'
 import { filterKeys } from '@/utils/tool'
-import type { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
+import type {
+  SupplierParams,
+  SupplierType,
+} from '@/services/supplierManage/Supplier/SupplierModel'
 import {
   addSupplier,
   deleteSupplier,
@@ -34,9 +37,10 @@ const Supplier: React.FC = () => {
 
   const { modal, message } = App.useApp()
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
+  const [searchDefaultForm, setSearchDefaultForm] = useState<SupplierParams>({
     page: 1,
     limit: 10,
+    sort: 'create_time desc',
   })
 
   const [params, setParams] = useState<{

@@ -12,7 +12,10 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { ProductSearchColumns } from '../config'
 import useParentSize from '@/hooks/useParentSize'
-import type { ProductManageType } from '@/services/productManage/productManageModel'
+import type {
+  ProductManageParams,
+  ProductManageType,
+} from '@/services/productManage/productManageModel'
 import {
   deleteProduct,
   addProduct,
@@ -36,10 +39,12 @@ const Product: React.FC = () => {
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
-    page: 1,
-    limit: 10,
-  })
+  const [searchDefaultForm, setSearchDefaultForm] =
+    useState<ProductManageParams>({
+      page: 1,
+      limit: 10,
+      sort: 'create_time desc',
+    })
 
   const [searchColumns, setSearchColumns] = useState(ProductSearchColumns)
 

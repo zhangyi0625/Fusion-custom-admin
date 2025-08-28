@@ -8,6 +8,7 @@ import AddSalesContract, {
 import {
   addContractManage,
   deleteContractManage,
+  getContractAttachment,
   getContractManage,
   getContractManageDetail,
   updateContractManage,
@@ -167,17 +168,17 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
   }
 
   const downLoadFile = (id: string) => {
-    getContractManageDetail(id).then((resp) => {
-      let fileIds = resp.fileIds
+    getContractAttachment(id).then((resp) => {
+      let fileIds = resp ?? []
       if (!fileIds || !fileIds.length) return
-      fileIds.map((item: string) => {
-        postDownlFile(item).then((resp) => {
+      fileIds.map((item: { fileId: string; fileName: string }) => {
+        postDownlFile(item.fileId).then((resp) => {
           let blobUrl = window.URL.createObjectURL(resp)
           const aElement = document.createElement('a')
           document.body.appendChild(aElement)
           aElement.style.display = 'none'
           aElement.href = blobUrl
-          aElement.download = '销售合同' + '-' + item + '.docx'
+          aElement.download = item.fileName
           aElement.click()
           document.body.removeChild(aElement)
         })

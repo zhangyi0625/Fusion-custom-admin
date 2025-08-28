@@ -14,7 +14,9 @@ export interface ProductManageType {
 
 export interface ProductManageParams
   extends Partial<ProductManageType>,
-    DefaultPaging {}
+    DefaultPaging {
+  sort: string
+}
 
 export interface ProductManageClassType {
   id?: string

@@ -57,6 +57,7 @@ const PurchaseContract: React.FC = () => {
       page: 1,
       limit: 10,
       source: 'P',
+      sort: 'create_time desc',
     })
 
   const [params, setParams] = useState<{

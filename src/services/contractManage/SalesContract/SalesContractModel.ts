@@ -24,7 +24,9 @@ export interface SaleContractType {
 
 export interface SaleContractParams
   extends Partial<SaleContractType>,
-    DefaultPaging {}
+    DefaultPaging {
+  sort: string
+}
 
 export interface SaleContractAttachmentType {
   fileId: string

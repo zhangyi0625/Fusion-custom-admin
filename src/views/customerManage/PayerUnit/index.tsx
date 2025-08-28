@@ -19,7 +19,10 @@ import {
   updatePayerUnit,
 } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 import AddPayerUnit from './AddPayerUnit'
-import { PayerUnitType } from '@/services/customerManage/PayerUnit/PayerUnitModel'
+import type {
+  PayerUnitParams,
+  PayerUnitType,
+} from '@/services/customerManage/PayerUnit/PayerUnitModel'
 import { PayerUnitSearchColumns } from '../config'
 
 const PayerUnit: React.FC = () => {
@@ -27,9 +30,10 @@ const PayerUnit: React.FC = () => {
 
   const { modal, message } = App.useApp()
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
+  const [searchDefaultForm, setSearchDefaultForm] = useState<PayerUnitParams>({
     page: 1,
     limit: 10,
+    sort: 'create_time desc',
   })
 
   const [params, setParams] = useState<{

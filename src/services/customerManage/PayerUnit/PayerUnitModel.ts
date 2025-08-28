@@ -7,6 +7,6 @@ export interface PayerUnitType {
   status: boolean | number
 }
 
-export interface PayerUnitParams
-  extends Partial<PayerUnitType>,
-    DefaultPaging {}
+export interface PayerUnitParams extends Partial<PayerUnitType>, DefaultPaging {
+  sort: string
+}

@@ -9,4 +9,6 @@ export interface CustomerType {
   keywords?: string
 }
 
-export interface CustomerParams extends Partial<CustomerType>, DefaultPaging {}
+export interface CustomerParams extends Partial<CustomerType>, DefaultPaging {
+  sort: string
+}
