@@ -8,6 +8,7 @@ import {
   deleteUserList,
   editUserList,
   getUserListByPage,
+  updateUserPassword,
 } from '@/services/system/user/userApi'
 import {
   DeleteOutlined,
@@ -23,8 +24,8 @@ import {
   Tag,
   type TableProps,
   TablePaginationConfig,
+  App,
 } from 'antd'
-import modal from 'antd/es/modal'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddUser from '../Role/AddUser'
 import { filterKeys } from '@/utils/tool'
@@ -37,6 +38,8 @@ import { SelectUserOptions } from './config'
 const User: React.FC = () => {
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<string[]>([])
+
+  const { modal, message } = App.useApp()
 
   // 容器高度计算（表格）
   const { parentRef, height } = useParentSize()
@@ -70,19 +73,20 @@ const User: React.FC = () => {
     {
       title: '用户账号',
       dataIndex: 'username',
-      width: 80,
+      width: 100,
       align: 'center',
     },
     {
       title: '姓名',
       dataIndex: 'nickname',
-      width: 80,
+      width: 100,
       align: 'center',
     },
     {
       title: '角色',
       key: 'roles',
       align: 'center',
+      width: 150,
       render(value) {
         return value.roles.map((item: any, index: number) => (
           <Tag color="blue" style={{ margin: '0 4px' }} key={index}>
@@ -95,6 +99,7 @@ const User: React.FC = () => {
       title: '状态',
       key: 'status',
       align: 'center',
+      width: 150,
       render(value) {
         return (
           <Switch
@@ -110,19 +115,19 @@ const User: React.FC = () => {
       title: '组织结构',
       dataIndex: 'organizationName',
       align: 'center',
-      width: 120,
+      width: 180,
     },
     {
       title: '邮箱',
       dataIndex: 'email',
       align: 'center',
-      width: 100,
+      width: 150,
     },
     {
       title: '手机号',
       dataIndex: 'phone',
       align: 'center',
-      width: 150,
+      width: 120,
     },
     {
       title: '更新时间',
@@ -152,6 +157,9 @@ const User: React.FC = () => {
             >
               删除
             </Button>
+            <Button type="link" size="small" onClick={() => resetPassword(_)}>
+              重置密码
+            </Button>
           </Space>
         )
       },
@@ -166,7 +174,7 @@ const User: React.FC = () => {
 
   const onUpdateSearch = (info?: SysRoleParams | unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => value !== undefined)
     )
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({
@@ -198,7 +206,7 @@ const User: React.FC = () => {
       }
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, editRow: null })
-      onUpdateSearch()
+      onUpdateSearch(searchDefaultForm)
     } catch (error) {}
   }
 
@@ -210,7 +218,22 @@ const User: React.FC = () => {
       onOk() {
         deletebatchUserList(selRows).then(() => {
           // 刷新表格数据
-          onUpdateSearch()
+          onUpdateSearch(searchDefaultForm)
+        })
+      },
+    })
+  }
+
+  const resetPassword = (row: SysUserType) => {
+    modal.confirm({
+      title: `重置${row.username}的密码`,
+      icon: <ExclamationCircleFilled />,
+      content: `确定重置${row.username}的密码吗？数据重置后将无法恢复！`,
+      onOk() {
+        updateUserPassword({ userId: row.userId }).then(() => {
+          message.success('操作成功')
+          // 刷新表格数据
+          onUpdateSearch(searchDefaultForm)
         })
       },
     })

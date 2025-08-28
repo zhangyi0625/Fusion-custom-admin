@@ -8,6 +8,7 @@ export enum UserApi {
   userManage = '/system/user',
   userManageByPage = '/system/user/page',
   batchUserManage = '/system/user/batch',
+  resetUserPassword = '/system/user/password',
 }
 
 /**
@@ -48,10 +49,15 @@ export const getUserListByPage = (params: SysUserParams) => {
  * @returns 结果
  */
 export const addUserList = (params: SysUserType) => {
-  return HttpRequest.post({
-    url: UserApi.userManage,
-    data: params,
-  })
+  return HttpRequest.post(
+    {
+      url: UserApi.userManage,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }
 
 /**
@@ -60,10 +66,32 @@ export const addUserList = (params: SysUserType) => {
  * @returns 结果
  */
 export const editUserList = (params: SysUserType) => {
-  return HttpRequest.put({
-    url: UserApi.userManage,
-    data: params,
-  })
+  return HttpRequest.put(
+    {
+      url: UserApi.userManage,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 重置用户密码
+ * @param params 用户参数
+ * @returns 结果
+ */
+export const updateUserPassword = (params: Pick<SysUserType, 'userId'>) => {
+  return HttpRequest.put(
+    {
+      url: UserApi.userManage,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }
 
 /**

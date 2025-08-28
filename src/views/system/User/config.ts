@@ -2,7 +2,7 @@ import type { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 
 export const SelectUserOptions: CustomColumn[] = [
   {
-    label: '账号',
+    label: '用户账号',
     name: 'username',
     formType: 'input',
     span: 6,

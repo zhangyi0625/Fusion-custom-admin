@@ -34,6 +34,14 @@ import {
 } from '@/services/system/role/roleApi'
 import type { SysUserType } from '@/services/system/role/roleModel'
 
+export interface RoleUserDrawerProps {
+  open: boolean
+  // 角色id
+  roleId: string
+  // 点击取消的回调
+  onCancel: () => void
+}
+
 /**
  * 给角色分配用户
  * @returns
@@ -420,11 +428,3 @@ const RoleUserDrawer: React.FC<RoleUserDrawerProps> = ({
 }
 
 export default RoleUserDrawer
-
-export interface RoleUserDrawerProps {
-  open: boolean
-  // 角色id
-  roleId: string
-  // 点击取消的回调
-  onCancel: (e: any) => void
-}

@@ -6,7 +6,7 @@ import { getLoginLog } from '@/services/setting'
 import { SysRoleParams } from '@/services/system/role/roleModel'
 
 const LoginLog: React.FC = () => {
-  const { height } = useParentSize()
+  const { parentRef, height } = useParentSize()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<SysRoleParams>({
     page: 1,
@@ -100,12 +100,16 @@ const LoginLog: React.FC = () => {
   return (
     <>
       <ConfigProvider>
-        <Card>
+        <Card
+          style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
+          styles={{ body: { height: '100%' } }}
+          ref={parentRef}
+        >
           <SearchTable
             size="middle"
             columns={columns}
             bordered
-            scroll={{ x: 'max-content', y: height - 158 }}
+            scroll={{ x: 'max-content', y: height - 118 }}
             rowKey="id"
             totalKey="count"
             fetchResultKey="list"

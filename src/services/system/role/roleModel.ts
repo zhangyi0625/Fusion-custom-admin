@@ -36,6 +36,7 @@ export interface SysUserType
   extends Pick<SysUserParams, 'userName' | 'nickname'> {
   userId: string | null
   organizationId: string
+  username: string
   phone: string
   introduction: string
   roles: string | string[] | any
