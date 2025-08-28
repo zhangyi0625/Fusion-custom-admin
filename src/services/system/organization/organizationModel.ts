@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface SysOrganizationType {
   organizationId: string | null
   parentId: string | null
@@ -9,7 +11,5 @@ export interface SysOrganizationType {
 }
 
 export interface SysOrganizationParams
-  extends Pick<SysOrganizationType, 'organizationName' | 'parentId'> {
-  page: number
-  limit: number
-}
+  extends Pick<SysOrganizationType, 'organizationName' | 'parentId'>,
+    DefaultPaging {}

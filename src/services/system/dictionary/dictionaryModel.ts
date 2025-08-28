@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface SysDictionaryClassType {
   dictName: string
   dictId?: string | null
@@ -11,7 +13,6 @@ export interface SysDictionaryType extends SysDictionaryClassType {
   dictDataCode: string
 }
 
-export interface SysDictionaryParams extends Pick<SysDictionaryType, 'dictId'> {
-  page: number
-  limit: number
-}
+export interface SysDictionaryParams
+  extends Pick<SysDictionaryType, 'dictId'>,
+    DefaultPaging {}

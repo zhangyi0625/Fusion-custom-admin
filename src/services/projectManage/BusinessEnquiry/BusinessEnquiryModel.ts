@@ -1,3 +1,4 @@
+import { DefaultPaging } from '@/types/global'
 import { MakeQuotationTableType } from '../SaleProject/SaleProjectModel'
 
 export interface BusinessEnquiryType {
@@ -22,9 +23,10 @@ export interface BusinessEnquiryType {
   confirmSupplierId: string | null
 }
 
-export interface BusinessEnquiryParams extends Partial<BusinessEnquiryType> {
-  page: number
-  limit: number
+export interface BusinessEnquiryParams
+  extends Partial<BusinessEnquiryType>,
+    DefaultPaging {
+  sort: string
   customerKeyword: string | null
   keyword: string | null
 }

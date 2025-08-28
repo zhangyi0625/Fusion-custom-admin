@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface PayerUnitType {
   id?: string
   code: string
@@ -5,7 +7,6 @@ export interface PayerUnitType {
   status: boolean | number
 }
 
-export interface PayerUnitParams extends Partial<PayerUnitType> {
-  page: number
-  limit: number
-}
+export interface PayerUnitParams
+  extends Partial<PayerUnitType>,
+    DefaultPaging {}

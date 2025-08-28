@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface SupplierType {
   id?: string | null
   name: string
@@ -9,7 +11,4 @@ export interface SupplierType {
   contactId?: string
 }
 
-export interface SupplierParams extends Partial<SupplierType> {
-  page: number
-  limit: number
-}
+export interface SupplierParams extends Partial<SupplierType>, DefaultPaging {}

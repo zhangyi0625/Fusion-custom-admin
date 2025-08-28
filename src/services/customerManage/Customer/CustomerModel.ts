@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface CustomerType {
   id?: string
   name: string
@@ -7,7 +9,4 @@ export interface CustomerType {
   keywords?: string
 }
 
-export interface CustomerParams extends Partial<CustomerType> {
-  page: number
-  limit: number
-}
+export interface CustomerParams extends Partial<CustomerType>, DefaultPaging {}

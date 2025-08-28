@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface ProductManageType {
   name: string
   pinyin: string
@@ -10,10 +12,9 @@ export interface ProductManageType {
   unit: string
 }
 
-export interface ProductManageParams extends Partial<ProductManageType> {
-  page: number
-  limit: number
-}
+export interface ProductManageParams
+  extends Partial<ProductManageType>,
+    DefaultPaging {}
 
 export interface ProductManageClassType {
   id?: string
@@ -22,7 +23,6 @@ export interface ProductManageClassType {
   sort: string | number
   children?: any[]
 }
-export interface ProductClassParams extends Partial<ProductManageClassType> {
-  page: number
-  limit: number
-}
+export interface ProductClassParams
+  extends Partial<ProductManageClassType>,
+    DefaultPaging {}

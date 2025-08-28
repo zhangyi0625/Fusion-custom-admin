@@ -1,3 +1,6 @@
+import { DefaultPaging } from '@/types/global'
+import { DefaultOptionType } from 'antd/es/select'
+
 /**
  * 系统角色
  */
@@ -18,14 +21,13 @@ export interface SysRoleType {
   comments: string
 }
 
-export interface SysRoleParams extends Partial<Omit<SysRoleType, 'id'>> {
-  page: number
-  limit: number
-}
+export interface SysRoleParams
+  extends Partial<Omit<SysRoleType, 'id'>>,
+    DefaultOptionType {}
 
-export interface SysUserParams extends Pick<SysRoleType, 'roleId'> {
-  page: number
-  limit: number
+export interface SysUserParams
+  extends Pick<SysRoleType, 'roleId'>,
+    DefaultPaging {
   userName: string | null
   nickname: string | null
 }

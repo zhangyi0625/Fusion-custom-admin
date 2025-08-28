@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface PurchaseContractType {
   id?: string
   contractNo: string
@@ -12,7 +14,6 @@ export interface PurchaseContractType {
   file: File
 }
 
-export interface PurchaseContractParams extends PurchaseContractType {
-  page: number
-  limit: number
-}
+export interface PurchaseContractParams
+  extends DefaultPaging,
+    PurchaseContractType {}

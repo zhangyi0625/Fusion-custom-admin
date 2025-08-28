@@ -1,3 +1,5 @@
+import { DefaultPaging } from '@/types/global'
+
 export interface ContractsType {
   id?: string
   name: string
@@ -5,7 +7,6 @@ export interface ContractsType {
   supplierId: string
 }
 
-export interface ContractsParams extends Partial<ContractsType> {
-  page: number
-  limit: number
-}
+export interface ContractsParams
+  extends Partial<ContractsType>,
+    DefaultPaging {}
