@@ -65,7 +65,7 @@ const Organization: React.FC = () => {
     })
 
   useEffect(() => {
-    getAllOranization()
+    getAllOranization('first')
   }, [])
 
   const [treeData, setTreeData] = useState([])
@@ -77,25 +77,28 @@ const Organization: React.FC = () => {
       dataIndex: 'organizationName',
       key: 'organizationName',
       align: 'center',
+      width: 180,
     },
     {
       title: '机构全称',
       dataIndex: 'organizationFullName',
       key: 'organizationFullName',
       align: 'center',
-      width: 150,
+      width: 180,
     },
     {
       title: '机构代码',
       dataIndex: 'organizationCode',
       key: 'organizationCode',
       align: 'center',
+      width: 120,
     },
     {
       title: '机构类型',
       dataIndex: 'organizationType',
       key: 'organizationType',
       align: 'center',
+      width: 120,
     },
     {
       title: '机构类型名称',
@@ -109,6 +112,7 @@ const Organization: React.FC = () => {
       dataIndex: 'updateTime',
       key: 'updateTime',
       align: 'center',
+      width: 200,
     },
     {
       title: '操作',
@@ -142,7 +146,7 @@ const Organization: React.FC = () => {
     },
   ]
 
-  const getAllOranization = () => {
+  const getAllOranization = (isFirst?: string) => {
     getOrganizationList().then((resp) => {
       let newArr = resp.map((item: SysOrganizationType) => {
         return {
@@ -155,22 +159,13 @@ const Organization: React.FC = () => {
         (item: SysOrganizationType) => item.parentId === '0'
       ).organizationId
       setTreeData(buildTree(newArr, 'organizationId') as any)
-      setSearchDefaultForm({ ...searchDefaultForm, parentId: parId })
+      isFirst
+        ? setSearchDefaultForm({ ...searchDefaultForm, parentId: parId })
+        : setSearchDefaultForm({ ...searchDefaultForm })
     })
     setTimeout(() => {
       setImmediate(false)
     }, 300)
-  }
-
-  const onUpdateSearch = (info?: SysOrganizationType | unknown) => {
-    const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
-    )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
-    setSearchDefaultForm({
-      ...pageInfo,
-      ...filteredObj,
-    })
   }
 
   const onUpdatePagination = (pagination: TablePaginationConfig) => {
@@ -197,7 +192,6 @@ const Organization: React.FC = () => {
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null })
-      // onUpdateSearch()
       getAllOranization()
     } catch (error) {}
   }
@@ -216,19 +210,11 @@ const Organization: React.FC = () => {
           ? deleteBatchOrganization(id as string[])
           : deleteOrganization(id as string)
         ).then(() => {
-          // 刷新表格数据
-          onUpdateSearch({ ...searchDefaultForm })
+          getAllOranization()
           // 清空选择项
           setSelectedRows([])
         })
       },
-    })
-  }
-
-  const addRow = () => {
-    setParams({
-      visible: true,
-      currentRow: null,
     })
   }
 
@@ -258,7 +244,10 @@ const Organization: React.FC = () => {
                 defaultSelectedKeys={[searchDefaultForm.parentId] as string[]}
               />
             </div>
-            <div className="flex-1 ml-[24px] h-full">
+            <div
+              className="ml-[24px] h-full"
+              style={{ width: 'calc(100% - 250px)' }}
+            >
               <Form labelCol={{ span: 6 }}>
                 <Row gutter={24} style={{ margin: '0' }}>
                   <Col span={8}>
@@ -278,7 +267,15 @@ const Organization: React.FC = () => {
                   </Col>
                   <Col span={8}>
                     <Space>
-                      <Button type="primary" onClick={addRow}>
+                      <Button
+                        type="primary"
+                        onClick={() =>
+                          setParams({
+                            visible: true,
+                            currentRow: null,
+                          })
+                        }
+                      >
                         新增
                       </Button>
                       <Button

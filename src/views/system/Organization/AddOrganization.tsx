@@ -3,6 +3,7 @@ import { Form, Input, InputNumber, Select, type InputRef } from 'antd'
 import DragModal from '@/components/modal/DragModal'
 import type { SysOrganizationType } from '@/services/system/organization/organizationModel'
 import { getOrganizationList } from '@/services/system/organization/organization'
+import { AddOrganizationForm } from './config'
 
 export interface AddOrganizationProps {
   params: {
@@ -32,6 +33,8 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
 
   const [organization, setOrganization] = useState([])
 
+  const [formMap, setFormMap] = useState(AddOrganizationForm)
+
   useEffect(() => {
     if (!visible) return
     getAllOranization()
@@ -53,6 +56,10 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
   const getAllOranization = () => {
     getOrganizationList().then((resp) => {
       setOrganization(resp)
+      formMap.map((item) => {
+        if (item.name === 'parentId') item.options = resp
+      })
+      setFormMap([...formMap])
     })
   }
 
@@ -94,60 +101,66 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
         <Form.Item name="organizationId" hidden>
           <Input disabled />
         </Form.Item>
-        <Form.Item name="parentId" label="上级机构">
-          <Select
-            options={organization}
-            fieldNames={{ label: 'organizationName', value: 'organizationId' }}
-            showSearch
-            allowClear
-            placeholder="选择上级机构"
-          />
-        </Form.Item>
-        <Form.Item
-          name="organizationName"
-          label="机构名称"
-          rules={[{ required: true, message: '请输入机构名称' }]}
-        >
-          <Input
-            ref={organizationRef}
-            placeholder="请输入机构名称"
-            autoComplete="off"
-          />
-        </Form.Item>
-        <Form.Item
-          name="organizationCode"
-          label="机构代码"
-          rules={[{ required: true, message: '请输入代码' }]}
-        >
-          <Input placeholder="请输入机构代码" autoComplete="off" />
-        </Form.Item>
-        <Form.Item name="organizationFullName" label="机构全称">
-          <Input placeholder="请输入机构全称" autoComplete="off" />
-        </Form.Item>
-        <Form.Item
-          name="organizationType"
-          label="机构类型"
-          rules={[{ required: true, message: '请输入机构类型' }]}
-        >
-          <Input placeholder="请输入机构类型" autoComplete="off" />
-        </Form.Item>
-        <Form.Item
-          name="organizationTypeName"
-          label="机构类型名称"
-          rules={[{ required: true, message: '请输入机构类型名称' }]}
-        >
-          <Input placeholder="请输入机构类型名称" autoComplete="off" />
-        </Form.Item>
-        <Form.Item
-          name="sortNumber"
-          label="排序号"
-          rules={[{ required: true, message: '请选择排序号' }]}
-        >
-          <InputNumber style={{ width: '100%' }} />
-        </Form.Item>
-        <Form.Item name="comments" label="组织备注">
-          <Input.TextArea placeholder="请输入组织机构备注" />
-        </Form.Item>
+        {formMap.map((item) => (
+          <Form.Item
+            label={item.label}
+            key={item.name}
+            name={item.name}
+            rules={
+              item.isRules
+                ? [
+                    {
+                      required: true,
+                      message: `请${
+                        item.formType === 'input' ? '输入' : '选择'
+                      }${item.label}`,
+                    },
+                  ]
+                : undefined
+            }
+          >
+            {item.formType === 'input' && (
+              <Input
+                placeholder={`请输入${item.label}`}
+                autoComplete="off"
+                allowClear
+              />
+            )}
+            {item.formType === 'inputNumber' && (
+              <InputNumber
+                style={{ width: '100%' }}
+                min={0}
+                placeholder={`请输入${item.label}`}
+              />
+            )}
+            {item.formType === 'textarea' && (
+              <Input.TextArea
+                placeholder={`请输入${item.label}`}
+                autoComplete="off"
+                allowClear
+              />
+            )}
+            {item.formType === 'select' && (
+              <Select
+                placeholder={`请选择${item.label}`}
+                options={item.options}
+                allowClear
+                fieldNames={
+                  item.selectFileldName ?? {
+                    label: 'name',
+                    value: 'id',
+                  }
+                }
+                showSearch
+                filterOption={(input, option) =>
+                  String(option?.organizationName ?? '')
+                    .toLowerCase()
+                    .includes(input.toLowerCase())
+                }
+              />
+            )}
+          </Form.Item>
+        ))}
       </Form>
     </DragModal>
   )
