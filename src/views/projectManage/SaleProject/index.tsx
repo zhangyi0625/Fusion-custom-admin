@@ -58,6 +58,7 @@ const SaleProject: React.FC = () => {
       customerKeyword: null,
       isInquiry: false,
       status: null,
+      sort: 'create_time desc',
     })
 
   const [params, setParams] = useState<{

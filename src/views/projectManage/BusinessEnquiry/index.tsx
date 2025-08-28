@@ -57,6 +57,7 @@ const BusinessEnquiry: React.FC = () => {
       customerKeyword: null,
       isInquiry: true,
       status: null,
+      sort: 'create_time desc',
     })
 
   const [searchColumns, setSearchColumns] = useState(
