@@ -37,9 +37,12 @@ import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
 import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
 import { formatTime } from '@/utils/format'
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
+import { useIntl, injectIntl } from 'react-intl'
 
 const BusinessEnquiry: React.FC = () => {
   const { parentRef, height } = useParentSize()
+
+  const { formatMessage } = useIntl()
 
   const { modal, message } = App.useApp()
 
@@ -423,12 +426,18 @@ const BusinessEnquiry: React.FC = () => {
             isShowReset={true}
             isShowExpend={true}
             iconHidden={true}
-            searchBtnText="查询"
-            advancedFilterText={['展开', '收起']}
+            searchBtnText={formatMessage({ id: '查询' })}
+            resetBtnText={formatMessage({ id: '重置' })}
+            advancedFilterText={[
+              formatMessage({ id: '展开' }),
+              formatMessage({ id: '收起' }),
+            ]}
             onUpdateSearch={onUpdateSearch}
           />
           <div className="flex items-center">
-            <p className="text-gray-900">项目状态：</p>
+            <p className="text-gray-900">
+              {formatMessage({ id: '项目状态' })}：
+            </p>
             {ProjectStatusOptions.slice(0, 3).map((item) => (
               <Button
                 key={item.value}
@@ -441,7 +450,7 @@ const BusinessEnquiry: React.FC = () => {
                 }
                 onClick={() => changeStatus(item.value)}
               >
-                {item.text}
+                {formatMessage({ id: item.text })}
               </Button>
             ))}
           </div>
@@ -508,4 +517,4 @@ const BusinessEnquiry: React.FC = () => {
   )
 }
 
-export default BusinessEnquiry
+export default injectIntl(BusinessEnquiry)

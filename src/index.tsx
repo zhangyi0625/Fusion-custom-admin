@@ -4,26 +4,39 @@ import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import { persistor, store } from '@/stores/store'
 import { PersistGate } from 'redux-persist/integration/react'
-import { Spin } from 'antd'
+import { ConfigProvider, Spin } from 'antd'
 import GlobalConfigProvider from './GlobalConfigProvider'
 import './index.css'
+import { FormattedMessage, FormattedNumber, IntlProvider } from 'react-intl'
+import {
+  getAntMessages,
+  getCurrentLang,
+  reactIntlLangConfig,
+} from './locals/react-intl'
 
 const container = document.getElementById('root')
 if (container) {
   const root = createRoot(container)
   root.render(
-    <Provider store={store}>
-      <PersistGate loading={<Spin />} persistor={persistor}>
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <GlobalConfigProvider />
-        </BrowserRouter>
-      </PersistGate>
-    </Provider>
+    <IntlProvider
+      locale={getCurrentLang()}
+      messages={reactIntlLangConfig[getCurrentLang()]}
+    >
+      <ConfigProvider locale={getAntMessages()}>
+        <Provider store={store}>
+          <PersistGate loading={<Spin />} persistor={persistor}>
+            <BrowserRouter
+              future={{
+                v7_startTransition: true,
+                v7_relativeSplatPath: true,
+              }}
+            >
+              <GlobalConfigProvider />
+            </BrowserRouter>
+          </PersistGate>
+        </Provider>
+      </ConfigProvider>
+    </IntlProvider>
   )
 } else {
   console.error('Root element not found')
