@@ -52,6 +52,7 @@ export const BusinessEnquirySearchColumns: CustomColumn[] = [
     label: null,
     name: 'createTime',
     formType: 'date-picker',
+    customPlaceholder: ['创建开始日期', '创建结束日期'],
     span: 6,
     hiddenItem: false,
     selectFetch: false,
