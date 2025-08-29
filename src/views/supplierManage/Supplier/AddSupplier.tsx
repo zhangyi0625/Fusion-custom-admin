@@ -155,6 +155,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
                     allowClear
+                    disabled={item.name == 'contactPhone'}
                   />
                 )}
                 {item.formType === 'select' && (
