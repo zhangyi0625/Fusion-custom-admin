@@ -169,3 +169,16 @@ export const AddContractsForm: Omit<CustomColumn, 'selectFetch'>[] = [
     hiddenItem: true,
   },
 ]
+
+export const SupplierAuditSearchColumns: CustomColumn[] = [
+  {
+    label: null,
+    name: 'name',
+    formType: 'normalSelect',
+    customPlaceholder: '选择状态',
+    options: [],
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+]
