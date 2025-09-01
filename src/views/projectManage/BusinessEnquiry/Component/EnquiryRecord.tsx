@@ -4,7 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
 } from 'react'
-import { Button, Select, Space, Timeline } from 'antd'
+import { Button, Select, Space, Timeline, Empty } from 'antd'
 import EnquiryIcon from '@/assets/svg/icon/enquiry-icon.svg'
 import QuotationIcon from '@/assets/svg/icon/quotation-icon.svg'
 import LinkIcon from '@/assets/svg/icon/link.svg'
@@ -209,6 +209,9 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
             />
           </div>
           <Timeline items={enquiryRecord} />
+          {!enquiryRecord.length && (
+            <Empty description="暂无需报价记录" style={{ marginTop: '80px' }} />
+          )}
         </div>
         <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>

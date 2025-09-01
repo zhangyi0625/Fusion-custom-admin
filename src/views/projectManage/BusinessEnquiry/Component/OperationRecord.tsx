@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useImperativeHandle } from 'react'
-import { Timeline } from 'antd'
+import { Empty, Timeline } from 'antd'
 import { getBusinessOperationRecord } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import type { BussinesOperationRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
@@ -45,6 +45,9 @@ const OperationRecordCom = React.forwardRef<
   return (
     <>
       <Timeline items={operationRecord} />
+      {!operationRecord.length && (
+        <Empty description="暂无操作记录" style={{ marginTop: '80px' }} />
+      )}
     </>
   )
 })
