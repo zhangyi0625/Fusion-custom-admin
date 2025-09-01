@@ -376,7 +376,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
             bordered
             rowKey="id"
             dataSource={dataSource}
-            scroll={{ x: 'max-content', y: 208 }}
+            scroll={{ x: 'max-content', y: 408 }}
           />
         )}
         <SupplierTransfer
@@ -400,6 +400,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           onOk={confirmQuotationModal}
         />
         <EditQuotation
+          title="修改报价表理由"
           visible={editModal.editQuotation}
           onCancel={() => setEditModal({ ...editModal, editQuotation: false })}
           onOk={confirmEditQuotation}
