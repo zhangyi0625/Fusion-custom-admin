@@ -59,17 +59,40 @@ export const BusinessEnquirySearchColumns: CustomColumn[] = [
   },
 ]
 
+export const OpenEnquirySearchColumns: CustomColumn[] = [
+  {
+    label: null,
+    name: 'title',
+    customPlaceholder: '请输入询价标题',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'customerKeyword',
+    customPlaceholder: '请输入客户名称或手机号',
+    formType: 'input',
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
+  {
+    label: null,
+    name: 'createTime',
+    formType: 'date-picker',
+    customPlaceholder: ['创建开始日期', '创建结束日期'],
+    span: 6,
+    hiddenItem: false,
+    selectFetch: false,
+  },
+]
+
 export const AddBusinessEnquiryForm: Omit<
   CustomColumn,
   'selectFetch' | 'hiddenItem'
 >[] = [
-  // {
-  //   label: '项目编号',
-  //   name: 'number',
-  //   formType: 'input',
-  //   span: 12,
-  //   isRules: true,
-  // },
   {
     label: '项目名称',
     name: 'name',
