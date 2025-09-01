@@ -11,7 +11,7 @@ export type ProductTransferProps = {
     visible: boolean
     selected: BussinesEnquiryProductType[] | null
   }
-  projectId: string
+  projectId: string | null
   onOk: (params: BussinesEnquiryProductType[]) => void
   onCancel: () => void
 }
@@ -84,7 +84,7 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
         productUnit: item.unit,
         productModel: item.model,
         qty: 0,
-        projectId: projectId,
+        projectId: projectId ?? '',
       })
     })
     setSelectedArr(newArr.concat(selected as BussinesEnquiryProductType[]))

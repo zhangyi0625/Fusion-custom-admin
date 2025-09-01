@@ -298,6 +298,7 @@ const Product: React.FC = () => {
       </Card>
       <AddProduct
         params={params}
+        type="systemProducts"
         ProductSearchColumns={ProductSearchColumns}
         onOk={onEditOk}
         onCancel={() => setParams({ visible: false, currentRow: null })}

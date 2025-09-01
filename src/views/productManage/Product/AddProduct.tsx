@@ -11,6 +11,7 @@ export type AddProductProps = {
     visible: boolean
     currentRow: ProductManageType | null
   }
+  type: 'systemProducts' | 'customizedProducts'
   ProductSearchColumns: CustomColumn[]
   onOk: (params: ProductManageType) => void
   onCancel: () => void
@@ -19,6 +20,7 @@ export type AddProductProps = {
 const AddProduct: React.FC<AddProductProps> = ({
   params,
   ProductSearchColumns,
+  type,
   onCancel,
   onOk,
 }) => {
@@ -35,7 +37,20 @@ const AddProduct: React.FC<AddProductProps> = ({
       }
     })
     return AddProductForm
-  }, [ProductSearchColumns])
+  }, [ProductSearchColumns, type])
+
+  const getCustomizedProducts = useCallback(() => {
+    let key = ['model', 'volt', 'spec', 'unit']
+    let arr = AddProductForm.filter((item) => key.includes(item.name))
+    let newArr = arr.map((item) => {
+      return {
+        ...item,
+        formType: 'input',
+        span: 24,
+      }
+    })
+    return newArr
+  }, [AddProductForm, type])
 
   useEffect(() => {
     if (!visible) return
@@ -67,7 +82,7 @@ const AddProduct: React.FC<AddProductProps> = ({
   }
   return (
     <DragModal
-      width="50%"
+      width={type === 'customizedProducts' ? '45%' : '50%'}
       open={visible}
       title={currentRow ? '编辑产品' : '新增产品'}
       onOk={onConfirm}
@@ -81,7 +96,11 @@ const AddProduct: React.FC<AddProductProps> = ({
           <Input disabled />
         </Form.Item>
         <Row gutter={24}>
-          {((getAddProductForm() as CustomColumn[]) ?? []).map((item) => (
+          {(
+            ((type === 'systemProducts'
+              ? getAddProductForm()
+              : getCustomizedProducts()) as CustomColumn[]) ?? []
+          ).map((item) => (
             <Col span={item.span} key={item.name}>
               <Form.Item
                 label={item.label}
@@ -99,8 +118,17 @@ const AddProduct: React.FC<AddProductProps> = ({
                       ]
                     : undefined
                 }
-                labelCol={{ span: item.formType === 'radio' ? 3 : 8 }}
-                layout={item.formType === 'radio' ? 'horizontal' : 'vertical'}
+                labelCol={{
+                  span:
+                    item.formType === 'radio' || type === 'customizedProducts'
+                      ? 3
+                      : 8,
+                }}
+                layout={
+                  item.formType === 'radio' || type === 'customizedProducts'
+                    ? 'horizontal'
+                    : 'vertical'
+                }
               >
                 {item.formType === 'input' && (
                   <Input

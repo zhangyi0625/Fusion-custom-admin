@@ -77,13 +77,6 @@ export const AddProductForm: Omit<
   CustomColumn,
   'selectFetch' | 'hiddenItem'
 >[] = [
-  // {
-  //   label: '产品名称',
-  //   name: 'name',
-  //   formType: 'input',
-  //   span: 12,
-  //   isRules: true,
-  // },
   {
     label: '拼音码',
     name: 'pinyin',
