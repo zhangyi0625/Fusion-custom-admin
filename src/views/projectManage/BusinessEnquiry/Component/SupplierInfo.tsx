@@ -117,8 +117,8 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       },
       {
         title: '询价修改时间',
-        key: 'updateTime',
-        dataIndex: 'updateTime',
+        key: 'inquiryTime',
+        dataIndex: 'inquiryTime',
         align: 'center',
         width: 200,
       },
