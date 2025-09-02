@@ -56,7 +56,11 @@ export default defineConfig({
     lazyCompilation: true,
   },
   // 构建产物相关配置
-  output: {},
+  output: {
+    cssModules: {
+      exportGlobals: true,
+    },
+  },
   // 构建优化相关
   performance: {
     chunkSplit: {
