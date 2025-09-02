@@ -24,13 +24,23 @@
   background-position: 50%;
   background-size: 100% 100%;
   .login-box {
-    width: 800px;
-    height: 540px;
-    display: flex;
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 6px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.149019607843137);
+    // display: flex;
     border-width: 0;
+    width: 480px;
+    height: 560px;
+    background: #ffffff;
+    box-shadow: 0px 2px 24px 0px #d8e2fa;
+    border-radius: 24px;
+
+    .login-title {
+      font-family: PingFangSC, PingFang SC;
+      font-weight: 600;
+      font-size: 28px;
+      color: #1f1f1f;
+      text-align: center;
+      font-style: normal;
+      margin: 70px auto 50px;
+    }
 
     .login-left {
       border-width: 0;
@@ -50,17 +60,71 @@
 
     .login-form {
       border-width: 0;
-      width: 420px;
-      height: 460px;
+      // width: 420px;
+      // height: 460px;
       display: flex;
       flex-direction: column;
-      padding: 40px;
-      font-family: '微软雅黑', sans-serif;
+      padding: 0 24px;
+      // font-family: '微软雅黑', sans-serif;
       font-weight: 400;
       font-style: normal;
       text-align: left;
       line-height: 24px;
       flex: 1;
+      .login-form-item {
+        display: flex;
+        align-items: center;
+        height: 52px;
+        line-height: 52px;
+        background: #f5f7fa;
+        border-radius: 6px;
+        margin: 0;
+        width: 100%;
+        margin-bottom: 16px;
+      }
+      .customer-input {
+        border: none;
+        background: transparent;
+        border: none !important;
+        outline: none !important;
+        box-shadow: unset;
+      }
+      .customer-input::after {
+        border: none !important;
+      }
+      .customer-input::before {
+        border: none !important;
+      }
+      .customer-input:active {
+        border: none !important;
+      }
+      :global {
+        .ant-form-item-required::before {
+          display: none !important;
+        }
+        .ant-input-affix-wrapper {
+          font-weight: 400 !important;
+          font-size: 14px !important;
+          color: #bfbfbf !important;
+        }
+        .ant-form-item {
+          margin: 0 !important;
+          width: 100% !important;
+        }
+        .ant-form-item-required {
+          font-weight: 500;
+          font-size: 14px;
+          color: #1f1f1f;
+        }
+        .ant-form-item-additional {
+          position: absolute;
+          margin-left: 12px;
+          bottom: -7px;
+        }
+        .ant-form-item-explain-error {
+          font-size: 12px;
+        }
+      }
     }
   }
 }

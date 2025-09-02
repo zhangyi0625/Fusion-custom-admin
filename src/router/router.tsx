@@ -39,6 +39,12 @@ export const defaultRoutes: RouteObject[] = [
     component: LazyLoad('MyEnquiry/index.tsx').type,
     title: '我的询价',
   },
+  {
+    path: '/Profile',
+    component: LazyLoad('Profile/index.tsx').type,
+    title: '账号信息',
+    caseSensitive: true,
+  },
 ]
 
 // 动态路由

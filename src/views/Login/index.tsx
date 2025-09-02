@@ -52,6 +52,7 @@ const Login: React.FC = () => {
   const submit = async (values: any) => {
     // 加入验证码校验key
     values.verifyKey = checkKey
+    values.username = values.phone
     setLoading(true)
     // 这里考虑返回的内容不仅包括token，还包括用户登录的角色（需要存储在本地，用于刷新页面时重新根据角色获取菜单）、配置的首页地址（供登录后进行跳转）
     try {
@@ -107,10 +108,11 @@ const Login: React.FC = () => {
             }
 
             // 跳转到首页
-            navigate(homePath)
+            // navigate(homePath)
+            navigate('/enquiryHall')
             antdUtils.notification?.success({
               message: '登录成功',
-              description: '欢迎来到在舱光速抢舱管理平台!',
+              description: '欢迎来到销售系统供应商端!',
             })
           }
           break
@@ -150,149 +152,121 @@ const Login: React.FC = () => {
       <div className={styles.dragArea} />
       <div className={styles['login-container']}>
         <div className={styles['login-box']}>
-          {/* 左边图案和标题 */}
-          <div className={styles['login-left']}>
-            <div className="logo mt-[60]">
-              <img
-                className="login-icon my-0 mx-auto"
-                width="70"
-                src={logo}
-                alt="logo"
-              />
-            </div>
-            <div className="title">
-              <p style={{ fontSize: '20px', margin: 0 }}>
-                <span
-                  style={{
-                    fontFamily:
-                      '微软雅黑 Bold, 微软雅黑 Regular, 微软雅黑, sans-serif',
-                    fontWeight: 700,
-                  }}
-                >
-                  融合管理平台
-                </span>
-              </p>
-              <p style={{ fontSize: '14px', margin: 0 }}>
-                <span
-                  style={{
-                    fontFamily: '微软雅黑, sans-serif',
-                    fontWeight: 400,
-                    color: '#999999',
-                  }}
-                >
-                  销售协同管理系统
-                </span>
-              </p>
-            </div>
+          <div className={styles['login-title']}>
+            <p>欢迎登录</p>
+            <p>销售系统供应商端</p>
           </div>
-          {/* 右边登陆表单 */}
           <div className={styles['login-form']}>
-            <div className="login-title">
-              <p style={{ fontSize: '28px', textAlign: 'center', margin: 0 }}>
-                <span
-                  style={{
-                    fontFamily:
-                      '微软雅黑 Bold, 微软雅黑 Regular, 微软雅黑, sans-serif',
-                    fontWeight: 700,
-                  }}
-                >
-                  用户登录
-                </span>
-              </p>
-            </div>
-            <div className="form" style={{ marginTop: '40px' }}>
-              <Form
-                form={form}
-                name="login"
-                labelCol={{ span: 5 }}
-                initialValues={{
-                  username: 'admin',
-                  password: '123456',
-                  remember: true,
-                }}
-                size="large"
-                autoComplete="off"
-                onFinish={submit}
-              >
+            <Form
+              form={form}
+              name="login"
+              labelCol={{ span: 5 }}
+              size="large"
+              autoComplete="off"
+              onFinish={submit}
+              colon={false}
+              initialValues={{
+                remember: true,
+              }}
+            >
+              <div className={styles['login-form-item']}>
                 <Form.Item
-                  name="username"
-                  rules={[{ required: true, message: '请输入用户名' }]}
+                  name="phone"
+                  rules={[{ required: true, message: '请输入手机号' }]}
+                  label="手机号"
                 >
                   <Input
                     size="large"
                     ref={inputRef}
-                    autoFocus
+                    className={styles['customer-input']}
                     autoComplete="off"
                     allowClear
-                    placeholder="用户名：admin"
-                    prefix={<UserOutlined />}
+                    placeholder="请输入手机号"
                   />
                 </Form.Item>
+              </div>
+              <div className={styles['login-form-item']}>
                 <Form.Item
                   name="password"
                   rules={[{ required: true, message: '请输入密码' }]}
+                  label="密码"
                 >
-                  <Input.Password
+                  <Input
                     size="large"
                     allowClear
+                    className={styles['customer-input']}
                     autoComplete="off"
-                    placeholder="密码：123456qwe,."
-                    prefix={<LockOutlined />}
+                    placeholder="请输入密码"
                   />
                 </Form.Item>
-                <Form.Item>
-                  <Row gutter={8}>
-                    <Col span={18}>
-                      <Form.Item
-                        name="verifyCode"
-                        noStyle
-                        rules={[{ required: true, message: '请输入验证码' }]}
-                      >
-                        <Input
-                          size="large"
-                          allowClear
-                          placeholder="输入右侧验证码"
-                          prefix={<SecurityScanOutlined />}
-                        />
-                      </Form.Item>
-                    </Col>
-                    <Col span={6}>
-                      <Button
+              </div>
+              <Form.Item>
+                <Row gutter={8}>
+                  <Col span={18}>
+                    <Form.Item
+                      name="verifyCode"
+                      noStyle
+                      rules={[{ required: true, message: '请输入验证码' }]}
+                    >
+                      <Input
                         size="large"
-                        onClick={getCode}
-                        style={{
-                          width: '100%',
-                          backgroundColor: '#f0f0f0',
-                          padding: '2px',
-                        }}
-                      >
-                        <Image
-                          src={code?.base64}
-                          preview={false}
-                          width="100%"
-                          height="100%"
-                        />
-                      </Button>
-                    </Col>
-                  </Row>
-                </Form.Item>
-                {/* 记住密码 */}
-                <Form.Item name="remember" valuePropName="checked">
+                        allowClear
+                        placeholder="输入右侧验证码"
+                        prefix={<SecurityScanOutlined />}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Button
+                      size="large"
+                      onClick={getCode}
+                      style={{
+                        width: '100%',
+                        backgroundColor: '#f0f0f0',
+                        padding: '2px',
+                      }}
+                    >
+                      <Image
+                        src={code?.base64}
+                        preview={false}
+                        width="100%"
+                        height="100%"
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <Form.Item name="remember" valuePropName="checked">
+                <div className="flex items-cente justify-between">
                   <Checkbox>记住密码</Checkbox>
-                </Form.Item>
-                <Form.Item>
-                  <Button
-                    loading={loading}
-                    size="large"
-                    style={{ width: '100%' }}
-                    type="primary"
-                    htmlType="submit"
-                  >
-                    登录
-                  </Button>
-                </Form.Item>
-              </Form>
-            </div>
+                  <div>忘记密码</div>
+                </div>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  loading={loading}
+                  size="large"
+                  style={{ width: '100%', marginTop: '30px' }}
+                  type="primary"
+                  htmlType="submit"
+                >
+                  登录
+                </Button>
+              </Form.Item>
+              <Form.Item>
+                <Button
+                  size="large"
+                  style={{
+                    width: '100%',
+                    marginTop: '30px',
+                    fontWeight: '600',
+                  }}
+                  type="link"
+                >
+                  免费注册
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       </div>

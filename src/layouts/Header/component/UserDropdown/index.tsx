@@ -1,20 +1,14 @@
-import { App, Avatar, Divider, Dropdown, theme, type MenuProps } from 'antd'
-import avatar from '@/assets/images/avatar.png'
+import { App, Divider, Dropdown, theme, type MenuProps } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import {
   ExclamationCircleOutlined,
-  FileMarkdownOutlined,
-  LockOutlined,
   LogoutOutlined,
-  QuestionCircleFilled,
   SyncOutlined,
   UserOutlined,
 } from '@ant-design/icons'
 import { logout } from '@/services/login/loginApi'
 import type { ReactNode } from 'react'
 import React from 'react'
-import { updatePreferences } from '@/stores/store'
-import { useDispatch } from 'react-redux'
 
 const { useToken } = theme
 
@@ -23,7 +17,6 @@ const { useToken } = theme
  * @returns
  */
 const UserDropdown: React.FC = () => {
-  const dispatch = useDispatch()
   const { token } = useToken()
   const { modal } = App.useApp()
 
@@ -38,6 +31,7 @@ const UserDropdown: React.FC = () => {
       disabled: false,
       onClick: () => {
         // 个人中心做成一个弹窗，内部可以修改
+        navigate('/Profile')
       },
     },
     {

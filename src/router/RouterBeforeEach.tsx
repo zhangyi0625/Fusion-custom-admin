@@ -17,7 +17,7 @@ const RouterBeforeEach: React.FC = () => {
     // 这里需要添加判定，如果是已登录状态，且访问根路径，则直接导向到首页
     if (location.pathname === '/' && bLogin) {
       const index = sessionStorage.getItem('homePath') || '/404'
-      navigate('/EnquiryHall')
+      navigate(index)
     } else if (bLogin === 'false' || !bLogin || location.pathname === '/') {
       // 未登录状态或登录状态已失效，则跳转到登录页面
       navigate('/login', { replace: true })
@@ -26,7 +26,6 @@ const RouterBeforeEach: React.FC = () => {
       const obj = checkRouterAuth(location.pathname)
       console.log(location, 'obj', obj)
       if (!obj && location.pathname !== '404' && !location.key) {
-        console.log(!obj && location.pathname !== '404' && !location.key)
         navigate('/404')
       }
     }

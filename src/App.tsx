@@ -52,7 +52,7 @@ const App: React.FC = () => {
     if (isLogin === 'false' || !isLogin || location.pathname === '/login') {
       navigate('/login')
     } else {
-      getMenuData()
+      // getMenuData()
     }
   }, [getMenuData, location.pathname, navigate])
 
