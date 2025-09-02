@@ -28,6 +28,19 @@ export const errorRoutes: RouteObject[] = [
   },
 ]
 
+export const defaultRoutes: RouteObject[] = [
+  {
+    path: '/EnquiryHall',
+    component: LazyLoad('EnquiryHall/index.tsx').type,
+    title: '询价大厅',
+  },
+  {
+    path: '/MyEnquiry',
+    component: LazyLoad('MyEnquiry/index.tsx').type,
+    title: '我的询价',
+  },
+]
+
 // 动态路由
 export const dynamicRoutes: RouteObject[] = [
   {
@@ -35,7 +48,7 @@ export const dynamicRoutes: RouteObject[] = [
     component: React.lazy(
       () => import('@/layouts/index.tsx')
     ) as unknown as ReactNode,
-    children: errorRoutes,
+    children: errorRoutes.concat(defaultRoutes),
   },
   {
     path: '/login',
@@ -78,7 +91,11 @@ export const Router = () => {
   // 使用useMemo 缓存处理后的路由
   const memoizedRoutes = useMemo(() => {
     // 确保动态路由只有在菜单数据变化时才重新生成
-    dynamicRoutes[0].children = [...handleRouter(menus), ...errorRoutes]
+    dynamicRoutes[0].children = [
+      ...handleRouter(menus),
+      ...defaultRoutes,
+      ...errorRoutes,
+    ]
     return generateRouter(dynamicRoutes)
   }, [menus])
   return useRoutes(memoizedRoutes)

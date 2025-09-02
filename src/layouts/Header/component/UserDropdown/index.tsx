@@ -32,11 +32,6 @@ const UserDropdown: React.FC = () => {
   // 菜单栏
   const items: MenuProps['items'] = [
     {
-      key: 'doc',
-      label: '文档',
-      icon: <FileMarkdownOutlined />,
-    },
-    {
       key: '1',
       label: '个人中心',
       icon: <UserOutlined />,
@@ -44,11 +39,6 @@ const UserDropdown: React.FC = () => {
       onClick: () => {
         // 个人中心做成一个弹窗，内部可以修改
       },
-    },
-    {
-      key: 'help',
-      label: '问题 & 帮助',
-      icon: <QuestionCircleFilled />,
     },
     {
       type: 'divider',
@@ -64,17 +54,6 @@ const UserDropdown: React.FC = () => {
          */
         localStorage.clear()
         window.location.reload()
-      },
-    },
-    {
-      type: 'divider',
-    },
-    {
-      key: 'lock',
-      label: '锁屏',
-      icon: <LockOutlined />,
-      onClick: () => {
-        dispatch(updatePreferences('widget', 'lockScreenStatus', true))
       },
     },
     {
@@ -131,9 +110,6 @@ const UserDropdown: React.FC = () => {
   const renderDropdown = (menus: ReactNode) => {
     return (
       <div className="dropdownContent" style={contentStyle}>
-        <div className="avatar flex items-center p-3">
-          <Avatar size="large" src={avatar} />
-        </div>
         <Divider style={{ margin: '2px 0' }} />
         {React.cloneElement(menus as React.ReactElement, {
           style: { boxShadow: 'none' },
@@ -151,7 +127,7 @@ const UserDropdown: React.FC = () => {
         overlayStyle={{ width: 240 }}
       >
         <div className="login-user flex items-center cursor-pointer justify-between h-[50] transition-all duration-300">
-          <Avatar size="default" src={avatar} />
+          <UserOutlined />
           <span style={{ margin: '0 0 0 6px' }}>
             {sessionStorage.getItem('loginUser') || 'username'}
           </span>

@@ -7,7 +7,7 @@ import {
   SettingOutlined,
 } from '@ant-design/icons'
 import { Badge, Dropdown, Input, Layout, Skeleton, Space, Tooltip } from 'antd'
-import React, { Suspense } from 'react'
+import React, { Suspense, useCallback } from 'react'
 import { memo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import MessageBox from './component/MessageBox'
@@ -15,6 +15,9 @@ import FullScreen from './component/FullScreen'
 import BreadcrumbNav from './component/BreadcrumbNav'
 import UserDropdown from './component/UserDropdown'
 import { type RootState, updatePreferences } from '@/stores/store'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { defaultRoutes } from '@/router/router'
+import { RouteObject } from '@/types/route'
 
 const Setting = React.lazy(() => import('./component/Setting'))
 
@@ -23,6 +26,10 @@ const Setting = React.lazy(() => import('./component/Setting'))
  */
 const Header: React.FC = memo(() => {
   const dispatch = useDispatch()
+
+  const location = useLocation()
+
+  const navigate = useNavigate()
   const [openSetting, setOpenSetting] = useState<boolean>(false)
   // 从全局状态中获取配置是否开启面包屑、图标
   const { breadcrumb } = useSelector((state: RootState) => state.preferences)
@@ -42,66 +49,45 @@ const Header: React.FC = memo(() => {
     console.log(name)
   }
 
+  const jumpRoute = (item: RouteObject) => {
+    console.log(location, 'sss', item)
+    navigate(item.path as string)
+  }
+
   return (
     <>
       <Layout.Header
-        className="ant-layout-header flex"
+        className="ant-layout-header flex items-center"
         style={{
-          borderBottom: ' 1px solid #e9edf0',
+          borderBottom: '1px solid #e9edf0',
+          padding: '0 24px',
         }}
       >
-        {/* 面包屑 */}
-        {breadcrumb.enable && <BreadcrumbNav />}
+        <p className="text-blue-500 font-semibold text-base">
+          销售系统供应商端
+        </p>
         <Space
           size="large"
           className="flex flex-1 justify-end items-center toolbox"
         >
-          <Input
-            variant="filled"
-            placeholder="输入内容查询"
-            suffix={
-              <SearchOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
-            }
-            onChange={(e) => searchMenu(e.target.value)}
-          />
-          {/* <Tooltip placement="bottom" title="github">
-            <GithubOutlined
-              style={{ cursor: 'pointer', fontSize: '18px' }}
-              onClick={routeGitHub}
-            />
-          </Tooltip> */}
-          <Tooltip placement="bottom" title="锁屏">
-            <LockOutlined
-              style={{ cursor: 'pointer', fontSize: '18px' }}
-              onClick={() => {
-                dispatch(updatePreferences('widget', 'lockScreenStatus', true))
-              }}
-            />
-          </Tooltip>
-          {/* 邮件 */}
-          {/* <Badge count={5}>
-            <MailOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
-          </Badge> */}
-          {/* <Dropdown placement="bottomRight" popupRender={() => <MessageBox />}>
-            <Badge count={5}>
-              <BellOutlined style={{ cursor: 'pointer', fontSize: '18px' }} />
-            </Badge>
-          </Dropdown> */}
-          <Tooltip placement="bottomRight" title="系统设置">
-            <SettingOutlined
-              style={{ cursor: 'pointer', fontSize: '18px' }}
-              onClick={() => setOpenSetting(true)}
-            />
-          </Tooltip>
-          <FullScreen />
-          {/* 用户信息 */}
+          {defaultRoutes.map((item) => (
+            <p
+              className={
+                location.pathname === item.path
+                  ? 'text-blue-500'
+                  : 'text-stone-500'
+              }
+              key={item.path}
+              onClick={() => jumpRoute(item)}
+            >
+              <span className="font-semibold cursor-pointer mr-[60px]">
+                {item.title}
+              </span>
+            </p>
+          ))}
           <UserDropdown />
         </Space>
       </Layout.Header>
-      {/* 系统设置界面 */}
-      <Suspense fallback={<Skeleton />}>
-        <Setting open={openSetting} setOpen={setOpenSetting} />
-      </Suspense>
     </>
   )
 })

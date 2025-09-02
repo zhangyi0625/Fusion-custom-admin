@@ -1,6 +1,6 @@
-import RouterBeforeEach from '@/router/RouterBeforeEach';
-import { Layout } from 'antd';
-import type React from 'react';
+import RouterBeforeEach from '@/router/RouterBeforeEach'
+import { Layout } from 'antd'
+import type React from 'react'
 
 /**
  * 中间主内容区域
@@ -13,11 +13,11 @@ const Content: React.FC = () => {
       style={{
         overflowY: 'auto',
         overflowX: 'hidden',
-        padding: '8px',
+        // padding: '8px',
       }}
     >
       <RouterBeforeEach />
     </Layout.Content>
-  );
-};
-export default Content;
+  )
+}
+export default Content

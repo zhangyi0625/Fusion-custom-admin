@@ -1,9 +1,9 @@
-import { Layout } from 'antd';
-import type React from 'react';
-import LeftMenu from './LeftMenu';
-import Header from './Header';
-import Content from './Content';
-import ScreenLock from '@/components/ScreenLock';
+import { Layout } from 'antd'
+import type React from 'react'
+import LeftMenu from './LeftMenu'
+import Header from './Header'
+import Content from './Content'
+import ScreenLock from '@/components/ScreenLock'
 
 /**
  * 系统整体布局
@@ -13,7 +13,7 @@ const Layouts: React.FC = () => {
     <>
       <Layout style={{ height: '100%' }}>
         {/* 左边菜单区域 */}
-        <LeftMenu />
+        {/* <LeftMenu /> */}
         <Layout>
           {/* 顶部区域 */}
           <Header />
@@ -24,6 +24,6 @@ const Layouts: React.FC = () => {
       {/* 锁屏区域 */}
       <ScreenLock />
     </>
-  );
-};
-export default Layouts;
+  )
+}
+export default Layouts
