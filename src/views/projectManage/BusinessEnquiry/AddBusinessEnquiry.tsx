@@ -154,7 +154,15 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
                 {item.formType === 'select' && (
                   <Select
                     placeholder={`请选择${item.label}`}
-                    filterOption
+                    showSearch={item.name !== 'customerId' ? false : true}
+                    filterOption={
+                      item.name !== 'customerId'
+                        ? false
+                        : (input, option) =>
+                            String(option?.name ?? '')
+                              .toLowerCase()
+                              .includes(input.toLowerCase())
+                    }
                     options={item.options}
                     fieldNames={
                       item.selectFileldName ?? {
