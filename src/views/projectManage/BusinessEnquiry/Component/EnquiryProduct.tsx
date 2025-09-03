@@ -17,14 +17,20 @@ import {
   downloadBusinessProject,
   getBusinessEnquiryProduct,
   putBusinessEnquiryProduct,
+  updateBusinessEnquiryList,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
-import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type {
+  BusinessEnquiryType,
+  BussinesEnquiryProductType,
+} from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import ProductTransfer from '../../ProductTransfer'
 import ImportProduct from '../../ImportProduct'
 import { debounce } from 'lodash-es'
 
 export type EnquiryProductProps = {
   projectId: string
+  detail: BusinessEnquiryType
+  onRefreshDetail: () => void
 }
 
 type ColumnTypes = Exclude<TableProps<any>['columns'], undefined>
@@ -44,7 +50,7 @@ interface EditableCellProps {
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
 
 const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
-  ({ projectId }) => {
+  ({ projectId, detail, onRefreshDetail }) => {
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState<any[]>([])
@@ -69,10 +75,9 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
     const [copperPrice, setCopperPrice] = useState<string>('')
 
     useEffect(() => {
-      console.log(projectId, 'projectId')
-
       projectId && loadEnquiryProduct()
-    }, [projectId])
+      setCopperPrice(detail.copperPrice ?? '')
+    }, [projectId, detail])
 
     const loadEnquiryProduct = async () => {
       const res = await getBusinessEnquiryProduct(projectId, {
@@ -283,6 +288,10 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
     }
 
     const downloadTable = () => {
+      if (!dataSource.length) {
+        message.error('询价列表为空，暂不支持下载！')
+        return
+      }
       downloadBusinessProject(projectId).then((resp) => {
         let blobUrl = window.URL.createObjectURL(resp)
         const aElement = document.createElement('a')
@@ -296,6 +305,15 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
     }
 
     const importSuccess = () => {}
+
+    const savePrice = async () => {
+      await updateBusinessEnquiryList({
+        ...detail,
+        copperPrice: copperPrice,
+      })
+      message.success('设置铜价成功！')
+      onRefreshDetail()
+    }
 
     const updateEnquiryProduct = async (
       currentRow: BussinesEnquiryProductType[]
@@ -357,6 +375,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
             value={copperPrice}
             onChange={(e) => setCopperPrice(e.target.value)}
             style={{ width: '240px' }}
+            addonAfter={<div onClick={savePrice}>保存</div>}
           />
         </div>
         <div className="editable-row">

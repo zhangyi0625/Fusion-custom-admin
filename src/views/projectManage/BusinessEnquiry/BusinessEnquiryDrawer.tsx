@@ -14,6 +14,7 @@ import PurchaseNegotiation from '../PurchaseBargain/Component/PurchaseNegotiatio
 import { getBusinessEnquiryDetail } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { ProjectStatusOptions } from '../config'
+import { formatTime } from '@/utils/format'
 
 export type BusinessEnquiryDrawerProps = {
   drawer: {
@@ -56,7 +57,28 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     return [
       {
         label: '项目编号：',
-        value: enquiryDrawerInfo.detail?.number,
+        value: (
+          <div className="flex items-center">
+            {enquiryDrawerInfo.detail?.number}
+            <div
+              className={`${
+                enquiryDrawerInfo.detail?.status === 'PENDING_PURCHASE'
+                  ? 'text-dull-grey'
+                  : enquiryDrawerInfo.detail?.status === 'TERMINATED'
+                  ? 'text-red-500'
+                  : 'text-green-500'
+              }`}
+            >
+              (
+              {
+                ProjectStatusOptions.find(
+                  (item) => item.value === enquiryDrawerInfo.detail?.status
+                )?.text
+              }
+              )
+            </div>
+          </div>
+        ),
       },
       {
         label: '项目名称：',
@@ -66,18 +88,26 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
         label: '客户名称：',
         value: enquiryDrawerInfo.detail?.customerName,
       },
+      // {
+      //   label: '状态：',
+      //   className: `${
+      //     enquiryDrawerInfo.detail?.status === 'PENDING_PURCHASE'
+      //       ? 'text-dull-grey'
+      //       : enquiryDrawerInfo.detail?.status === 'TERMINATED'
+      //       ? 'text-red-500'
+      //       : 'text-green-500'
+      //   }`,
+      //   value: ProjectStatusOptions.find(
+      //     (item) => item.value === enquiryDrawerInfo.detail?.status
+      //   )?.text,
+      // },
       {
-        label: '状态：',
-        className: `${
-          enquiryDrawerInfo.detail?.status === 'PENDING_PURCHASE'
-            ? 'text-dull-grey'
-            : enquiryDrawerInfo.detail?.status === 'TERMINATED'
-            ? 'text-red-500'
-            : 'text-green-500'
-        }`,
-        value: ProjectStatusOptions.find(
-          (item) => item.value === enquiryDrawerInfo.detail?.status
-        )?.text,
+        label: '业务员：',
+        value: enquiryDrawerInfo.detail?.salespersonName,
+      },
+      {
+        label: '客户手机号：',
+        value: enquiryDrawerInfo.detail?.customerPhone,
       },
       {
         label: '付款方：',
@@ -85,7 +115,10 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
       },
       {
         label: '预计采购日期：',
-        value: enquiryDrawerInfo.detail?.estimatedPurchaseTime,
+        value: formatTime(
+          enquiryDrawerInfo.detail?.estimatedPurchaseTime as string,
+          'Y-M-D'
+        ),
       },
       {
         label: '项目类型：',
@@ -135,7 +168,13 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     {
       label: '询价产品',
       key: 'EnquiryProductCom',
-      children: <EnquiryProductCom projectId={detailId as string} />,
+      children: (
+        <EnquiryProductCom
+          projectId={detailId as string}
+          detail={enquiryDrawerInfo.detail as BusinessEnquiryType}
+          onRefreshDetail={() => loadEnquiryDetail()}
+        />
+      ),
       disabled: drawer.source === 'PurchaseBargain',
     },
     {
@@ -170,7 +209,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
       key: 'SalesContract',
       children: (
         <SalesContract
-          projectId={detailId as string}
+          projectId={copyDetailId}
           detail={enquiryDrawerInfo.detail as BusinessEnquiryType}
         />
       ),
@@ -213,7 +252,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
     if (!drawerShow) return
     loadEnquiryDetail()
     setCopyDetailId(detailId as string)
-  }, [drawerShow])
+  }, [drawerShow, detailId])
 
   const onChange = (value: string) => {
     setDefaultActiveKey(value)
@@ -246,11 +285,9 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
         {baseInfo()
           .slice(0, 4)
           .map((item) => (
-            <p key={item.label}>
+            <p key={item.label} className="flex items-center">
               {item.label}
-              <span className={`${item.className} text-dull-grey`}>
-                {item.value}
-              </span>
+              <span className="text-dull-grey">{item.value}</span>
             </p>
           ))}
       </div>
@@ -258,6 +295,7 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
         activeKey={defaultActiveKey}
         items={components}
         onChange={onChange}
+        key={copyDetailId}
       />
     </Drawer>
   )

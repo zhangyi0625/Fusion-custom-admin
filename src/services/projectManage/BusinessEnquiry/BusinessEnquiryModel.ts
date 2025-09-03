@@ -8,6 +8,7 @@ export interface BusinessEnquiryType {
   customerName: string
   companyId: string
   companyName: string
+  customerPhone: string
   estimatedPurchaseTime: string
   type: 'FRAME_CONTRACT' | 'INSTANT_CONTRACT'
   price: number
@@ -21,6 +22,8 @@ export interface BusinessEnquiryType {
   createTime: string
   entrustName: string
   confirmSupplierId: string | null
+  salespersonName: string
+  copperPrice: string
 }
 
 export interface BusinessEnquiryParams

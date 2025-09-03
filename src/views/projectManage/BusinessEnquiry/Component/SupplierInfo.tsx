@@ -397,6 +397,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           onCancel={() =>
             setQuotationModal({ visible: false, supplierId: null, edit: false })
           }
+          detail={detail}
           onOk={confirmQuotationModal}
         />
         <EditQuotation

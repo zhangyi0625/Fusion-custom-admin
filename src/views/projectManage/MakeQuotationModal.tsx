@@ -18,12 +18,14 @@ import { debounce } from 'lodash-es'
 import type { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
 import { getBusinessSupplierProduct } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type MakeQuotationModalProps = {
   params: {
     visible: boolean
     supplierId: string | null
   }
+  detail: BusinessEnquiryType
   onOk: (products: { data: MakeQuotationTableType[]; type: string }) => void
   onCancel: () => void
 }
@@ -55,6 +57,7 @@ const EditableContext =
 
 const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   params,
+  detail,
   onOk,
   onCancel,
 }) => {
@@ -270,10 +273,6 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
     },
   }
 
-  const searchValueChange = debounce((value: any) => {
-    console.log(value)
-  }, 300)
-
   const onConfirm = () => {
     onOk({ data: quotationData, type: 'submit' })
   }
@@ -457,7 +456,8 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         </p>
         <Input
           placeholder="请输入当前铜价"
-          onChange={(e) => searchValueChange(e.target.value)}
+          value={detail?.copperPrice ?? ''}
+          disabled
           style={{ width: '240px' }}
         />
       </div>
