@@ -404,7 +404,7 @@ export const AddSalesContractNoteForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'INVOICE',
       },
       {
-        label: '收款',
+        label: '付款',
         value: 'RECEIPT',
       },
     ],

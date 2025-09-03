@@ -54,7 +54,7 @@ const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
         align: 'center',
         width: 100,
         render(value) {
-          return <div>{value.type === 'INVOICE' ? '开票' : '收款'}</div>
+          return <div>{value.type === 'INVOICE' ? '开票' : '付款'}</div>
         },
       },
       {
