@@ -96,6 +96,14 @@ const SalesContract: React.FC = () => {
     } else {
       getReduxData()
     }
+    let isJump = sessionStorage.getItem('SaleContractDetail') ?? null
+    if (isJump) {
+      setDrawer({
+        drawerShow: true,
+        detailId: isJump,
+        source: 'SalesContract',
+      })
+    }
   }, [essential])
 
   const tableColumns: TableProps['columns'] = [
@@ -429,13 +437,14 @@ const SalesContract: React.FC = () => {
       />
       <SalesContractDrawer
         drawer={drawer}
-        onCancel={() =>
-          setDrawer({
-            drawerShow: false,
-            detailId: null,
-            source: 'SalesContract',
-          })
-        }
+        onCancel={() => {
+          sessionStorage.removeItem('SaleContractDetail'),
+            setDrawer({
+              drawerShow: false,
+              detailId: null,
+              source: 'SalesContract',
+            })
+        }}
         onRefresh={() => setSearchDefaultForm({ ...searchDefaultForm })}
       />
       <ConfirmSaleContractStatus

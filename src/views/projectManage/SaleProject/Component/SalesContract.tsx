@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import type { SaleContractType } from '@/services/contractManage/SalesContract/SalesContractModel'
 import { App, Button, Space, TableProps } from 'antd'
 import { SearchTable } from 'customer-search-form-table'
@@ -19,6 +19,7 @@ import { AddSalesContractForm } from '@/views/contractManage/config'
 import { postDownlFile } from '@/services/upload/UploadApi'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { useNavigate } from 'react-router-dom'
 
 export type SalesContractProps = {
   projectId: string
@@ -27,6 +28,8 @@ export type SalesContractProps = {
 
 const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
   const { modal, message } = App.useApp()
+
+  const navigate = useNavigate()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState({
     salesProjectId: projectId,
@@ -53,7 +56,12 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       align: 'center',
       render(value) {
         return (
-          <div className="text-blue-500 cursor-pointer">{value.number}</div>
+          <div
+            className="text-blue-500 cursor-pointer"
+            onClick={() => jumpSaleContract(value.id)}
+          >
+            {value.number}
+          </div>
         )
       },
       width: 200,
@@ -157,6 +165,11 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
     },
   ]
 
+  const jumpSaleContract = (id: string) => {
+    sessionStorage.setItem('SaleContractDetail', id)
+    navigate('/contractManage/salesContract')
+  }
+
   const openSalesContractDetail = (id: string) => {
     getContractManageDetail(id).then((resp) => {
       setParams({
@@ -185,6 +198,10 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       })
     })
   }
+
+  useEffect(() => {
+    console.log(projectId, 'projectId')
+  }, [])
 
   const onEditOk = async (customerRow: SaleContractType) => {
     console.log(customerRow, 'currentRow', detail)
