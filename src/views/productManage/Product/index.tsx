@@ -112,6 +112,27 @@ const Product: React.FC = () => {
       width: 250,
     },
     {
+      title: '产品型号',
+      key: 'model',
+      dataIndex: 'model',
+      align: 'center',
+      width: 150,
+    },
+    {
+      title: '产品电压',
+      key: 'spvoltec',
+      dataIndex: 'volt',
+      align: 'center',
+      width: 120,
+    },
+    {
+      title: '产品规格',
+      key: 'spec',
+      dataIndex: 'spec',
+      align: 'center',
+      width: 120,
+    },
+    {
       title: '拼音码',
       key: 'pinyin',
       dataIndex: 'pinyin',
