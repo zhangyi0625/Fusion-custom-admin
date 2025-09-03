@@ -173,14 +173,14 @@ const SalesContract: React.FC = () => {
       width: 120,
     },
     {
-      title: '已执行金额',
+      title: '已开票金额',
       key: 'invoicePrice',
       dataIndex: 'invoicePrice',
       align: 'center',
       width: 100,
     },
     {
-      title: '已开票金额',
+      title: '已执行金额',
       key: 'receiptPrice',
       dataIndex: 'receiptPrice',
       align: 'center',
@@ -436,6 +436,7 @@ const SalesContract: React.FC = () => {
             source: 'SalesContract',
           })
         }
+        onRefresh={() => setSearchDefaultForm({ ...searchDefaultForm })}
       />
       <ConfirmSaleContractStatus
         params={confirmParams}

@@ -14,6 +14,7 @@ export type SalesContractDrawerProps = {
     source: 'SalesContract' | 'PurchaseContract'
   }
   onCancel: () => void
+  onRefresh: () => void
 }
 
 export type BaseInfoDetail = {
@@ -25,6 +26,7 @@ export type BaseInfoDetail = {
 const SalesContractDrawer: React.FC<SalesContractDrawerProps> = ({
   drawer,
   onCancel,
+  onRefresh,
 }) => {
   const { drawerShow, detailId } = drawer
 
@@ -38,7 +40,6 @@ const SalesContractDrawer: React.FC<SalesContractDrawerProps> = ({
   useEffect(() => {
     if (!drawerShow) return
     loadEnquiryDetail()
-    console.log(defaultActiveKey, 'defaultActiveKey')
   }, [drawerShow])
 
   const loadEnquiryDetail = () => {
@@ -135,7 +136,12 @@ const SalesContractDrawer: React.FC<SalesContractDrawerProps> = ({
     {
       label: '款项登记',
       key: 'SalesContractNote',
-      children: <SalesContractNote detailId={detailId as string} />,
+      children: (
+        <SalesContractNote
+          detailId={detailId as string}
+          onRefresh={onRefresh}
+        />
+      ),
     },
   ]
 

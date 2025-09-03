@@ -84,7 +84,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
         contractTime: dayjs(currentRow.contractTime),
       })
     }
-    if (currentRow?.fileIds.length) {
+    if (currentRow?.fileIds && currentRow?.fileIds.length) {
       let newArr: UploadFile[] = []
       currentRow.fileIds.map((item) => {
         newArr.push({

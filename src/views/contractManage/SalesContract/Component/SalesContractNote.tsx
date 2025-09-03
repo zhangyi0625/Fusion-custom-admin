@@ -13,10 +13,11 @@ import { formatTime } from '@/utils/format'
 
 export type SalesContractNoteProps = {
   detailId: string
+  onRefresh: () => void
 }
 
 const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
-  ({ detailId }) => {
+  ({ detailId, onRefresh }) => {
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState([])
@@ -132,6 +133,7 @@ const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
         // 操作成功，关闭弹窗，刷新数据
         setParams({ visible: false, currentRow: null })
         loadContractAttachment()
+        onRefresh()
       } catch (error) {}
     }
 
