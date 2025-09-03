@@ -91,7 +91,7 @@ export const AddPayerUnitForm: Omit<
   },
   {
     label: '状态',
-    isRules: true,
+    isRules: false,
     formType: 'radio',
     span: 24,
     name: 'status',

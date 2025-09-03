@@ -73,6 +73,12 @@ const AddPayerUnit: React.FC<AddPayerUnitProps> = ({
                             item.formType === 'input' ? '输入' : '选择'
                           }${item.label}`,
                         },
+                        item.name === 'code'
+                          ? {
+                              message: '请输入18位正确的社会统一信用代码',
+                              len: 18,
+                            }
+                          : {},
                       ]
                     : undefined
                 }
