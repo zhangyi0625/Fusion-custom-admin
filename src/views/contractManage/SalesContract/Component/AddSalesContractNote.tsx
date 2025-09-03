@@ -31,6 +31,10 @@ const AddSalesContractNote: React.FC<AddSalesContractNoteProps> = ({
         ...currentRow,
         invoiceDate: dayjs(currentRow.invoiceDate),
       })
+    } else {
+      form.setFieldsValue({
+        invoiceDate: dayjs(new Date()),
+      })
     }
   }, [visible])
 
@@ -79,10 +83,7 @@ const AddSalesContractNote: React.FC<AddSalesContractNoteProps> = ({
                   />
                 )}
                 {item.formType === 'date-picker' && (
-                  <DatePicker
-                    style={{ width: '100%' }}
-                    format={'YY-MM-DD HH:mm:ss'}
-                  />
+                  <DatePicker style={{ width: '100%' }} format={'YY-MM-DD'} />
                 )}
               </Form.Item>
             </Col>
