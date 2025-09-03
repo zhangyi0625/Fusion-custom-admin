@@ -62,6 +62,13 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
       width: 180,
     },
     {
+      title: '跟进人',
+      key: 'updateName',
+      dataIndex: 'updateName',
+      align: 'center',
+      width: 180,
+    },
+    {
       title: '跟进内容',
       key: 'content',
       dataIndex: 'content',
