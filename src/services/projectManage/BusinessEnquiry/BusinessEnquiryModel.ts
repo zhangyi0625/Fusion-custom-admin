@@ -30,7 +30,8 @@ export interface BusinessEnquiryParams
   extends Partial<BusinessEnquiryType>,
     DefaultPaging {
   sort: string
-  customerKeyword: string | null
+  // customerKeyword: string | null
+  powerType: number | string
   keyword: string | null
 }
 

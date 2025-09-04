@@ -57,7 +57,7 @@ const BusinessEnquiry: React.FC = () => {
       page: 1,
       limit: 10,
       keyword: null,
-      customerKeyword: null,
+      powerType: 1,
       isInquiry: true,
       status: null,
       sort: 'create_time desc',
@@ -354,7 +354,7 @@ const BusinessEnquiry: React.FC = () => {
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'isInquiry', 'status'],
+      ['page', 'limit', 'isInquiry', 'status', 'sort'],
       true
     )
     console.log(pageInfo, filteredObj, info)

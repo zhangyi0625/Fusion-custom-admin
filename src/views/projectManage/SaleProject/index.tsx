@@ -55,7 +55,7 @@ const SaleProject: React.FC = () => {
       page: 1,
       limit: 10,
       keyword: null,
-      customerKeyword: null,
+      powerType: 1,
       isInquiry: false,
       status: null,
       sort: 'create_time desc',
@@ -348,7 +348,7 @@ const SaleProject: React.FC = () => {
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
-      ['page', 'limit', 'isInquiry', 'status'],
+      ['page', 'limit', 'isInquiry', 'status', 'sort'],
       true
     )
     setSearchDefaultForm({
