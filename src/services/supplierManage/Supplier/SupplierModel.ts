@@ -9,6 +9,8 @@ export interface SupplierType {
   logo: string
   logoName: string
   contactId?: string
+  username: string
+  password: string
 }
 
 export interface SupplierParams extends Partial<SupplierType>, DefaultPaging {

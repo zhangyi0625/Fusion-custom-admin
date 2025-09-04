@@ -92,6 +92,18 @@ export const AddSupplierForm: Omit<
     formType: 'input',
     span: 24,
   },
+  {
+    label: '用户账号',
+    name: 'username',
+    formType: 'input',
+    span: 24,
+  },
+  {
+    label: '用户密码',
+    name: 'password',
+    formType: 'input',
+    span: 24,
+  },
 ]
 
 export const AddCustomerForm: Omit<
