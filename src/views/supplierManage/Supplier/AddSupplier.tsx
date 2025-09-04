@@ -23,6 +23,7 @@ export type AddSupplierProps = {
   params: {
     visible: boolean
     currentRow: SupplierType | null
+    editPassword: boolean
   }
   onOk: (params: SupplierType) => void
   onCancel: () => void
@@ -35,7 +36,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
   onCancel,
   onOk,
 }) => {
-  const { visible, currentRow } = params
+  const { visible, currentRow, editPassword } = params
 
   const [form] = Form.useForm()
 
@@ -45,9 +46,12 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
 
   const [contracts, setContracts] = useState<ContractsType[]>([])
 
+  const [loading, setLoading] = useState<boolean>(false)
+
   useEffect(() => {
     if (!visible) return
     loadContracts()
+    setLoading(true)
     form.resetFields()
     if (currentRow) {
       form.setFieldsValue({ ...currentRow })
@@ -61,10 +65,16 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
   const loadContracts = async () => {
     const resp = await getContracts({})
     setContracts(resp)
-    formMap.map((item) => {
+    AddSupplierForm.map((item) => {
+      item.hiddenItem = false
       if (item.name === 'contactId') item.options = resp
+      if (currentRow && editPassword)
+        item.hiddenItem = item.name === 'password' ? false : true
+      if (currentRow && !editPassword && item.name === 'password')
+        item.hiddenItem = true
     })
-    setFormMap([...formMap])
+    setFormMap([...AddSupplierForm])
+    setLoading(false)
   }
 
   const selectChange = (item: string) => {
@@ -116,9 +126,14 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
     <DragModal
       width="40%"
       open={visible}
-      title={currentRow ? '编辑供应商' : '新增供应商'}
+      title={
+        currentRow
+          ? `编辑供应商${editPassword ? '登陆密码' : ''}`
+          : '新增供应商'
+      }
       onOk={onConfirm}
       onCancel={onCancel}
+      loading={loading}
     >
       <Form form={form} labelCol={{ span: 6 }}>
         <Form.Item name="id" hidden>
@@ -126,7 +141,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
         </Form.Item>
         <Row gutter={24}>
           {formMap.map((item) => (
-            <Col span={item.span} key={item.name}>
+            <Col span={item.span} key={item.name} hidden={item.hiddenItem}>
               <Form.Item
                 label={item.label}
                 key={item.name}
@@ -176,7 +191,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
               </Form.Item>
             </Col>
           ))}
-          <Col span={24}>
+          <Col span={24} hidden={editPassword}>
             <Form.Item
               name={'logo'}
               label="logo"

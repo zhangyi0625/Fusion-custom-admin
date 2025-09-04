@@ -57,16 +57,14 @@ export const ContractsSearchColumns: CustomColumn[] = [
   },
 ]
 
-export const AddSupplierForm: Omit<
-  CustomColumn,
-  'selectFetch' | 'hiddenItem'
->[] = [
+export const AddSupplierForm: Omit<CustomColumn, 'selectFetch'>[] = [
   {
     label: '供应商',
     name: 'name',
     formType: 'input',
     span: 24,
     isRules: true,
+    hiddenItem: false,
   },
   {
     label: '社会统一信用代码',
@@ -74,6 +72,7 @@ export const AddSupplierForm: Omit<
     formType: 'input',
     span: 24,
     isRules: true,
+    hiddenItem: false,
   },
   {
     label: '主联系人',
@@ -85,24 +84,28 @@ export const AddSupplierForm: Omit<
       value: 'id',
     },
     span: 24,
+    hiddenItem: false,
   },
   {
     label: '手机号',
     name: 'contactPhone',
     formType: 'input',
     span: 24,
+    hiddenItem: false,
   },
   {
     label: '用户账号',
     name: 'username',
     formType: 'input',
     span: 24,
+    hiddenItem: false,
   },
   {
     label: '用户密码',
     name: 'password',
     formType: 'input',
     span: 24,
+    hiddenItem: false,
   },
 ]
 

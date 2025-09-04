@@ -10,6 +10,7 @@ export enum SupplierManageApi {
   SupplierManageByPage = '/business/supplier/page',
   SupplierManageRecord = 'business/supplier-event/',
   SupplierContracts = '/business/supplier-contact/page',
+  SupplierPassword = '/business/supplier/changePassword',
 }
 
 /**
@@ -72,6 +73,25 @@ export const updateSupplier = (params: SupplierType) => {
   return HttpRequest.put(
     {
       url: SupplierManageApi.SupplierManage,
+      data: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 更新供应商密码
+ * @param params 供应商管理参数
+ * @returns
+ */
+export const updateSupplierPassword = (
+  params: Pick<SupplierType, 'id' | 'password'>
+) => {
+  return HttpRequest.put(
+    {
+      url: SupplierManageApi.SupplierPassword,
       data: params,
     },
     {

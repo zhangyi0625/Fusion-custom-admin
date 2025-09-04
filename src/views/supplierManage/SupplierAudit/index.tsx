@@ -34,9 +34,11 @@ const SupplierAudit: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean
     currentRow: SupplierType | null
+    editPassword: boolean
   }>({
     visible: false,
     currentRow: null,
+    editPassword: false,
   })
 
   const tableColumns: TableProps['columns'] = [
@@ -89,6 +91,7 @@ const SupplierAudit: React.FC = () => {
                 setParams({
                   visible: true,
                   currentRow: _,
+                  editPassword: false,
                 })
               }
               type="link"
@@ -130,7 +133,7 @@ const SupplierAudit: React.FC = () => {
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
+      setParams({ visible: false, currentRow: null, editPassword: false })
       onUpdateSearch(searchDefaultForm)
     } catch (error) {}
   }
@@ -180,7 +183,13 @@ const SupplierAudit: React.FC = () => {
           <Button
             type="primary"
             style={{ zIndex: 99 }}
-            onClick={() => setParams({ visible: true, currentRow: null })}
+            onClick={() =>
+              setParams({
+                visible: true,
+                currentRow: null,
+                editPassword: false,
+              })
+            }
           >
             新增供应商
           </Button>
@@ -203,7 +212,9 @@ const SupplierAudit: React.FC = () => {
       <AddSupplier
         params={params}
         onOk={onEditOk}
-        onCancel={() => setParams({ visible: false, currentRow: null })}
+        onCancel={() =>
+          setParams({ visible: false, currentRow: null, editPassword: false })
+        }
       />
     </>
   )

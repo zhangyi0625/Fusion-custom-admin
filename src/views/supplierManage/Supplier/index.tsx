@@ -24,6 +24,7 @@ import {
   deleteSupplier,
   getSupplierByPage,
   updateSupplier,
+  updateSupplierPassword,
 } from '@/services/supplierManage/Supplier/SupplierApi'
 import AddSupplier from './AddSupplier'
 import SupplierRecord from './SupplierRecord'
@@ -46,9 +47,11 @@ const Supplier: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean
     currentRow: SupplierType | null
+    editPassword: boolean
   }>({
     visible: false,
     currentRow: null,
+    editPassword: false,
   })
 
   const [supplierDrawer, setSupplierDrawer] = useState<{
@@ -136,11 +139,24 @@ const Supplier: React.FC = () => {
                 setParams({
                   visible: true,
                   currentRow: _,
+                  editPassword: false,
                 })
               }
               type="link"
             >
               编辑
+            </Button>
+            <Button
+              onClick={() =>
+                setParams({
+                  visible: true,
+                  currentRow: _,
+                  editPassword: true,
+                })
+              }
+              type="link"
+            >
+              修改密码
             </Button>
             <Button
               onClick={() => deleteItem(_.id)}
@@ -204,11 +220,15 @@ const Supplier: React.FC = () => {
         await addSupplier(customerRow)
       } else {
         // 编辑数据
-        await updateSupplier(customerRow)
+        params.editPassword
+          ? await updateSupplierPassword(
+              filterKeys(customerRow, ['id', 'password'], true)
+            )
+          : await updateSupplier(customerRow)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
+      setParams({ visible: false, currentRow: null, editPassword: false })
       onUpdateSearch(searchDefaultForm)
     } catch (error) {}
   }
@@ -264,7 +284,13 @@ const Supplier: React.FC = () => {
           <Button
             type="primary"
             style={{ zIndex: 99 }}
-            onClick={() => setParams({ visible: true, currentRow: null })}
+            onClick={() =>
+              setParams({
+                visible: true,
+                currentRow: null,
+                editPassword: false,
+              })
+            }
           >
             新增供应商
           </Button>
@@ -287,7 +313,9 @@ const Supplier: React.FC = () => {
       <AddSupplier
         params={params}
         onOk={onEditOk}
-        onCancel={() => setParams({ visible: false, currentRow: null })}
+        onCancel={() =>
+          setParams({ visible: false, currentRow: null, editPassword: false })
+        }
       />
       <SupplierRecord params={supplierDrawer} onCancel={cancelSupplier} />
       {previewImage && (
