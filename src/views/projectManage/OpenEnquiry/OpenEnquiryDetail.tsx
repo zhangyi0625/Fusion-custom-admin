@@ -1,11 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { Button, Drawer, Space, Table, TableProps, Tabs, TabsProps } from 'antd'
-import type { OpenEnquiryType } from '@/services/projectManage/OpenEnquiry/OpenEnquiryModel'
-import { ProjectStatusOptions } from '../config'
+import type {
+  OpenEnquiryType,
+  QuotationsType,
+} from '@/services/projectManage/OpenEnquiry/OpenEnquiryModel'
+import { OpenEnquiryStatusOptions } from '../config'
 import type { BaseInfoDetail } from '../BusinessEnquiry/BusinessEnquiryDrawer'
 import { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import { SearchTable } from 'customer-search-form-table'
-import { getBusinessEnquiryListPage } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
+import { getOpenEnquiryListDetail } from '@/services/projectManage/OpenEnquiry/OpenEnquiryApi'
+import { formatTime } from '@/utils/format'
 
 export type OpenEnquiryDetailProps = {
   params: {
@@ -29,7 +32,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
 
   const [dataSource, setDataSource] = useState<BussinesEnquiryProductType[]>([])
 
-  const [immediate, setImmediate] = useState<boolean>(true)
+  const [quotations, setQuotations] = useState<QuotationsType[]>([])
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('BaseInfoCom')
@@ -67,10 +70,11 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         key: 'qty',
         dataIndex: 'qty',
         align: 'center',
+        width: 100,
       },
     ]
 
-  const supplierQuotationTableColumns: TableProps['columns'] = [
+  const supplierQuotationTableColumns: TableProps<QuotationsType>['columns'] = [
     {
       title: '供应商',
       key: 'supplierName',
@@ -87,24 +91,26 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
     },
     {
       title: '报价总金额',
-      key: 'price',
-      dataIndex: 'price',
+      key: 'amount',
+      dataIndex: 'amount',
       align: 'center',
       width: 100,
     },
     {
       title: '报价时间',
-      key: 'Timeline',
-      dataIndex: 'Timeline',
+      key: 'updateTime',
+      dataIndex: 'updateTime',
       align: 'center',
       width: 100,
     },
     {
       title: '是否为备选供应商',
-      key: 'is',
-      dataIndex: 'is',
+      key: 'alternative',
       align: 'center',
       width: 100,
+      render(value) {
+        return <div>{value.alternative ? '是' : '否'}</div>
+      },
     },
     {
       title: '操作',
@@ -130,7 +136,16 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
 
   useEffect(() => {
     if (!drawerShow) return
+    loadEnquiryDetail()
   }, [drawerShow])
+
+  const loadEnquiryDetail = async () => {
+    const resp = await getOpenEnquiryListDetail(detailId as string)
+    console.log(resp, 'resp')
+    setEnquiryDrawerInfo({ detail: resp })
+    setDataSource(resp.products ?? [])
+    setQuotations(resp.quotations ?? [])
+  }
 
   const baseInfo = useCallback(() => {
     return [
@@ -140,7 +155,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
       },
       {
         label: '预估金额：',
-        value: enquiryDrawerInfo.detail?.price,
+        value: enquiryDrawerInfo.detail?.estimatedAmount,
       },
       {
         label: '客户名称：',
@@ -149,27 +164,30 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
       {
         label: '状态：',
         className: `${
-          enquiryDrawerInfo.detail?.status === 'PENDING_PURCHASE'
-            ? 'text-dull-grey'
-            : enquiryDrawerInfo.detail?.status === 'TERMINATED'
+          enquiryDrawerInfo.detail?.status === 'PENDING_REVIEW'
+            ? 'text-stone-900'
+            : enquiryDrawerInfo.detail?.status === 'ENDED'
             ? 'text-red-500'
             : 'text-green-500'
         }`,
-        value: ProjectStatusOptions.find(
+        value: OpenEnquiryStatusOptions.find(
           (item) => item.value === enquiryDrawerInfo.detail?.status
-        )?.text,
+        )?.label,
       },
       {
         label: '手机号：',
-        value: enquiryDrawerInfo.detail?.phone,
+        value: enquiryDrawerInfo.detail?.customerPhone,
       },
       {
         label: '城市/区县：',
-        value: enquiryDrawerInfo.detail?.city,
+        value: enquiryDrawerInfo.detail?.address,
       },
       {
         label: '截止报价日期：',
-        value: enquiryDrawerInfo.detail?.deadTime,
+        value: formatTime(
+          enquiryDrawerInfo.detail?.deadline as string,
+          'Y-M-D'
+        ),
       },
       {
         label: '询价创建日期：',
@@ -184,11 +202,6 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
 
   const tabsChange = (value: string) => {
     setDefaultActiveKey(value)
-    // if (value === 'EnquiryRecordCom') {
-    //   EnquiryRecordComRef.current?.onRefresh()
-    // } else if (value === 'OperationRecordCom') {
-    //   OperationRecordComRef.current?.onRefresh()
-    // }
   }
 
   const BaseInfoCom: React.FC<{ detail: BaseInfoDetail[] }> = ({ detail }) => {
@@ -221,20 +234,14 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
   const SupplierQuotation: React.FC = () => {
     return (
       <>
-        <SearchTable
-          size="middle"
-          columns={supplierQuotationTableColumns}
+        <Table<QuotationsType>
           bordered
-          rowKey="id"
-          totalKey="count"
-          fetchResultKey="list"
-          immediate={immediate}
-          scroll={{ x: 'max-content', y: 578 }}
-          fetchData={getBusinessEnquiryListPage}
-          searchFilter={{}}
-          isSelection={false}
-          isPagination={false}
-          onUpdatePagination={() => {}}
+          rowKey={'id'}
+          size="small"
+          columns={supplierQuotationTableColumns}
+          dataSource={quotations}
+          scroll={{ x: 'max-content', y: 588 }}
+          pagination={false}
         />
       </>
     )
@@ -282,6 +289,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         activeKey={defaultActiveKey}
         items={components}
         onChange={tabsChange}
+        key={detailId}
       />
     </Drawer>
   )

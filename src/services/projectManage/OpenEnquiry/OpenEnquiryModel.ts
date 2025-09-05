@@ -1,19 +1,40 @@
-import { DefaultPaging } from '@/types/global'
+import type { ProductManageType } from '@/services/productManage/productManageModel'
+import type { DefaultPaging } from '@/types/global'
 
 export interface OpenEnquiryType {
-  title: string
-  price: string
-  customerId: string
-  customerName: string
-  status: string | null
-  phone: string
+  id?: string
+  address: string
+  area: string
   city: string
-  createTime: string
-  deadTime: string
+  province: string
+  title: string
+  estimatedAmount: string
+  deadline: string
+  customerName: string
+  customerPhone: string
+  files: string[]
   remark: string
+  products: ProductManageType[]
+  quotations: QuotationsType[]
+  status: string | null
+  createTime: string
+  viewCount: string
+  quotationCount: string
+  confirmQuotationId: string
 }
 
-export interface openEnquiryParams extends DefaultPaging {
+export interface OpenEnquiryParams
+  extends Pick<OpenEnquiryType, 'title' | 'status'>,
+    DefaultPaging {
   sort: string
-  keyword: string
+  keyword: string | null
+}
+
+export interface QuotationsType {
+  alternative: boolean
+  amount: string
+  inquiryId: string
+  supplierName: string
+  supplierId: string
+  items: ProductManageType[]
 }

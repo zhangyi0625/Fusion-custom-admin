@@ -3,14 +3,27 @@ import { CustomColumn } from 'customer-search-form-table/SearchForm/type'
 export const BusinessEnquirySearchColumns: CustomColumn[] = [
   {
     label: null,
-    name: 'customerId',
+    name: 'powerType',
     formType: 'normalSelect',
     customPlaceholder: '请选择目标客户',
-    options: [],
-    defaultValue: '',
+    options: [
+      {
+        label: '全部客户',
+        value: 1,
+      },
+      {
+        label: '我负责的客户',
+        value: 2,
+      },
+      {
+        label: '我下属的客户',
+        value: 3,
+      },
+    ],
+    defaultValue: 1,
     selectFileldName: {
-      label: 'name',
-      value: 'id',
+      label: 'label',
+      value: 'value',
     },
     span: 6,
     selectFetch: false,
@@ -257,6 +270,37 @@ export const ProjectStatusOptions = [
   {
     text: '中止',
     value: 'TERMINATED',
+  },
+]
+
+export const OpenEnquiryStatusOptions = [
+  {
+    label: '全部',
+    value: null,
+  },
+  {
+    label: '待审核',
+    value: 'PENDING_REVIEW',
+  },
+  {
+    label: '待报价',
+    value: 'PENDING_QUOTE',
+  },
+  {
+    label: '已报价',
+    value: 'QUOTED',
+  },
+  {
+    label: '已结束',
+    value: 'ENDED',
+  },
+  {
+    label: '审核不通过',
+    value: 'REVIEW_REJECTED',
+  },
+  {
+    label: '已取消',
+    value: 'CANCELLED',
   },
 ]
 

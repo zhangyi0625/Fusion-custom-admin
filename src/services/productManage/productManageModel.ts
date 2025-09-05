@@ -1,6 +1,7 @@
 import { DefaultPaging } from '@/types/global'
 
 export interface ProductManageType {
+  id?: string
   name: string
   pinyin: string
   volt: string
@@ -10,6 +11,7 @@ export interface ProductManageType {
   status: boolean | number
   sort: string
   unit: string
+  qty: number
 }
 
 export interface ProductManageParams

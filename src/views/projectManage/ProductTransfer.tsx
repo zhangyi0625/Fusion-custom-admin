@@ -64,6 +64,7 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
     setTargetKeys(ids)
     setSelectedArr(selected ?? [])
     setMockData(newRes)
+    console.log(newRes, 'newRes', selected)
   }
 
   const onConfirm = () => {
@@ -79,16 +80,18 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
     )
     filterArr.map((item) => {
       newArr.push({
+        id: item.id,
         productName: item.name,
         productSpec: item.spec,
         productUnit: item.unit,
         productModel: item.model,
-        qty: 0,
+        qty: item.qty ?? 0,
         projectId: projectId ?? '',
       })
     })
     setSelectedArr(newArr.concat(selected as BussinesEnquiryProductType[]))
     // console.log(newArr, 'newArr', selectedArr, filterArr, targetKeys)
+
     onOk(newArr)
     // return
     // console.log(targetKeys, 'targetKeys', selectedArr, newArr, selected)

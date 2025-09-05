@@ -48,13 +48,14 @@ export interface BussinesEnquiryRecordType extends BussinesOperationRecordType {
 }
 
 export interface BussinesEnquiryProductType {
-  id?: string
+  id?: string | null
   productModel: string
   productName: string
   productSpec: string
   productUnit: string
   qty: number
   projectId?: string
+  productId?: string
 }
 
 export interface BussinesFollowRecordType {
