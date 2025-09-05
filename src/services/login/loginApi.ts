@@ -8,7 +8,7 @@ export enum LoginApi {
   /**
    * 登录
    */
-  login = '/user/login',
+  login = '/supplier/login',
 
   /**
    * 退出登录

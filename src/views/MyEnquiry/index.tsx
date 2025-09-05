@@ -1,15 +1,19 @@
 import styles from '../EnquiryHall/enquiryHall.module.scss'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Button,
   Checkbox,
   CheckboxProps,
   Input,
-  Radio,
   Space,
+  TablePaginationConfig,
   TableProps,
 } from 'antd'
 import { formatTime } from '@/utils/format'
+import { SearchTable } from 'customer-search-form-table'
+import { getMyEnquiryByPage } from '@/services/myEnquiry/myEnquiryApi'
+import { MyEnquiryParams } from '@/services/myEnquiry/myEnquiryModel'
+import MyEnquiryDetail from './MyEnquiryDetail'
 
 const MyEnquiry: React.FC = () => {
   const [drawer, setDrawer] = useState<{ visible: boolean; currentRow: null }>({
@@ -17,10 +21,19 @@ const MyEnquiry: React.FC = () => {
     currentRow: null,
   })
 
-  const [searchDefaultForm, setSearchDefaultForm] = useState({
+  const [searchDefaultForm, setSearchDefaultForm] = useState<MyEnquiryParams>({
     title: null,
-    checked: false,
+    alternative: false,
+    page: 1,
+    limit: 10,
+    sort: 'create_time desc',
   })
+
+  const [inputValue, setInputValue] = useState<string>('')
+
+  useEffect(() => {
+    setInputValue('')
+  }, [])
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -38,52 +51,50 @@ const MyEnquiry: React.FC = () => {
     },
     {
       title: '手机号',
-      key: 'phone',
-      dataIndex: 'phone',
+      key: 'customerPhone',
+      dataIndex: 'customerPhone',
       align: 'center',
       width: 120,
     },
     {
       title: '报价数',
-      key: 'supplierCount',
+      key: 'viewCount',
       align: 'center',
       width: 80,
       render(value) {
-        return <div>{value.supplierCount}</div>
+        return <div>{value.viewCount}</div>
       },
     },
     {
       title: '浏览量',
-      key: 'count',
-      dataIndex: 'count',
+      key: 'quotationCount',
+      dataIndex: 'quotationCount',
       align: 'center',
       width: 100,
     },
     {
       title: '报价金额',
-      key: 'price',
+      key: 'amount',
       align: 'center',
       width: 150,
       render(value) {
-        return <div>{value.price}万元</div>
+        return <div>{value.amount}</div>
       },
     },
     {
       title: '城市/区县',
-      key: 'price',
+      key: 'address',
+      dataIndex: 'address',
       align: 'center',
       width: 150,
-      render(value) {
-        return <div>{value.price}万元</div>
-      },
     },
     {
       title: '报价截止日期',
-      key: 'estimatedPurchaseTime',
+      key: 'deadline',
       align: 'center',
       width: 180,
       render(value) {
-        return <div>{formatTime(value.estimatedPurchaseTime, 'Y-M-D')}</div>
+        return <div>{formatTime(value.deadline, 'Y-M-D')}</div>
       },
     },
     {
@@ -95,8 +106,8 @@ const MyEnquiry: React.FC = () => {
     },
     {
       title: '简要说明',
-      key: 'createName',
-      dataIndex: 'createName',
+      key: 'remark',
+      dataIndex: 'remark',
       align: 'center',
       width: 120,
     },
@@ -120,12 +131,22 @@ const MyEnquiry: React.FC = () => {
     },
   ]
 
-  const onSearch = () => {}
+  const onSearch = () => {
+    setSearchDefaultForm({ ...searchDefaultForm, title: inputValue })
+  }
 
   const onChange: CheckboxProps['onChange'] = (value: any) => {
     setSearchDefaultForm({
       ...searchDefaultForm,
-      checked: value.target.checked,
+      alternative: value.target.checked,
+    })
+  }
+
+  const onUpdatePagination = (pagination: TablePaginationConfig) => {
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      page: pagination.current as number,
+      limit: pagination.pageSize as number,
     })
   }
 
@@ -142,6 +163,8 @@ const MyEnquiry: React.FC = () => {
               placeholder="请输入询价标题"
               allowClear
               style={{ width: '272px' }}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
             ></Input>
             <Button
               type="primary"
@@ -152,13 +175,32 @@ const MyEnquiry: React.FC = () => {
             </Button>
             <Checkbox
               onChange={(e: any) => onChange(e)}
-              checked={searchDefaultForm.checked}
+              checked={searchDefaultForm.alternative}
             >
               仅查看成为备选供应商的报价
             </Checkbox>
           </div>
-          <div className="mt-[10px] bg-white rounded-[6px] px-[24px] py-[20px]"></div>
+          <div className="mt-[10px] bg-white rounded-[6px] px-[24px] py-[20px]">
+            <SearchTable
+              size="middle"
+              columns={tableColumns}
+              bordered
+              rowKey="id"
+              totalKey="count"
+              fetchResultKey="list"
+              scroll={{ x: 'max-content', y: 568 }}
+              fetchData={getMyEnquiryByPage}
+              searchFilter={searchDefaultForm}
+              isSelection={false}
+              isPagination={true}
+              onUpdatePagination={onUpdatePagination}
+            />
+          </div>
         </div>
+        <MyEnquiryDetail
+          params={drawer}
+          onCancel={() => setDrawer({ visible: false, currentRow: null })}
+        />
       </div>
     </>
   )

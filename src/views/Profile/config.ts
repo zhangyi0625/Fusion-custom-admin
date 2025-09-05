@@ -20,7 +20,7 @@ export const ProfileOptions: ProfileOptionsType[] = [
   {
     label: '手机号',
     key: 'affilate',
-    isEdit: true,
+    isEdit: false,
     editType: 'editPhone',
   },
   {

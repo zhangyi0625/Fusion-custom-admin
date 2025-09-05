@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Button,
   Drawer,
@@ -10,7 +10,9 @@ import {
   Table,
   TableProps,
 } from 'antd'
-import { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { getEnquiryManageDetail } from '@/services/enquiryHall/enquiryHallApi'
+import type { ProductManageType } from '@/services/productManage/productManageModel'
 
 export type EnquiryHallDrawerProps = {
   params: {
@@ -42,9 +44,26 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
   onCancel,
   onOk,
 }) => {
-  const { visible, detailId } = params
+  const { visible, detailId = '' } = params
 
   const [dataSource, setDataSource] = useState<BussinesEnquiryProductType[]>([])
+
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (!visible) return
+    loadEnquiryDetail()
+  }, [visible])
+
+  const loadEnquiryDetail = async () => {
+    setLoading(true)
+    const res = await getEnquiryManageDetail(detailId as string)
+    res.products.map((item: { amount: number }) => {
+      item.amount = 0
+    })
+    setDataSource(res.products ?? [])
+    setLoading(false)
+  }
 
   const EditableRow: React.FC<EditableRowProps> = ({ index, ...props }) => {
     const [form] = Form.useForm()
@@ -155,8 +174,8 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
     },
     {
       title: '产品单价',
-      key: 'price',
-      dataIndex: 'price',
+      key: 'amount',
+      dataIndex: 'amount',
       align: 'center',
       editable: true,
     },
@@ -195,6 +214,36 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
     },
   }
 
+  const confirm = () => {
+    let newArr: Omit<
+      ProductManageType,
+      'remark' | 'pinyin' | 'status' | 'sort'
+    >[] = []
+    console.log(dataSource, 'dataSource')
+    dataSource.map((item: BussinesEnquiryProductType) => {
+      newArr.push({
+        amount: item.amount,
+        model: item.productModel,
+        spec: item.productSpec,
+        name: item.productName,
+        qty: item.qty,
+        unit: item.productUnit,
+        volt: item.productVolt,
+      })
+    })
+    onOk(newArr)
+  }
+
+  const getSum = useMemo(() => {
+    const value = dataSource.reduce(
+      (total: number, item: BussinesEnquiryProductType) => {
+        return total + Number(item.amount)
+      },
+      0
+    )
+    return value.toFixed(1)
+  }, [dataSource])
+
   return (
     <Drawer
       title="我要报价"
@@ -205,7 +254,7 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
       extra={
         <Space>
           <Button onClick={onCancel}>取消</Button>
-          <Button type="primary" onClick={onCancel}>
+          <Button type="primary" onClick={confirm}>
             提交报价
           </Button>
         </Space>
@@ -219,7 +268,7 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
           className="font-semibold pr-[30px] h-[51px] flex items-center justify-end"
         >
           <span>报价总金额</span>
-          <span className="text-red-500 ml-[14px]">9410</span>
+          <span className="text-red-500 mx-[20px]">{getSum}</span>
         </div>
       }
     >
@@ -230,6 +279,7 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
         rowKey={'id'}
         size="small"
         dataSource={dataSource}
+        loading={loading}
         scroll={{ x: 'max-content', y: 698 }}
         columns={mergedColumns as ColumnTypes}
         pagination={false}

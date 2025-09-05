@@ -51,8 +51,6 @@ const Login: React.FC = () => {
    */
   const submit = async (values: any) => {
     // 加入验证码校验key
-    values.verifyKey = checkKey
-    values.username = values.phone
     setLoading(true)
     // 这里考虑返回的内容不仅包括token，还包括用户登录的角色（需要存储在本地，用于刷新页面时重新根据角色获取菜单）、配置的首页地址（供登录后进行跳转）
     try {
@@ -89,11 +87,12 @@ const Login: React.FC = () => {
             let roleId = data.user?.userId
             // 没有配置首页地址默认跳到第一个菜单
             let { homePath } = data
-            sessionStorage.setItem('token', data.access_token)
+
+            sessionStorage.setItem('token', data.token)
             sessionStorage.setItem('isLogin', 'true')
             sessionStorage.setItem('roleId', roleId)
             // 存储登录的用户名
-            sessionStorage.setItem('loginUser', data.user?.username)
+            sessionStorage.setItem('loginUser', values.username)
             const menu = await getMenuListByUser()
             dispatch(setMenus(filterTree(2, menu)))
             // 判断是否配置了默认跳转的首页地址
@@ -109,7 +108,7 @@ const Login: React.FC = () => {
 
             // 跳转到首页
             // navigate(homePath)
-            navigate('/enquiryHall')
+            navigate('/EnquiryHall')
             antdUtils.notification?.success({
               message: '登录成功',
               description: '欢迎来到销售系统供应商端!',
@@ -171,9 +170,9 @@ const Login: React.FC = () => {
             >
               <div className={styles['login-form-item']}>
                 <Form.Item
-                  name="phone"
-                  rules={[{ required: true, message: '请输入手机号' }]}
-                  label="手机号"
+                  name="username"
+                  rules={[{ required: true, message: '请输入用户名' }]}
+                  label="用户名"
                 >
                   <Input
                     size="large"
@@ -181,7 +180,7 @@ const Login: React.FC = () => {
                     className={styles['customer-input']}
                     autoComplete="off"
                     allowClear
-                    placeholder="请输入手机号"
+                    placeholder="请输入用户名"
                   />
                 </Form.Item>
               </div>
@@ -200,7 +199,7 @@ const Login: React.FC = () => {
                   />
                 </Form.Item>
               </div>
-              <Form.Item>
+              {/* <Form.Item>
                 <Row gutter={8}>
                   <Col span={18}>
                     <Form.Item
@@ -235,11 +234,11 @@ const Login: React.FC = () => {
                     </Button>
                   </Col>
                 </Row>
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item name="remember" valuePropName="checked">
                 <div className="flex items-cente justify-between">
                   <Checkbox>记住密码</Checkbox>
-                  <div>忘记密码</div>
+                  <div className="cursor-pointer">忘记密码</div>
                 </div>
               </Form.Item>
               <Form.Item>
@@ -253,7 +252,7 @@ const Login: React.FC = () => {
                   登录
                 </Button>
               </Form.Item>
-              <Form.Item>
+              {/* <Form.Item>
                 <Button
                   size="large"
                   style={{
@@ -265,7 +264,7 @@ const Login: React.FC = () => {
                 >
                   免费注册
                 </Button>
-              </Form.Item>
+              </Form.Item> */}
             </Form>
           </div>
         </div>

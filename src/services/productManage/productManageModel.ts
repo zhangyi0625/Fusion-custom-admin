@@ -10,6 +10,8 @@ export interface ProductManageType {
   status: boolean | number
   sort: string
   unit: string
+  amount?: string
+  qty?: number
 }
 
 export interface ProductManageParams

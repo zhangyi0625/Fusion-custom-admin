@@ -49,8 +49,10 @@ export interface BussinesEnquiryProductType {
   productName: string
   productSpec: string
   productUnit: string
+  productVolt: string
   qty: number
   projectId?: string
+  amount?: string
 }
 
 export interface BussinesFollowRecordType {
