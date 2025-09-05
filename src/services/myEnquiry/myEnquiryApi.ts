@@ -5,8 +5,8 @@ import type { MyEnquiryParams } from './myEnquiryModel'
  * 枚举我的询价相关的api
  */
 export enum MyEnquiryApi {
-  myEnquiryByPage = '/supplier/client/supplier-quotation/page',
-  myEnquiry = '/supplier/client/supplier-quotation',
+  myEnquiryByPage = '/supplier/quotation/page',
+  myEnquiry = '/supplier/quotation',
 }
 
 /**

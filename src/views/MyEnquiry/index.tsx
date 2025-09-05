@@ -40,76 +40,49 @@ const MyEnquiry: React.FC = () => {
       title: '询价标题',
       key: 'title',
       dataIndex: 'title',
-      align: 'center',
+      align: 'left',
+      width: 200,
     },
     {
-      title: '客户',
-      key: 'customerName',
-      dataIndex: 'customerName',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '手机号',
-      key: 'customerPhone',
-      dataIndex: 'customerPhone',
-      align: 'center',
-      width: 120,
-    },
-    {
-      title: '报价数',
-      key: 'viewCount',
-      align: 'center',
-      width: 80,
-      render(value) {
-        return <div>{value.viewCount}</div>
-      },
-    },
-    {
-      title: '浏览量',
-      key: 'quotationCount',
-      dataIndex: 'quotationCount',
-      align: 'center',
-      width: 100,
-    },
-    {
-      title: '报价金额',
+      title: '报价总金额',
       key: 'amount',
-      align: 'center',
+      align: 'left',
       width: 150,
       render(value) {
         return <div>{value.amount}</div>
       },
     },
     {
-      title: '城市/区县',
-      key: 'address',
-      dataIndex: 'address',
-      align: 'center',
-      width: 150,
+      title: '报价时间',
+      key: 'createTime',
+      dataIndex: 'createTime',
+      align: 'left',
+      width: 200,
     },
     {
-      title: '报价截止日期',
+      title: '是否为备选供应商',
+      key: 'alternative',
+      align: 'left',
+      width: 150,
+      render(value) {
+        return <div>{value.alternative ? '是' : '否'}</div>
+      },
+    },
+    {
+      title: '预估金额',
+      key: 'estimatedAmount',
+      dataIndex: 'estimatedAmount',
+      align: 'left',
+      width: 100,
+    },
+    {
+      title: '截止报价日期',
       key: 'deadline',
-      align: 'center',
+      align: 'left',
       width: 180,
       render(value) {
         return <div>{formatTime(value.deadline, 'Y-M-D')}</div>
       },
-    },
-    {
-      title: '询价创建日期',
-      key: 'createTime',
-      dataIndex: 'createTime',
-      align: 'center',
-      width: 200,
-    },
-    {
-      title: '简要说明',
-      key: 'remark',
-      dataIndex: 'remark',
-      align: 'center',
-      width: 120,
     },
     {
       title: '操作',

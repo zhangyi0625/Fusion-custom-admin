@@ -5,11 +5,12 @@ import { getMyEnquiryManageDetail } from '@/services/myEnquiry/myEnquiryApi'
 import type { EnquiryHallItemType } from '@/services/enquiryHall/enquiryHallModel'
 import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { formatTime } from '@/utils/format'
+import { getEnquiryManageDetail } from '@/services/enquiryHall/enquiryHallApi'
 
 export type MyEnquiryDetailProps = {
   params: {
     visible: boolean
-    currentRow: { id: string } | null
+    currentRow: { id: string; inquiryId: string } | null
   }
   onCancel: () => void
 }
@@ -21,12 +22,14 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   const { visible, currentRow } = params
 
   const [defaultActiveKey, setDefaultActiveKey] =
-    useState<string>('BaseInfoCom')
+    useState<string>('MyQuotationDetail')
 
   const [enquiryDrawerInfo, setEnquiryDrawerInfo] = useState<{
-    detail: EnquiryHallItemType | null
+    enquiryDetail: EnquiryHallItemType | null
+    quotationDetil: { supplierName: string; items: any } | null
   }>({
-    detail: null,
+    quotationDetil: null,
+    enquiryDetail: null,
   })
 
   useEffect(() => {
@@ -36,8 +39,12 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
 
   const loadMyEnquiryDetail = async () => {
     const resp = await getMyEnquiryManageDetail(currentRow?.id as string)
+    const enquiryInfo = await getEnquiryManageDetail(
+      currentRow?.inquiryId as string
+    )
     setEnquiryDrawerInfo({
-      detail: resp,
+      enquiryDetail: enquiryInfo,
+      quotationDetil: resp,
     })
   }
 
@@ -45,30 +52,30 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
     return [
       {
         label: '询价标题：',
-        value: enquiryDrawerInfo.detail?.title,
+        value: enquiryDrawerInfo.enquiryDetail?.title,
       },
       {
         label: '预估金额：',
-        value: enquiryDrawerInfo.detail?.estimatedAmount,
+        value: enquiryDrawerInfo.enquiryDetail?.estimatedAmount,
       },
       {
         label: '城市/区县：',
-        value: enquiryDrawerInfo.detail?.address,
+        value: enquiryDrawerInfo.enquiryDetail?.address,
       },
       {
         label: '截止报价日期：',
         value: formatTime(
-          enquiryDrawerInfo.detail?.deadline as string,
+          enquiryDrawerInfo.enquiryDetail?.deadline as string,
           'Y-M-D'
         ),
       },
       {
         label: '询价创建日期：',
-        value: enquiryDrawerInfo.detail?.createTime,
+        value: enquiryDrawerInfo.enquiryDetail?.createTime,
       },
       {
         label: '简要说明：',
-        value: enquiryDrawerInfo.detail?.remark ?? '无',
+        value: enquiryDrawerInfo.enquiryDetail?.remark ?? '无',
       },
     ]
   }, [enquiryDrawerInfo])
@@ -86,14 +93,14 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
     },
     {
       title: '型号-电压等级-规格',
-      key: 'productName',
-      dataIndex: 'productName',
+      key: 'name',
+      dataIndex: 'name',
       align: 'center',
     },
     {
       title: '单位',
-      key: 'productUnit',
-      dataIndex: 'productUnit',
+      key: 'unit',
+      dataIndex: 'unit',
       align: 'center',
     },
     {
@@ -138,7 +145,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   ]
 
   const getSum = useMemo(() => {
-    const value = (enquiryDrawerInfo.detail?.quotations ?? []).reduce(
+    const value = (enquiryDrawerInfo.quotationDetil?.items ?? []).reduce(
       (total: number, item: BussinesEnquiryProductType) => {
         return total + Number(item.amount)
       },
@@ -150,34 +157,36 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   const MyQuotationDetail: React.FC = () => {
     return (
       <>
-        {enquiryDrawerInfo.detail?.confirmQuotationId && (
+        {enquiryDrawerInfo.quotationDetil?.supplierName && (
           <div
-            className="px-[12px] mx-[20px] py-[9px] rounded-[6px] flex items-center text-green-500"
+            className="px-[12px] my-[20px] py-[9px] rounded-[6px] flex items-center text-green-500"
             style={{ background: '#F3FFED' }}
           >
             <img
               src={SuccessIcon}
-              className="w-[16px] h-[16px] ml-[8px]"
+              className="w-[16px] h-[16px] mr-[6px]"
               alt="success"
             />
             客户已选择该报价为备选供应商报价
           </div>
         )}
         <div
-          className="h-[54px] leading-[54px] w-full mt-[8px] flex items-center px-[12px]"
+          className="h-[54px] leading-[54px] w-full mt-[8px] flex items-center justify-end px-[12px]"
           style={{ background: '#fafafa' }}
         >
           <span>报价总金额</span>
           <span className="text-red-500 mx-[20px]">{getSum}</span>
         </div>
-        <Table<any>
-          rowKey={'id'}
-          size="small"
-          columns={MyQuotationDetailTableColumns}
-          dataSource={enquiryDrawerInfo.detail?.quotations ?? []}
-          scroll={{ x: 'max-content', y: 398 }}
-          pagination={false}
-        />
+        <div className="editable-row">
+          <Table<any>
+            rowKey={'id'}
+            size="small"
+            columns={MyQuotationDetailTableColumns}
+            dataSource={enquiryDrawerInfo.quotationDetil?.items ?? []}
+            scroll={{ x: 'max-content', y: 398 }}
+            pagination={false}
+          />
+        </div>
       </>
     )
   }
@@ -189,7 +198,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
           rowKey={'id'}
           size="small"
           columns={CustomerEnquiryDetailTableColumns}
-          dataSource={enquiryDrawerInfo.detail?.products ?? []}
+          dataSource={enquiryDrawerInfo.enquiryDetail?.products ?? []}
           scroll={{ x: 'max-content', y: 398 }}
           pagination={false}
         />
@@ -223,7 +232,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
         </Space>
       }
     >
-      <p className="font-semibold">客户询价基本信息</p>
+      <p className="font-semibold mb-[20px]">客户询价基本信息</p>
       <div className="grid grid-cols-2 text-gray-500 gap-y-[10px] mb-[30px] text-sm">
         {baseInfo().map((item) => (
           <p key={item.label}>

@@ -51,4 +51,8 @@
   .ant-drawer-footer {
     padding: 0 !important;
   }
+  .ant-cascader-menu {
+    overflow-y: auto !important;
+    max-height: 200px !important;
+  }
 }

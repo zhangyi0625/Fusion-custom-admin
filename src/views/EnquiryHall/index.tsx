@@ -1,5 +1,5 @@
 import styles from './enquiryHall.module.scss'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FilterOptions } from './config'
 import { DownOutlined } from '@ant-design/icons'
 import {
@@ -56,6 +56,8 @@ const EnquiryHall: React.FC = () => {
 
   const [scrollTop, setScrollTop] = useState<number>(0)
 
+  const [isScoll, setIsScoll] = useState<boolean>(false)
+
   const [params, setParams] = useState<{
     visible: boolean
     detailId: string | null
@@ -71,7 +73,8 @@ const EnquiryHall: React.FC = () => {
 
   //监听header距顶部距离
   const handleScroll = (event: any) => {
-    setScrollTop(event.target.scrollTop)
+    !isScoll && setScrollTop(event.target.scrollTop)
+    console.log(event.target.scrollTop, 'event.target.scrollTop', isScoll)
   }
 
   const loadArea = async () => {
@@ -123,6 +126,13 @@ const EnquiryHall: React.FC = () => {
       ...searchDefaultForm,
       address: address,
     })
+  }
+
+  const onOpenChange = (value: boolean) => {
+    setIsScoll(value)
+    if (!value) {
+      window.removeEventListener('scroll', handleScroll, true)
+    } else window.addEventListener('scroll', handleScroll, true)
   }
 
   const loadEnquiryDetail = async (items: ReEnquiryHallItemType) => {
@@ -177,6 +187,14 @@ const EnquiryHall: React.FC = () => {
                 {item.title}
               </div>
             ))}
+            {/* <div
+              style={{
+                overflow: 'scroll',
+                height: '200px',
+                paddingTop: '84px',
+              }}
+            >
+              <div style={{ height: '1000px' }} id="getPopupContainerDiv"> */}
             <Cascader
               placeholder="区域"
               // style={{ background: '#F5F5F5' }}
@@ -186,13 +204,19 @@ const EnquiryHall: React.FC = () => {
                 children: 'children',
               }}
               options={cityOptions}
+              // onOpenChange={onOpenChange}
               onChange={onChange}
+              getPopupContainer={(triggerNode: any) => triggerNode.parentNode}
             />
+            {/* </div>
+            </div> */}
           </div>
           {enquiryHallList.map((item, index) => (
             <div className={styles['enquiry-hall-item']} key={index}>
               <div className="flex items-center">
-                <p className="font-semibold text-lg">{item.title}</p>
+                <p className="font-semibold text-lg min-w-[120px]">
+                  {item.title}
+                </p>
                 <p className="ml-[20px] text-gray-400">2025-08-22发布</p>
               </div>
               <div className="flex items-center mt-[11px] justify-between">
@@ -202,7 +226,7 @@ const EnquiryHall: React.FC = () => {
                     截止报价日期：{formatTime(item.deadline, 'Y-M-D')}
                   </p>
                 </div>
-                <div className="flex items-center">
+                <div className="flex items-center justify-between min-w-[350px]">
                   <p className="text-gray-400 mr-[110px]">
                     预估金额
                     <span className="text-red-500 ml-[4px] font-semibold">
