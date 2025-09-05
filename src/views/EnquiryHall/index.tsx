@@ -145,7 +145,12 @@ const EnquiryHall: React.FC = () => {
     setEnquiryHallList(newArr)
   }
 
-  const onConfirm = (currentRow: ProductManageType[]) => {
+  const onConfirm = (
+    currentRow: Omit<
+      ProductManageType,
+      'status' | 'remark' | 'pinyin' | 'sort'
+    >[]
+  ) => {
     addSupplierQuotation({
       inquiryId: params.detailId as string,
       items: currentRow,
@@ -261,7 +266,7 @@ const EnquiryHall: React.FC = () => {
                   />
                 </a>
                 {item.quotations && item.checked && (
-                  <Table<any>
+                  <Table
                     style={{ width: '800px', marginTop: '20px' }}
                     rowKey={'id'}
                     size="small"

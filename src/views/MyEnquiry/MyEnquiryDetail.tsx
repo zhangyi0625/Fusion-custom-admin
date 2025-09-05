@@ -3,9 +3,9 @@ import { Button, Drawer, Space, Table, TableProps, Tabs, TabsProps } from 'antd'
 import SuccessIcon from '@/assets/svg/icon/success.svg'
 import { getMyEnquiryManageDetail } from '@/services/myEnquiry/myEnquiryApi'
 import type { EnquiryHallItemType } from '@/services/enquiryHall/enquiryHallModel'
-import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import { formatTime } from '@/utils/format'
 import { getEnquiryManageDetail } from '@/services/enquiryHall/enquiryHallApi'
+import type { ProductManageType } from '@/services/productManage/productManageModel'
+import { formatTime } from '@/utils/format'
 
 export type MyEnquiryDetailProps = {
   params: {
@@ -26,7 +26,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
 
   const [enquiryDrawerInfo, setEnquiryDrawerInfo] = useState<{
     enquiryDetail: EnquiryHallItemType | null
-    quotationDetil: { supplierName: string; items: any } | null
+    quotationDetil: { supplierName: string; items: ProductManageType[] } | null
   }>({
     quotationDetil: null,
     enquiryDetail: null,
@@ -146,7 +146,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
 
   const getSum = useMemo(() => {
     const value = (enquiryDrawerInfo.quotationDetil?.items ?? []).reduce(
-      (total: number, item: BussinesEnquiryProductType) => {
+      (total: number, item: ProductManageType) => {
         return total + Number(item.amount)
       },
       0
@@ -157,7 +157,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   const MyQuotationDetail: React.FC = () => {
     return (
       <>
-        {enquiryDrawerInfo.quotationDetil?.supplierName && (
+        {enquiryDrawerInfo.enquiryDetail?.confirmQuotationId && (
           <div
             className="px-[12px] my-[20px] py-[9px] rounded-[6px] flex items-center text-green-500"
             style={{ background: '#F3FFED' }}
@@ -178,7 +178,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
           <span className="text-red-500 mx-[20px]">{getSum}</span>
         </div>
         <div className="editable-row">
-          <Table<any>
+          <Table
             rowKey={'id'}
             size="small"
             columns={MyQuotationDetailTableColumns}
@@ -194,7 +194,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   const CustomerEnquiryDetail: React.FC = () => {
     return (
       <>
-        <Table<any>
+        <Table
           rowKey={'id'}
           size="small"
           columns={CustomerEnquiryDetailTableColumns}

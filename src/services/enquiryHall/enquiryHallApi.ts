@@ -85,7 +85,7 @@ export const getEnquiryManageDetail = (id: string) => {
  */
 export const addSupplierQuotation = (params: {
   inquiryId: string
-  items: ProductManageType[]
+  items: Omit<ProductManageType, 'status' | 'remark' | 'pinyin' | 'sort'>[]
 }) => {
   return HttpRequest.post(
     {

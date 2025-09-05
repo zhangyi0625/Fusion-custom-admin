@@ -19,7 +19,9 @@ export type EnquiryHallDrawerProps = {
     visible: boolean
     detailId: string | null
   }
-  onOk: (params: any) => void
+  onOk: (
+    params: Omit<ProductManageType, 'status' | 'remark' | 'pinyin' | 'sort'>[]
+  ) => void
   onCancel: () => void
 }
 

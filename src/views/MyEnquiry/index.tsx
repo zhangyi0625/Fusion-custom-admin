@@ -147,7 +147,7 @@ const MyEnquiry: React.FC = () => {
               查询
             </Button>
             <Checkbox
-              onChange={(e: any) => onChange(e)}
+              onChange={(e) => onChange(e)}
               checked={searchDefaultForm.alternative}
             >
               仅查看成为备选供应商的报价
