@@ -93,6 +93,7 @@ const Login: React.FC = () => {
             sessionStorage.setItem('roleId', roleId)
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', values.username)
+            sessionStorage.setItem('password', values.password)
             const menu = await getMenuListByUser()
             dispatch(setMenus(filterTree(2, menu)))
             // 判断是否配置了默认跳转的首页地址

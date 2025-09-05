@@ -65,16 +65,19 @@ const EnquiryHall: React.FC = () => {
     visible: false,
     detailId: null,
   })
+
   useEffect(() => {
     loadArea()
+  }, [])
+
+  useEffect(() => {
     init()
     window.addEventListener('scroll', handleScroll, true)
   }, [searchDefaultForm])
 
   //监听header距顶部距离
   const handleScroll = (event: any) => {
-    !isScoll && setScrollTop(event.target.scrollTop)
-    console.log(event.target.scrollTop, 'event.target.scrollTop', isScoll)
+    setScrollTop(event.target.scrollTop)
   }
 
   const loadArea = async () => {
@@ -126,13 +129,6 @@ const EnquiryHall: React.FC = () => {
       ...searchDefaultForm,
       address: address,
     })
-  }
-
-  const onOpenChange = (value: boolean) => {
-    setIsScoll(value)
-    if (!value) {
-      window.removeEventListener('scroll', handleScroll, true)
-    } else window.addEventListener('scroll', handleScroll, true)
   }
 
   const loadEnquiryDetail = async (items: ReEnquiryHallItemType) => {

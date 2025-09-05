@@ -1,5 +1,6 @@
 import { HttpRequest } from '@/utils/request'
 import type { Response } from '@/types/global'
+import { ResetLoginPasswordType } from './loginModel'
 
 /**
  * 枚举登录需要的接口地址
@@ -18,6 +19,16 @@ export enum LoginApi {
    * 获取验证码
    */
   getCode = '/user/captcha',
+
+  /**
+   * 修改密码
+   */
+  updatePassword = '/supplier/changePassword',
+
+  /**
+   * 获取供应商账号信息
+   */
+  getSupplerAccountInfo = '/supplier/detail',
 }
 
 /**
@@ -54,4 +65,32 @@ export const getCaptcha = (checkKey: string) => {
  */
 export const logout = (token: string) => {
   HttpRequest.delete({ url: LoginApi.logout, params: { token } })
+}
+
+/**
+ * 修改供应商账号密码
+ */
+export const updatePassword = (params: ResetLoginPasswordType) => {
+  return HttpRequest.post<Response>(
+    {
+      url: LoginApi.updatePassword,
+      data: params,
+    },
+    { isTransformResponse: false }
+  )
+}
+
+/**
+ * 获取验证码
+ * @returns 验证码
+ */
+export const getSupplerAccountInfo = () => {
+  return HttpRequest.get(
+    {
+      url: LoginApi.getSupplerAccountInfo,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
 }

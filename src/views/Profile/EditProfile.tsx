@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Input } from 'antd'
 import DragModal from '@/components/modal/DragModal'
 
@@ -24,6 +24,12 @@ const EditProfile: React.FC<EditProfileProps> = ({
 
   const [countdownNumber, setCountdownNumber] = useState<number>(60)
 
+  useEffect(() => {
+    if (!visible) return
+    let oldPassword = sessionStorage.getItem('password') ?? ''
+    form.setFieldsValue({ oldPassword: oldPassword })
+  }, [visible])
+
   const sendCode = () => {
     setIsSendCheckCode(true)
     const timer = setInterval(function () {
@@ -43,6 +49,8 @@ const EditProfile: React.FC<EditProfileProps> = ({
         onOk({ ...form.getFieldsValue() })
       })
       .catch((errorInfo) => {
+        console.log(errorInfo, 'sss')
+
         // 滚动并聚焦到第一个错误字段
         form.scrollToField(errorInfo.errorFields[0].name)
         form.focusField(errorInfo.errorFields[0].name)
@@ -57,73 +65,121 @@ const EditProfile: React.FC<EditProfileProps> = ({
       onOk={onConfirm}
       onCancel={onCancel}
     >
-      <Form form={form} labelCol={{ span: 4 }}>
-        <Form.Item
-          label={type === 'editPhone' ? '新手机号' : '手机号'}
-          key="phone"
-          name="phone"
-          rules={[
-            {
-              required: true,
-              message: '请输入新手机号',
-            },
-            {
-              pattern: /^1[3-9]\d{9}$/,
-              message: '请输入正确的手机号',
-            },
-          ]}
-        >
-          <Input
-            disabled={type !== 'editPhone'}
-            placeholder="请输入新手机号"
-            autoComplete="off"
-            allowClear
-          />
-        </Form.Item>
-        <Form.Item
-          label="验证码"
-          key="code"
-          name="code"
-          rules={[
-            {
-              required: true,
-              message: '请输入验证码',
-            },
-          ]}
-        >
-          <Input
-            placeholder="请输入验证码"
-            autoComplete="off"
-            addonAfter={
-              <>
-                {!isSendCheckCode ? (
-                  <div
-                    className="text-dull-500 cursor-pointer"
-                    onClick={sendCode}
-                  >
-                    发送验证码
-                  </div>
-                ) : (
-                  <div className="text-gray-500">({countdownNumber})s</div>
-                )}
-              </>
-            }
-            allowClear
-          />
-        </Form.Item>
-        {type === 'editPassword' && (
+      <Form form={form} labelCol={{ span: 6 }}>
+        {type === 'editPhone' && (
           <Form.Item
-            label="登陆密码"
-            key="password"
-            name="password"
+            label={type === 'editPhone' ? '新手机号' : '手机号'}
+            key="phone"
+            name="phone"
             rules={[
               {
                 required: true,
-                message: '请输入登录密码',
+                message: '请输入新手机号',
+              },
+              {
+                pattern: /^1[3-9]\d{9}$/,
+                message: '请输入正确的手机号',
               },
             ]}
           >
-            <Input placeholder="请输入登录密码" autoComplete="off" allowClear />
+            <Input
+              disabled={type !== 'editPhone'}
+              placeholder="请输入新手机号"
+              autoComplete="off"
+              allowClear
+            />
+          </Form.Item>
+        )}
+        {type === 'editPhone' && (
+          <Form.Item
+            label="验证码"
+            key="code"
+            name="code"
+            rules={[
+              {
+                required: true,
+                message: '请输入验证码',
+              },
+            ]}
+            hidden={type !== 'editPhone'}
+          >
+            <Input
+              placeholder="请输入验证码"
+              autoComplete="off"
+              addonAfter={
+                <>
+                  {!isSendCheckCode ? (
+                    <div
+                      className="text-dull-500 cursor-pointer"
+                      onClick={sendCode}
+                    >
+                      发送验证码
+                    </div>
+                  ) : (
+                    <div className="text-gray-500">({countdownNumber})s</div>
+                  )}
+                </>
+              }
+              allowClear
+            />
+          </Form.Item>
+        )}
+        {type === 'editPassword' && (
+          <Form.Item
+            label="原密码"
+            key="oldPassword"
+            name="oldPassword"
+            rules={[
+              {
+                required: true,
+                message: '请输入原密码',
+              },
+            ]}
+          >
+            <Input
+              disabled
+              placeholder="请输入原密码"
+              autoComplete="off"
+              allowClear
+            />
+          </Form.Item>
+        )}
+        {type === 'editPassword' && (
+          <Form.Item
+            label="新登陆密码"
+            key="newPassword"
+            name="newPassword"
+            rules={[
+              {
+                required: true,
+                message: '请输入新登录密码',
+              },
+            ]}
+          >
+            <Input
+              placeholder="请输入新登录密码"
+              autoComplete="off"
+              allowClear
+            />
+          </Form.Item>
+        )}
+        {type === 'editPassword' && (
+          <Form.Item
+            label="确认登陆密码"
+            key="confirmPassword"
+            name="confirmPassword"
+            rules={[
+              {
+                required: true,
+                message: '请输入确认登陆密码',
+              },
+            ]}
+          >
+            <Input
+              placeholder="请输入确认登陆密码"
+              autoComplete="off"
+              allowClear
+            />
           </Form.Item>
         )}
       </Form>
