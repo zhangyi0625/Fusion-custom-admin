@@ -1,5 +1,6 @@
 import { HttpRequest } from '@/utils/request'
 import type { SysUserParams, SysUserType } from '../role/roleModel'
+import { UserAuthorityType } from './userModel'
 
 /**
  * 枚举用户相关的api
@@ -9,6 +10,7 @@ export enum UserApi {
   userManageByPage = '/system/user/page',
   batchUserManage = '/system/user/batch',
   resetUserPassword = '/system/user/password',
+  userAuthority = '/system/user-power',
 }
 
 /**
@@ -118,6 +120,39 @@ export const deletebatchUserList = (ids: string[]) => {
     {
       url: UserApi.batchUserManage,
       params: ids,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 查询用户权限
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const getUserAuthority = (id: string) => {
+  return HttpRequest.get(
+    {
+      url: UserApi.userAuthority + '/' + id,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 修改用户权限
+ * @param params 用户参数
+ * @returns 用户列表
+ */
+export const updateUserAuthority = (params: UserAuthorityType) => {
+  return HttpRequest.post(
+    {
+      url: UserApi.userAuthority,
+      params: params,
     },
     {
       successMessageMode: 'none',

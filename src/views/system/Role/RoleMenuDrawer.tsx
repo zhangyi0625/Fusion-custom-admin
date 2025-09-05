@@ -57,6 +57,7 @@ const RoleMenuDrawer: React.FC<RoleMenuDrawerProps> = ({
         setTreeData(data)
         setChecked(selectData)
         setExpandedKeys(expanded)
+        console.log(data, 'data', selectData, expanded)
       })
     })
   }

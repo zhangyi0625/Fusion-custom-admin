@@ -8,6 +8,7 @@ import {
   deleteUserList,
   editUserList,
   getUserListByPage,
+  updateUserAuthority,
   updateUserPassword,
 } from '@/services/system/user/userApi'
 import {
@@ -28,6 +29,7 @@ import {
 } from 'antd'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddUser from '../Role/AddUser'
+import UserAuthority from './UserAuthority'
 import { filterKeys } from '@/utils/tool'
 import { SelectUserOptions } from './config'
 
@@ -55,6 +57,14 @@ const User: React.FC = () => {
   const [searchDefaultForm, setSearchDefaultForm] = useState<SysRoleParams>({
     page: 1,
     limit: 10,
+  })
+
+  const [athorityDrawer, setAuthorityDrawer] = useState<{
+    visible: boolean
+    userId: string
+  }>({
+    visible: false,
+    userId: '',
   })
 
   const columns: TableProps['columns'] = [
@@ -157,6 +167,15 @@ const User: React.FC = () => {
             >
               删除
             </Button>
+            <Button
+              type="link"
+              size="small"
+              onClick={() =>
+                setAuthorityDrawer({ visible: true, userId: _.userId })
+              }
+            >
+              权限设置
+            </Button>
             <Button type="link" size="small" onClick={() => resetPassword(_)}>
               重置密码
             </Button>
@@ -253,6 +272,18 @@ const User: React.FC = () => {
     })
   }
 
+  const saveUserAuthority = (selected: string[]) => {
+    updateUserAuthority({
+      userId: athorityDrawer.userId,
+      powerType: 4,
+      viewIds: selected,
+    }).then(() => {
+      message.success('分配成功')
+      setAuthorityDrawer({ visible: false, userId: '' })
+      onUpdateSearch(searchDefaultForm)
+    })
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -325,6 +356,11 @@ const User: React.FC = () => {
         open={params}
         onCancel={() => setParams({ visible: false, editRow: null })}
         onOk={onEditOk}
+      />
+      <UserAuthority
+        params={athorityDrawer}
+        onCancel={() => setAuthorityDrawer({ visible: false, userId: '' })}
+        onOk={saveUserAuthority}
       />
     </>
   )
