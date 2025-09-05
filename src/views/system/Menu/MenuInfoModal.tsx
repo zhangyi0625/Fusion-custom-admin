@@ -69,6 +69,15 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
   }, [currentRow, visible])
 
   /**
+   * 按钮类型默认隐藏路由
+   * @param e menuType
+   */
+  const changeMenuType = (e: number) => {
+    setMenuType(e)
+    form.setFieldsValue({ hide: e === 2 ? true : false })
+  }
+
+  /**
    * 弹窗打开关闭的回调（打开后默认聚焦到名称输入框）
    * @param open 弹窗是否打开
    */
@@ -145,7 +154,7 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
         <Form.Item name="menuType" label="菜单类型">
           <Radio.Group
             buttonStyle="solid"
-            onChange={(e) => setMenuType(e.target.value)}
+            onChange={(e) => changeMenuType(e.target.value)}
           >
             <Radio.Button value={0}>一级菜单</Radio.Button>
             <Radio.Button value={1}>子菜单</Radio.Button>
@@ -159,7 +168,7 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
         >
           <Input autoFocus ref={nameRef} />
         </Form.Item>
-        {menuType === 1 && (
+        {menuType !== 0 && (
           <Form.Item name="parentId" label="上级菜单">
             <TreeSelect
               showSearch
@@ -204,22 +213,24 @@ const MenuInfoModal: React.FC<MenuInfoModalProps> = ({
         {/* <Form.Item name="redirect" label="默认跳转地址">
           <Input allowClear autoComplete="off" />
         </Form.Item> */}
-        <Form.Item name="icon" label="菜单图标">
-          <Input
-            allowClear
-            autoComplete="off"
-            addonAfter={
-              <Dropdown
-                trigger={['hover']}
-                placement="bottom"
-                popupRender={() => <IconPanel onSelect={onSelectIcon} />}
-                overlayClassName="w-[360] h-[300] bg-white overflow-y-auto p-2 shadow-xl"
-              >
-                <SettingOutlined className="cursor-pointer" />
-              </Dropdown>
-            }
-          />
-        </Form.Item>
+        {menuType !== 2 && (
+          <Form.Item name="icon" label="菜单图标">
+            <Input
+              allowClear
+              autoComplete="off"
+              addonAfter={
+                <Dropdown
+                  trigger={['hover']}
+                  placement="bottom"
+                  popupRender={() => <IconPanel onSelect={onSelectIcon} />}
+                  overlayClassName="w-[360] h-[300] bg-white overflow-y-auto p-2 shadow-xl"
+                >
+                  <SettingOutlined className="cursor-pointer" />
+                </Dropdown>
+              }
+            />
+          </Form.Item>
+        )}
         <Form.Item name="sortNumber" label="排序">
           <InputNumber min={0} autoComplete="off" style={{ width: '200px' }} />
         </Form.Item>
