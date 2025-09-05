@@ -8,7 +8,9 @@ import { OpenEnquiryStatusOptions } from '../config'
 import type { BaseInfoDetail } from '../BusinessEnquiry/BusinessEnquiryDrawer'
 import { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { getOpenEnquiryListDetail } from '@/services/projectManage/OpenEnquiry/OpenEnquiryApi'
+import OpenQuotationDetail from './OpenQuotationDetail'
 import { formatTime } from '@/utils/format'
+import { ProductManageType } from '@/services/productManage/productManageModel'
 
 export type OpenEnquiryDetailProps = {
   params: {
@@ -39,7 +41,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
 
   const [quotationDetail, setQuotationDetail] = useState<{
     visible: boolean
-    currentRow: null
+    currentRow: { items: ProductManageType[] } | null
   }>({
     visible: false,
     currentRow: null,
@@ -80,7 +82,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
       key: 'supplierName',
       dataIndex: 'supplierName',
       align: 'center',
-      width: 120,
+      width: 140,
     },
     {
       title: '联系人',
@@ -98,16 +100,16 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
     },
     {
       title: '报价时间',
-      key: 'updateTime',
-      dataIndex: 'updateTime',
+      key: 'createTime',
+      dataIndex: 'createTime',
       align: 'center',
-      width: 100,
+      width: 200,
     },
     {
       title: '是否为备选供应商',
       key: 'alternative',
       align: 'center',
-      width: 100,
+      width: 200,
       render(value) {
         return <div>{value.alternative ? '是' : '否'}</div>
       },
@@ -290,6 +292,12 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         items={components}
         onChange={tabsChange}
         key={detailId}
+      />
+      <OpenQuotationDetail
+        params={quotationDetail}
+        onCancel={() =>
+          setQuotationDetail({ visible: false, currentRow: null })
+        }
       />
     </Drawer>
   )

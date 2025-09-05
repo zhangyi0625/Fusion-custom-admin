@@ -12,6 +12,7 @@ export interface ProductManageType {
   sort: string
   unit: string
   qty: number
+  amount?: string
 }
 
 export interface ProductManageParams
