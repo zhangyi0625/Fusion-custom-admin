@@ -1,13 +1,7 @@
 import type React from 'react'
-import { useEffect, useRef, useState } from 'react'
-import { Button, Checkbox, Col, Form, Image, Input, Row } from 'antd'
-import logo from '@/assets/images/icon-512.png'
-import {
-  LockOutlined,
-  SecurityScanOutlined,
-  UserOutlined,
-} from '@ant-design/icons'
 import styles from './login.module.scss'
+import { useEffect, useRef, useState } from 'react'
+import { Button, Checkbox, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { getCaptcha, login } from '@/services/login/loginApi'
 import { useDispatch } from 'react-redux'
@@ -15,6 +9,7 @@ import { setMenus } from '@/stores/store'
 import { HttpCodeEnum } from '@/enums/httpEnum'
 import { antdUtils } from '@/utils/antdUtil'
 import { getMenuListByUser } from '@/services/system/menu/menuApi'
+import LoginByEditPassword from './LoginByEditPassword'
 import { filterTree } from '@/utils/utils'
 
 /**
@@ -40,9 +35,13 @@ const Login: React.FC = () => {
   // 验证码的校验key，获取验证码的时候返回，用于验证码的校验
   const [checkKey, setCheckKey] = useState<string>('')
 
+  // 登陆 && 忘记密码
+  const [loginStatus, setLoginStatus] = useState<string>('login')
+
   // 页面挂载请求后端获取验证码
   useEffect(() => {
     getCode()
+    // form.setFieldsValue({ remember: true })
   }, [])
 
   /**
@@ -153,107 +152,88 @@ const Login: React.FC = () => {
       <div className={styles['login-container']}>
         <div className={styles['login-box']}>
           <div className={styles['login-title']}>
-            <p>欢迎登录</p>
-            <p>销售系统供应商端</p>
+            {loginStatus === 'login' ? (
+              <>
+                <p>欢迎登录</p>
+                <p>销售系统供应商端</p>
+              </>
+            ) : (
+              <p>找回密码</p>
+            )}
           </div>
           <div className={styles['login-form']}>
-            <Form
-              form={form}
-              name="login"
-              labelCol={{ span: 5 }}
-              size="large"
-              autoComplete="off"
-              onFinish={submit}
-              colon={false}
-              initialValues={{
-                remember: true,
-              }}
-            >
-              <div className={styles['login-form-item']}>
-                <Form.Item
-                  name="username"
-                  rules={[{ required: true, message: '请输入用户名' }]}
-                  label="用户名"
-                >
-                  <Input
-                    size="large"
-                    ref={inputRef}
-                    className={styles['customer-input']}
-                    autoComplete="off"
-                    allowClear
-                    placeholder="请输入用户名"
-                  />
-                </Form.Item>
-              </div>
-              <div className={styles['login-form-item']}>
-                <Form.Item
-                  name="password"
-                  rules={[{ required: true, message: '请输入密码' }]}
-                  label="密码"
-                >
-                  <Input
-                    size="large"
-                    allowClear
-                    className={styles['customer-input']}
-                    autoComplete="off"
-                    placeholder="请输入密码"
-                  />
-                </Form.Item>
-              </div>
-              {/* <Form.Item>
-                <Row gutter={8}>
-                  <Col span={18}>
-                    <Form.Item
-                      name="verifyCode"
-                      noStyle
-                      rules={[{ required: true, message: '请输入验证码' }]}
-                    >
-                      <Input
-                        size="large"
-                        allowClear
-                        placeholder="输入右侧验证码"
-                        prefix={<SecurityScanOutlined />}
-                      />
-                    </Form.Item>
-                  </Col>
-                  <Col span={6}>
-                    <Button
+            {loginStatus === 'forgotPassword' ? (
+              <LoginByEditPassword
+                onLogin={() => setLoginStatus('login')}
+                onSave={() => {}}
+              />
+            ) : (
+              <Form
+                form={form}
+                name="login"
+                labelCol={{ span: 4 }}
+                size="large"
+                autoComplete="off"
+                onFinish={submit}
+                colon={false}
+                initialValues={{
+                  remember: true,
+                }}
+              >
+                <div className={styles['login-form-item']}>
+                  <Form.Item
+                    name="username"
+                    rules={[{ required: true, message: '请输入用户名' }]}
+                    label="用户名"
+                  >
+                    <Input
                       size="large"
-                      onClick={getCode}
-                      style={{
-                        width: '100%',
-                        backgroundColor: '#f0f0f0',
-                        padding: '2px',
-                      }}
-                    >
-                      <Image
-                        src={code?.base64}
-                        preview={false}
-                        width="100%"
-                        height="100%"
-                      />
-                    </Button>
-                  </Col>
-                </Row>
-              </Form.Item> */}
-              <Form.Item name="remember" valuePropName="checked">
-                <div className="flex items-cente justify-between">
-                  <Checkbox>记住密码</Checkbox>
-                  <div className="cursor-pointer">忘记密码</div>
+                      ref={inputRef}
+                      className={styles['customer-input']}
+                      autoComplete="off"
+                      allowClear
+                      placeholder="请输入用户名"
+                    />
+                  </Form.Item>
                 </div>
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  loading={loading}
-                  size="large"
-                  style={{ width: '100%', marginTop: '30px' }}
-                  type="primary"
-                  htmlType="submit"
-                >
-                  登录
-                </Button>
-              </Form.Item>
-              {/* <Form.Item>
+                <div className={styles['login-form-item']}>
+                  <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: '请输入密码' }]}
+                    label="密码"
+                  >
+                    <Input
+                      size="large"
+                      allowClear
+                      className={styles['customer-input']}
+                      autoComplete="off"
+                      placeholder="请输入密码"
+                    />
+                  </Form.Item>
+                </div>
+                <Form.Item name="remember" valuePropName="checked">
+                  <div className="flex items-cente justify-between">
+                    <Checkbox defaultChecked={true}>记住密码</Checkbox>
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setLoginStatus('forgotPassword')}
+                    >
+                      忘记密码
+                    </div>
+                  </div>
+                </Form.Item>
+                <Form.Item>
+                  <Button
+                    loading={loading}
+                    size="large"
+                    style={{ width: '100%', marginTop: '30px' }}
+                    type="primary"
+                    htmlType="submit"
+                  >
+                    登录
+                  </Button>
+                </Form.Item>
+                {/* <Form.Item>
                 <Button
                   size="large"
                   style={{
@@ -266,7 +246,8 @@ const Login: React.FC = () => {
                   免费注册
                 </Button>
               </Form.Item> */}
-            </Form>
+              </Form>
+            )}
           </div>
         </div>
       </div>
