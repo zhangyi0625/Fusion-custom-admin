@@ -79,7 +79,7 @@ const OpenEnquiry: React.FC = () => {
           </div>
         )
       },
-      width: 120,
+      width: 150,
     },
     {
       title: '客户',
@@ -155,7 +155,7 @@ const OpenEnquiry: React.FC = () => {
       key: 'address',
       dataIndex: 'address',
       align: 'center',
-      width: 200,
+      width: 220,
     },
     {
       title: '报价截止日期',
@@ -258,8 +258,21 @@ const OpenEnquiry: React.FC = () => {
     })
   }
 
-  const onAuditEnquiry = (status: string, rejectReason?: string) => {
-    loadEnquiryResult(status, rejectReason)
+  const onAuditEnquiry = (
+    status: string,
+    rejectReason?: string,
+    params?: ProductManageType[] | null
+  ) => {
+    if (params?.length) {
+      postAllocationEnquiry(
+        auidtDrawer.currentRow?.id as string,
+        params as ProductManageType[]
+      ).then(() => {
+        loadEnquiryResult(status, rejectReason)
+      })
+    } else {
+      loadEnquiryResult(status, rejectReason)
+    }
   }
 
   const loadEnquiryResult = (status: string, rejectReason?: string) => {

@@ -32,7 +32,11 @@ export type OpenEnquiryAuditProps = {
     currentRow: OpenEnquiryType | null
   }
   onCancel: () => void
-  onAuditEnquiry: (status: string, rejectReason?: string) => void
+  onAuditEnquiry: (
+    status: string,
+    rejectReason?: string,
+    selectedArr?: ProductManageType[]
+  ) => void
 }
 
 type ColumnTypes = Exclude<TableProps<any>['columns'], undefined>
@@ -318,7 +322,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
   }
 
   const confirmAudit = () => {
-    onAuditEnquiry('PENDING_QUOTE', '')
+    onAuditEnquiry('PENDING_QUOTE', '', dataSource)
   }
 
   return (
@@ -375,7 +379,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
           rowKey={'productId'}
           size="small"
           dataSource={dataSource}
-          scroll={{ x: 'max-content', y: 188 }}
+          scroll={{ x: 'max-content', y: 688 }}
           columns={mergedColumns as ColumnTypes}
           pagination={false}
         />
