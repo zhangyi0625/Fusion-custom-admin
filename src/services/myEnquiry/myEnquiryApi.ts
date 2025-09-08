@@ -2,7 +2,7 @@ import { HttpRequest } from '@/utils/request'
 import type { MyEnquiryParams } from './myEnquiryModel'
 
 /**
- * 枚举我的询价相关的api
+ * 枚举我的报价相关的api
  */
 export enum MyEnquiryApi {
   myEnquiryByPage = '/supplier/quotation/page',
@@ -10,7 +10,7 @@ export enum MyEnquiryApi {
 }
 
 /**
- * 分页获取我的询价列表
+ * 分页获取我的报价列表
  * @param params 询价参数
  * @returns 询价列表
  */

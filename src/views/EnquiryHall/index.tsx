@@ -68,16 +68,17 @@ const EnquiryHall: React.FC = () => {
 
   useEffect(() => {
     loadArea()
+    window.addEventListener('scroll', handleScroll, true)
   }, [])
 
   useEffect(() => {
     init()
-    window.addEventListener('scroll', handleScroll, true)
   }, [searchDefaultForm])
 
   //监听header距顶部距离
   const handleScroll = (event: any) => {
     setScrollTop(event.target.scrollTop)
+    console.log(scrollTop, 'scrollTop', event.target.scrollTop)
   }
 
   const loadArea = async () => {
@@ -167,7 +168,7 @@ const EnquiryHall: React.FC = () => {
         <div className={styles['enquiry-hall-content']}>
           <div
             className={
-              scrollTop >= 70
+              scrollTop >= 120
                 ? styles['enquiry-hall-filter-is-sticky']
                 : styles['enquiry-hall-filter']
             }

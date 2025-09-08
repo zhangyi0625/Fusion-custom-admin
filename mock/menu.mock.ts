@@ -2460,7 +2460,7 @@ export default defineMock([
           {
             menuId: '36',
             parentId: '0',
-            title: '我的询价',
+            title: '我的报价',
             path: '/MyEnquiry',
             component: 'MyEnquiry',
             menuType: 0,
