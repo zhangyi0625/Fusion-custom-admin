@@ -83,7 +83,7 @@ const AddSalesContractNote: React.FC<AddSalesContractNoteProps> = ({
                   />
                 )}
                 {item.formType === 'date-picker' && (
-                  <DatePicker style={{ width: '100%' }} format={'YY-MM-DD'} />
+                  <DatePicker style={{ width: '100%' }} format={'YYYY-MM-DD'} />
                 )}
               </Form.Item>
             </Col>
