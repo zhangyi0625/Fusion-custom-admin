@@ -379,7 +379,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
           rowKey={'productId'}
           size="small"
           dataSource={dataSource}
-          scroll={{ x: 'max-content', y: 688 }}
+          scroll={{ x: 'max-content', y: currentRow?.files.length ? 198 : 688 }}
           columns={mergedColumns as ColumnTypes}
           pagination={false}
         />
