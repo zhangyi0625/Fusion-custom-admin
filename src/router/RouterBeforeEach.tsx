@@ -20,7 +20,7 @@ const RouterBeforeEach: React.FC = () => {
       navigate(index)
     } else if (bLogin === 'false' || !bLogin || location.pathname === '/') {
       // 未登录状态或登录状态已失效，则跳转到登录页面
-      navigate('/login', { replace: true })
+      navigate('/supplierLogin', { replace: true })
     } else {
       // 检测当前路径 如果是菜单中的path跳过检测 [order:id]
       const obj = checkRouterAuth(location.pathname)

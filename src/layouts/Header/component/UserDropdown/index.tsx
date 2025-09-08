@@ -79,7 +79,7 @@ const UserDropdown: React.FC = () => {
             // 修改回document.title
             document.title = '销售协同管理系统 - 登录'
             // 退出到登录页面
-            navigate('/login')
+            navigate('/supplierLogin')
           },
           cancelText: '取消',
         })

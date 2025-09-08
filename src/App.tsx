@@ -49,8 +49,12 @@ const App: React.FC = () => {
     antdUtils.setModalInstance(modal)
     // 去后台查询菜单，也需要判定当前是否登录，未登录的话就跳转登录页面
     const isLogin = sessionStorage.getItem('isLogin')
-    if (isLogin === 'false' || !isLogin || location.pathname === '/login') {
-      navigate('/login')
+    if (
+      isLogin === 'false' ||
+      !isLogin ||
+      location.pathname === '/supplierLogin'
+    ) {
+      navigate('/supplierLogin')
     } else {
       // getMenuData()
     }

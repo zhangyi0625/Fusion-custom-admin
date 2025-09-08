@@ -16,7 +16,7 @@ import { filterTree } from '@/utils/utils'
  * 登录模块
  * @returns 组件内容
  */
-const Login: React.FC = () => {
+const SupplierLogin: React.FC = () => {
   const [form] = Form.useForm()
 
   const inputRef = useRef(null)
@@ -254,4 +254,4 @@ const Login: React.FC = () => {
     </>
   )
 }
-export default Login
+export default SupplierLogin

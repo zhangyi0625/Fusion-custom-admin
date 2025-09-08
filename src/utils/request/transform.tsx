@@ -127,7 +127,7 @@ export const transform: AxiosTransform = {
             sessionStorage.removeItem('token')
             sessionStorage.removeItem('isLogin')
             sessionStorage.removeItem('roleId')
-            window.location.href = '/login'
+            window.location.href = '/supplierLogin'
           },
           okText: '确定',
         })

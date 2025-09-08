@@ -57,8 +57,8 @@ export const dynamicRoutes: RouteObject[] = [
     children: errorRoutes.concat(defaultRoutes),
   },
   {
-    path: '/login',
-    component: LazyLoad('Login').type,
+    path: '/supplierLogin',
+    component: LazyLoad('SupplierLogin').type,
   },
 ]
 
