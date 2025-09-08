@@ -1,5 +1,5 @@
 import styles from './enquiryHall.module.scss'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { FilterOptions } from './config'
 import { DownOutlined } from '@ant-design/icons'
 import {
@@ -78,13 +78,17 @@ const EnquiryHall: React.FC = () => {
   //监听header距顶部距离
   const handleScroll = (event: any) => {
     setScrollTop(event.target.scrollTop)
-    console.log(scrollTop, 'scrollTop', event.target.scrollTop)
+    // console.log(scrollTop, 'scrollTop', event.target.scrollTop)
   }
 
   const loadArea = async () => {
     const resp = await getEnquiryCity()
     setCityOptions(resp)
   }
+
+  const supplierName = useCallback(() => {
+    return sessionStorage.getItem('loginUser')
+  }, [])
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -132,12 +136,14 @@ const EnquiryHall: React.FC = () => {
     })
   }
 
-  const loadEnquiryDetail = async (items: ReEnquiryHallItemType) => {
-    const res = await getEnquiryManageDetail(items.id as string)
+  const expendProducts = async (items: ReEnquiryHallItemType) => {
+    const res = items.products
+      ? items.products
+      : await getEnquiryManageDetail(items.id as string)
     let newArr = enquiryHallList.map((item) => {
       if (item.id === items.id) {
         item.checked = !items.checked
-        item.quotations = !items.checked ? [] : res.products
+        item.products = item.products ?? res.products
       }
       return {
         ...item,
@@ -235,7 +241,10 @@ const EnquiryHall: React.FC = () => {
                       {item.estimatedAmount}
                     </span>
                   </p>
-                  {!item.confirmQuotationId ? (
+                  {!item.quotations.find(
+                    (supplier: { supplierName: string }) =>
+                      supplier.supplierName === supplierName()
+                  ) ? (
                     <Button
                       type="primary"
                       size="large"
@@ -255,7 +264,7 @@ const EnquiryHall: React.FC = () => {
                 </div>
               </div>
               <div className="text-blue-500 mt-[12px] cursor-pointer">
-                <a onClick={() => loadEnquiryDetail(item)}>
+                <a onClick={() => expendProducts(item)}>
                   询价清单
                   <DownOutlined
                     style={{
@@ -266,13 +275,13 @@ const EnquiryHall: React.FC = () => {
                     rotate={!item.checked ? 180 : 0}
                   />
                 </a>
-                {item.quotations && item.checked && (
+                {item.products && item.checked && (
                   <Table
                     style={{ width: '800px', marginTop: '20px' }}
                     rowKey={'id'}
                     size="small"
                     columns={tableColumns}
-                    dataSource={item.quotations ?? []}
+                    dataSource={item.products ?? []}
                     pagination={false}
                   />
                 )}
