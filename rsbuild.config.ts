@@ -60,6 +60,7 @@ export default defineConfig({
     cssModules: {
       exportGlobals: true,
     },
+    assetPrefix: 'https://sale.zaicang.net/supplier/',
   },
   // 构建优化相关
   performance: {
