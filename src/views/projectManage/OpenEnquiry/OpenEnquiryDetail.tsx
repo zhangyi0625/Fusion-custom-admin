@@ -156,7 +156,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         value: enquiryDrawerInfo.detail?.title,
       },
       {
-        label: '预估金额：',
+        label: '预估金额(万元)：',
         value: enquiryDrawerInfo.detail?.estimatedAmount,
       },
       {

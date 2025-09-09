@@ -346,7 +346,7 @@ const OpenEnquiry: React.FC = () => {
           totalKey="count"
           fetchResultKey="list"
           immediate={immediate}
-          scroll={{ x: 'max-content', y: height - 178 }}
+          scroll={{ x: 'max-content', y: height - 138 }}
           fetchData={getOpenEnquiryListPage}
           searchFilter={searchDefaultForm}
           isSelection={true}

@@ -2407,7 +2407,7 @@ export default defineMock([
     },
   },
   {
-    url: '/api/user/auth/menu/1',
+    url: '/api/user/auth/menu',
     method: 'GET',
     enabled: true,
     body(request) {
