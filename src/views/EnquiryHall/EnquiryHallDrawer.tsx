@@ -221,7 +221,6 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
       ProductManageType,
       'remark' | 'pinyin' | 'status' | 'sort'
     >[] = []
-    console.log(dataSource, 'dataSource')
     dataSource.map((item: BussinesEnquiryProductType) => {
       newArr.push({
         amount: item.amount,
@@ -239,7 +238,7 @@ const EnquiryHallDrawer: React.FC<EnquiryHallDrawerProps> = ({
   const getSum = useMemo(() => {
     const value = dataSource.reduce(
       (total: number, item: BussinesEnquiryProductType) => {
-        return total + Number(item.amount)
+        return total + Number(item.amount) * Number(item.qty)
       },
       0
     )

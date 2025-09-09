@@ -15,6 +15,7 @@ export interface EnquiryHallItemType {
   products: BussinesEnquiryProduct[]
   status?: string
   createTime?: string
+  customerPhone: string
   quotations: any
   viewCount?: string
   quotationCount?: string

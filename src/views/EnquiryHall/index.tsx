@@ -16,6 +16,7 @@ import type {
   EnquiryHallItemType,
 } from '@/services/enquiryHall/enquiryHallModel'
 import EnquiryHallDrawer from './EnquiryHallDrawer'
+import PhoneIcon from '@/assets/svg/icon/phone.svg'
 import {
   addSupplierQuotation,
   getEnquiryCity,
@@ -226,6 +227,12 @@ const EnquiryHall: React.FC = () => {
                 <p className="font-semibold text-lg min-w-[120px]">
                   {item.title}
                 </p>
+                <img
+                  src={PhoneIcon}
+                  className="w-[24px] h-[24px] ml-[20px]"
+                  alt="PhoneIcon"
+                />
+                <p className="text-gray-400  ml-[2px]">{item.customerPhone}</p>
                 <p className="ml-[20px] text-gray-400">2025-08-22发布</p>
               </div>
               <div className="flex items-center mt-[11px] justify-between">
