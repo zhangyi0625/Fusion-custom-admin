@@ -1,11 +1,11 @@
-import { Button, Card, Col, Row, DatePicker } from 'antd';
-import StatusLineChart from './StatusLineChart';
-import ShortCutMenu from './ShortCutMenu';
-import EndpointStatistics from './EndpointStatistics';
-import style from './home.module.scss';
-import DocumentPieChart from './DocumentPieChart';
+import { Card } from 'antd'
+// import StatusLineChart from './StatusLineChart'
+// import ShortCutMenu from './ShortCutMenu'
+// import EndpointStatistics from './EndpointStatistics'
+import style from './home.module.scss'
+// import DocumentPieChart from './DocumentPieChart'
 
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker
 
 /**
  * 首页
@@ -14,13 +14,13 @@ const { RangePicker } = DatePicker;
 function Home() {
   return (
     <>
-      <Row gutter={8}>
-        <Col span={12}>
-          <Card className={style.cardTitleBar} style={{ height: '300px' }}>
-            欢迎
-          </Card>
-        </Col>
-        <Col span={12}>
+      {/* <Row gutter={24}> */}
+      {/* <Col span={24}> */}
+      <Card className={style.cardTitleBar} style={{ height: '100%' }}>
+        欢迎
+      </Card>
+      {/* </Col> */}
+      {/* <Col span={12}>
           <Card
             style={{ height: '300px' }}
             styles={{ header: { borderBottom: 'none' } }}
@@ -33,9 +33,9 @@ function Home() {
           >
             <ShortCutMenu />
           </Card>
-        </Col>
-      </Row>
-      <Row gutter={8} style={{ marginTop: '8px' }}>
+        </Col> */}
+      {/* </Row> */}
+      {/* <Row gutter={8} style={{ marginTop: '8px' }}>
         <Col span={12}>
           <Card
             styles={{
@@ -83,8 +83,8 @@ function Home() {
             菜单
           </Card>
         </Col>
-      </Row>
+      </Row> */}
     </>
-  );
+  )
 }
-export default Home;
+export default Home
