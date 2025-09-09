@@ -89,11 +89,11 @@ const MyEnquiry: React.FC = () => {
       },
     },
     {
-      title: '预估金额',
+      title: '预估金额(万元)',
       key: 'estimatedAmount',
       dataIndex: 'estimatedAmount',
       align: 'left',
-      width: 100,
+      width: 120,
     },
     {
       title: '截止报价日期',

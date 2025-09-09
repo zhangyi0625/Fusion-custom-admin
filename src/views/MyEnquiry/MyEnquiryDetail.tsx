@@ -57,7 +57,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
         value: enquiryDrawerInfo.enquiryDetail?.title,
       },
       {
-        label: '预估金额：',
+        label: '预估金额(万元)：',
         value: enquiryDrawerInfo.enquiryDetail?.estimatedAmount,
       },
       {
@@ -149,7 +149,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   const getSum = useMemo(() => {
     const value = (enquiryDrawerInfo.quotationDetil?.items ?? []).reduce(
       (total: number, item: ProductManageType) => {
-        return total + Number(item.amount)
+        return total + Number(item.amount) * Number(item.qty)
       },
       0
     )

@@ -44,6 +44,16 @@
       position: relative;
       font-size: 14px;
       font-weight: 400;
+      .enquiry-hall-item-price {
+        position: absolute;
+        bottom: 0px;
+        right: 24px;
+        transform: translateY(4px);
+        min-width: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
   }
 }
