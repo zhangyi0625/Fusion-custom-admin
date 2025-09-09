@@ -75,14 +75,14 @@ const Customer: React.FC = () => {
       key: 'phone',
       dataIndex: 'phone',
       align: 'center',
-      width: 200,
+      width: 150,
     },
     {
       title: '关联单位',
       key: 'companyName',
       dataIndex: 'companyName',
       align: 'center',
-      width: 200,
+      width: 220,
     },
     {
       title: '状态',
@@ -91,12 +91,21 @@ const Customer: React.FC = () => {
       render(value) {
         return <div>{value.status ? '有效' : '无效'}</div>
       },
+      width: 80,
+    },
+    {
+      title: '上次登陆时间',
+      key: 'loginTime',
+      dataIndex: 'loginTime',
+      align: 'center',
+      width: 200,
     },
     {
       title: '创建日期',
       key: 'createTime',
       dataIndex: 'createTime',
       align: 'center',
+      width: 200,
     },
     {
       title: '操作',
