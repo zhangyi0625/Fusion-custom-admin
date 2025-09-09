@@ -61,18 +61,14 @@ const SupplierLogin: React.FC = () => {
         // 登录成功
         case HttpCodeEnum.SUCCESS:
           {
-            let roleId = data.user?.userId
             // 没有配置首页地址默认跳到第一个菜单
-
-            sessionStorage.setItem('token', data.token)
+            sessionStorage.setItem('supplierToken', data.token)
             sessionStorage.setItem('isLogin', 'true')
-            sessionStorage.setItem('roleId', roleId)
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', values.username)
             sessionStorage.setItem('password', values.password)
             sessionStorage.setItem('homePath', '/EnquiryHall')
-            // 跳转到首页
-            // navigate(homePath)
+            // 默认跳转到询价大厅
             navigate('/EnquiryHall')
             antdUtils.notification?.success({
               message: '登录成功',

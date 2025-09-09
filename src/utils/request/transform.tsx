@@ -124,7 +124,7 @@ export const transform: AxiosTransform = {
           content: '当前用户身份验证凭证已过期或无效，请重新登录！',
           onOk() {
             // 登录失效后需要将本地token清除
-            sessionStorage.removeItem('token')
+            sessionStorage.removeItem('supplierToken')
             sessionStorage.removeItem('isLogin')
             sessionStorage.removeItem('roleId')
             window.location.href = '/supplierLogin'
@@ -239,7 +239,7 @@ export const transform: AxiosTransform = {
     // 将加密配置放到请求头里面
     config.headers['X-Encrypted'] = cpt
     config.headers['Authorization'] =
-      'Bearer ' + sessionStorage.getItem('token')
+      'Bearer ' + sessionStorage.getItem('supplierToken')
     return config
   },
 

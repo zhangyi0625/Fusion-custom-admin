@@ -13,7 +13,7 @@ function createAxios(opts?: Partial<CreateAxiosOptions>) {
         authenticationScheme: '',
         timeout: 10 * 1000,
         headers: {
-          Authorization: 'Bearer ' + sessionStorage.getItem('token'),
+          Authorization: 'Bearer ' + sessionStorage.getItem('supplierToken'),
         },
         // 数据处理方式
         transform,
