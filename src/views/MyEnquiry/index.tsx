@@ -16,9 +16,14 @@ import { MyEnquiryParams } from '@/services/myEnquiry/myEnquiryModel'
 import MyEnquiryDetail from './MyEnquiryDetail'
 
 const MyEnquiry: React.FC = () => {
-  const [drawer, setDrawer] = useState<{ visible: boolean; currentRow: null }>({
+  const [drawer, setDrawer] = useState<{
+    visible: boolean
+    currentRow: null
+    type: string
+  }>({
     visible: false,
     currentRow: null,
+    type: '',
   })
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<MyEnquiryParams>({
@@ -39,9 +44,24 @@ const MyEnquiry: React.FC = () => {
     {
       title: '询价标题',
       key: 'title',
-      dataIndex: 'title',
       align: 'left',
       width: 200,
+      render(value) {
+        return (
+          <div
+            className="cursor-pointer text-blue-500"
+            onClick={() =>
+              setDrawer({
+                visible: true,
+                currentRow: value,
+                type: 'CustomerEnquiryDetail',
+              })
+            }
+          >
+            {value.title}
+          </div>
+        )
+      },
     },
     {
       title: '报价总金额',
@@ -93,7 +113,13 @@ const MyEnquiry: React.FC = () => {
         return (
           <Space>
             <Button
-              onClick={() => setDrawer({ visible: true, currentRow: _ })}
+              onClick={() =>
+                setDrawer({
+                  visible: true,
+                  currentRow: _,
+                  type: 'MyQuotationDetail',
+                })
+              }
               type="link"
             >
               报价明细
@@ -172,7 +198,9 @@ const MyEnquiry: React.FC = () => {
         </div>
         <MyEnquiryDetail
           params={drawer}
-          onCancel={() => setDrawer({ visible: false, currentRow: null })}
+          onCancel={() =>
+            setDrawer({ visible: false, currentRow: null, type: '' })
+          }
         />
       </div>
     </>

@@ -11,6 +11,7 @@ export type MyEnquiryDetailProps = {
   params: {
     visible: boolean
     currentRow: { id: string; inquiryId: string } | null
+    type: string
   }
   onCancel: () => void
 }
@@ -19,7 +20,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   params,
   onCancel,
 }) => {
-  const { visible, currentRow } = params
+  const { visible, currentRow, type } = params
 
   const [defaultActiveKey, setDefaultActiveKey] =
     useState<string>('MyQuotationDetail')
@@ -35,6 +36,7 @@ const MyEnquiryDetail: React.FC<MyEnquiryDetailProps> = ({
   useEffect(() => {
     if (!visible) return
     loadMyEnquiryDetail()
+    setDefaultActiveKey(type)
   }, [visible])
 
   const loadMyEnquiryDetail = async () => {
