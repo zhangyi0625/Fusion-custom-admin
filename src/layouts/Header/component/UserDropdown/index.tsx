@@ -66,10 +66,9 @@ const UserDropdown: React.FC = () => {
           content: '确认退出登录吗？',
           okText: '确认',
           onOk: () => {
-            const token = sessionStorage.getItem('token')
-
+            // const token = sessionStorage.getItem('token')
             // 清除后端的信息
-            logout(token as string)
+            // logout(token as string)
             // 清空token
             sessionStorage.removeItem('token')
             sessionStorage.removeItem('roleId')
