@@ -207,6 +207,7 @@ const PayerUnit: React.FC = () => {
           totalKey="count"
           fetchResultKey="list"
           scroll={{ x: 'max-content', y: height - 168 }}
+          rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getPayerUnitByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}

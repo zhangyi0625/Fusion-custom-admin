@@ -388,6 +388,7 @@ const PurchaseContract: React.FC = () => {
           totalKey="count"
           fetchResultKey="list"
           scroll={{ x: 'max-content', y: height - 168 }}
+          rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           immediate={immediate}
           fetchData={getContractManageByPage}
           searchFilter={searchDefaultForm}
@@ -417,6 +418,7 @@ const PurchaseContract: React.FC = () => {
             source: 'SalesContract',
           })
         }
+        onRefresh={() => {}}
       />
       <ConfirmSaleContractStatus
         params={confirmParams}

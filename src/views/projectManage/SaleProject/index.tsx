@@ -471,6 +471,7 @@ const SaleProject: React.FC = () => {
           fetchResultKey="list"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 178 }}
+          rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getBusinessEnquiryListPage}
           searchFilter={searchDefaultForm}
           isSelection={true}

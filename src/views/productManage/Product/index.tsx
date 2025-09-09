@@ -310,6 +310,7 @@ const Product: React.FC = () => {
           fetchResultKey="list"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 168 }}
+          rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getProductByPage}
           searchFilter={searchDefaultForm}
           isSelection={false}

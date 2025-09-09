@@ -347,6 +347,7 @@ const OpenEnquiry: React.FC = () => {
           fetchResultKey="list"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 138 }}
+          rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getOpenEnquiryListPage}
           searchFilter={searchDefaultForm}
           isSelection={true}
