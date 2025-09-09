@@ -36,19 +36,6 @@ export default defineMock([
     },
   },
   {
-    url: '/api/logout',
-    method: 'DELETE',
-    body(request) {
-      const body = request.query
-      const { token } = body
-      return {
-        code: 200,
-        message: '',
-        data: { token },
-      }
-    },
-  },
-  {
     url: '/api/getCaptcha',
     method: 'GET',
     enabled: false,

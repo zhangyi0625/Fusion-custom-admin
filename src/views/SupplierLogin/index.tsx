@@ -3,14 +3,10 @@ import styles from './login.module.scss'
 import { useEffect, useRef, useState } from 'react'
 import { Button, Checkbox, Form, Input } from 'antd'
 import { useNavigate } from 'react-router-dom'
-import { getCaptcha, login } from '@/services/login/loginApi'
-import { useDispatch } from 'react-redux'
-import { setMenus } from '@/stores/store'
+import { login } from '@/services/login/loginApi'
 import { HttpCodeEnum } from '@/enums/httpEnum'
 import { antdUtils } from '@/utils/antdUtil'
-import { getMenuListByUser } from '@/services/system/menu/menuApi'
 import LoginByEditPassword from './LoginByEditPassword'
-import { filterTree } from '@/utils/utils'
 
 /**
  * 登录模块
@@ -23,26 +19,14 @@ const SupplierLogin: React.FC = () => {
 
   const navigate = useNavigate()
 
-  const dispatch = useDispatch()
   // 加载状态
   const [loading, setLoading] = useState<boolean>(false)
-  // 验证码（后续更改从后端获取）
-  const [code, setCode] = useState<{
-    base64: string
-    text: string
-    verifyKey?: string
-  }>()
-  // 验证码的校验key，获取验证码的时候返回，用于验证码的校验
-  const [checkKey, setCheckKey] = useState<string>('')
 
   // 登陆 && 忘记密码
   const [loginStatus, setLoginStatus] = useState<string>('login')
 
   // 页面挂载请求后端获取验证码
-  useEffect(() => {
-    getCode()
-    // form.setFieldsValue({ remember: true })
-  }, [])
+  useEffect(() => {}, [])
 
   /**
    * 登录表单提交
@@ -62,30 +46,23 @@ const SupplierLogin: React.FC = () => {
         case HttpCodeEnum.RC102:
           form.setFields([{ name: 'username', errors: [message] }])
           form.getFieldInstance('username').focus()
-          // 刷新验证码
-          getCode()
           break
         // 密码输入错误
         case HttpCodeEnum.RC108:
           form.setFields([{ name: 'password', errors: [message] }])
           form.getFieldInstance('password').focus()
-          // 刷新验证码
-          getCode()
           break
         // 验证码错误或过期
         case HttpCodeEnum.RC300:
         case HttpCodeEnum.RC301:
           form.setFields([{ name: 'captcha', errors: [message] }])
           form.getFieldInstance('captcha').focus()
-          // 刷新验证码
-          getCode()
           break
         // 登录成功
         case HttpCodeEnum.SUCCESS:
           {
             let roleId = data.user?.userId
             // 没有配置首页地址默认跳到第一个菜单
-            let { homePath } = data
 
             sessionStorage.setItem('token', data.token)
             sessionStorage.setItem('isLogin', 'true')
@@ -93,19 +70,7 @@ const SupplierLogin: React.FC = () => {
             // 存储登录的用户名
             sessionStorage.setItem('loginUser', values.username)
             sessionStorage.setItem('password', values.password)
-            const menu = await getMenuListByUser()
-            dispatch(setMenus(filterTree(2, menu)))
-            // 判断是否配置了默认跳转的首页地址
-            if (!homePath) {
-              // 获取第一个是路由的地址
-              const firstRoute = menu.find(
-                (item: { menuType: number }) => item.menuType === 0
-              )
-              if (firstRoute) {
-                homePath = firstRoute.path
-              }
-            }
-
+            sessionStorage.setItem('homePath', '/EnquiryHall')
             // 跳转到首页
             // navigate(homePath)
             navigate('/EnquiryHall')
@@ -126,24 +91,11 @@ const SupplierLogin: React.FC = () => {
               </>
             ),
           })
-          // 刷新验证码
-          getCode()
           break
       }
     } finally {
       setLoading(false)
     }
-  }
-
-  /**
-   * 获取验证码
-   */
-  const getCode = async () => {
-    // 时间key
-    const key = new Date().getTime().toString()
-    const code = await getCaptcha(key)
-    setCode(code)
-    setCheckKey(code?.verifyKey)
   }
 
   return (

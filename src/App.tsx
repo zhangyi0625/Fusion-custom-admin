@@ -1,4 +1,3 @@
-import { setMenus } from '@/stores/store'
 import { Spin, App as AntdApp, Skeleton } from 'antd'
 import type React from 'react'
 import { Suspense, useCallback, useEffect, useState } from 'react'
@@ -6,8 +5,6 @@ import { useDispatch } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Router } from '@/router/router'
 import { antdUtils } from '@/utils/antdUtil'
-import { getMenuListByUser } from './services/system/menu/menuApi'
-import { filterTree } from './utils/utils'
 
 /**
  * 主应用
@@ -22,24 +19,6 @@ const App: React.FC = () => {
   const location = useLocation()
   // 方便非react组件内部使用
   const { notification, message, modal } = AntdApp.useApp()
-
-  /**
-   * 查询用户的菜单信息
-   */
-  const getMenuData = useCallback(async () => {
-    try {
-      const menu = await getMenuListByUser()
-      dispatch(setMenus(filterTree(2, menu))) // 更新 Redux 状态
-    } catch (e: unknown) {
-      notification.error({
-        message: '菜单加载失败',
-        description: `原因：${e instanceof Error ? e.message : '未知错误'}`,
-        duration: 0,
-      })
-    } finally {
-      setLoading(false)
-    }
-  }, [dispatch])
 
   // 组件挂载完成后加载用户菜单
   useEffect(() => {
@@ -57,8 +36,9 @@ const App: React.FC = () => {
       navigate('/supplierLogin')
     } else {
       // getMenuData()
+      setLoading(false)
     }
-  }, [getMenuData, location.pathname, navigate])
+  }, [location.pathname, navigate])
 
   return (
     <>
