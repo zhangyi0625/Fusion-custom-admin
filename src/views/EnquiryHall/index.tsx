@@ -43,7 +43,6 @@ const EnquiryHall: React.FC = () => {
       sort: '',
       page: 1,
       limit: 10,
-      address: '',
     })
 
   const [enquiryHallList, setEnquiryHallList] = useState<
@@ -129,10 +128,11 @@ const EnquiryHall: React.FC = () => {
   }
 
   const onChange: CascaderProps<Option>['onChange'] = (value) => {
-    let address = value ? value[0] + value[1] + value[2] : ''
     setSearchDefaultForm({
       ...searchDefaultForm,
-      address: address,
+      province: value ? value[0] : null,
+      city: value ? value[1] : null,
+      area: value ? value[2] : null,
     })
   }
 
@@ -212,6 +212,7 @@ const EnquiryHall: React.FC = () => {
                 children: 'children',
               }}
               options={cityOptions}
+              changeOnSelect
               // onOpenChange={onOpenChange}
               onChange={onChange}
               getPopupContainer={(triggerNode: any) => triggerNode.parentNode}

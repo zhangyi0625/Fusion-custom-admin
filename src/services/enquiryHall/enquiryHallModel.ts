@@ -4,9 +4,9 @@ import { BussinesEnquiryProduct } from '../projectManage/BusinessEnquiry/Busines
 export interface EnquiryHallItemType {
   id?: string | null
   address: string
-  area: string
-  city: string
-  province: string
+  area: string | null
+  city: string | null
+  province: string | null
   title: string
   estimatedAmount: string
   deadline: string
@@ -22,7 +22,7 @@ export interface EnquiryHallItemType {
 }
 
 export interface EnquiryHallItemParams
-  extends Pick<EnquiryHallItemType, 'address'>,
+  extends Partial<Pick<EnquiryHallItemType, 'province' | 'area' | 'city'>>,
     DefaultPaging {
   sort: string
 }
