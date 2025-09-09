@@ -174,6 +174,7 @@ const Product: React.FC = () => {
       key: 'createTime',
       dataIndex: 'createTime',
       align: 'center',
+      width: 180,
     },
     {
       title: '操作',

@@ -128,7 +128,7 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
       open={visible}
       title={
         currentRow
-          ? `编辑供应商${editPassword ? '登陆密码' : ''}`
+          ? `编辑供应商${editPassword ? '登录密码' : ''}`
           : '新增供应商'
       }
       onOk={onConfirm}

@@ -185,7 +185,7 @@ const Login: React.FC = () => {
               </p>
             </div>
           </div>
-          {/* 右边登陆表单 */}
+          {/* 右边登录表单 */}
           <div className={styles['login-form']}>
             <div className="login-title">
               <p style={{ fontSize: '28px', textAlign: 'center', margin: 0 }}>

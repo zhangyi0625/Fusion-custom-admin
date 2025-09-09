@@ -94,7 +94,7 @@ const Customer: React.FC = () => {
       width: 80,
     },
     {
-      title: '上次登陆时间',
+      title: '上次登录时间',
       key: 'loginTime',
       dataIndex: 'loginTime',
       align: 'center',

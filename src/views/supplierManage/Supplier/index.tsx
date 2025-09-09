@@ -121,6 +121,13 @@ const Supplier: React.FC = () => {
       width: 100,
     },
     {
+      title: '登录账号',
+      key: 'username',
+      dataIndex: 'username',
+      align: 'center',
+      width: 120,
+    },
+    {
       title: '创建日期',
       key: 'createTime',
       dataIndex: 'createTime',

@@ -175,7 +175,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
           <Col span={12}>
             <Form.Item
               className="mb-0"
-              label="登陆密码"
+              label="登录密码"
               name="password"
               rules={[
                 { required: true },
