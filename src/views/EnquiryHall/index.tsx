@@ -57,8 +57,6 @@ const EnquiryHall: React.FC = () => {
 
   const [scrollTop, setScrollTop] = useState<number>(0)
 
-  const [isScoll, setIsScoll] = useState<boolean>(false)
-
   const [loading, setLoading] = useState<boolean>(false)
 
   const [params, setParams] = useState<{
@@ -81,7 +79,6 @@ const EnquiryHall: React.FC = () => {
   //监听header距顶部距离
   const handleScroll = (event: any) => {
     setScrollTop(event.target.scrollTop)
-    // console.log(scrollTop, 'scrollTop', event.target.scrollTop)
   }
 
   const loadArea = async () => {
@@ -201,17 +198,8 @@ const EnquiryHall: React.FC = () => {
                 {item.title}
               </div>
             ))}
-            {/* <div
-              style={{
-                overflow: 'scroll',
-                height: '200px',
-                paddingTop: '84px',
-              }}
-            >
-              <div style={{ height: '1000px' }} id="getPopupContainerDiv"> */}
             <Cascader
               placeholder="区域"
-              // style={{ background: '#F5F5F5' }}
               fieldNames={{
                 label: 'name',
                 value: 'name',
@@ -219,26 +207,21 @@ const EnquiryHall: React.FC = () => {
               }}
               options={cityOptions}
               changeOnSelect
-              // onOpenChange={onOpenChange}
               onChange={onChange}
               getPopupContainer={(triggerNode: any) => triggerNode.parentNode}
             />
-            {/* </div>
-            </div> */}
           </div>
           <Spin spinning={loading}>
             {enquiryHallList.map((item, index) => (
               <div className={styles['enquiry-hall-item']} key={index}>
                 <div className="flex items-center">
-                  <p className="font-semibold text-lg min-w-[120px]">
-                    {item.title}
-                  </p>
+                  <p className="font-semibold text-lg">{item.title}</p>
                   <img
                     src={PhoneIcon}
                     className="w-[24px] h-[24px] ml-[20px]"
                     alt="PhoneIcon"
                   />
-                  <p className="text-gray-400  ml-[2px]">
+                  <p className="text-stone-900 ml-[2px]">
                     {item.customerPhone}
                   </p>
                   <p className="ml-[20px] text-gray-400">2025-08-22发布</p>
