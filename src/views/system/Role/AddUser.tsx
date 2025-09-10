@@ -172,7 +172,7 @@ const AddUser: React.FC<AddUserProps> = ({ open, onOk, onCancel, roleId }) => {
               />
             </Form.Item>
           </Col>
-          <Col span={12}>
+          <Col span={12} hidden={!!open.editRow}>
             <Form.Item
               className="mb-0"
               label="登录密码"

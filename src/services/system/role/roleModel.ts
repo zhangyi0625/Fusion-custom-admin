@@ -42,4 +42,5 @@ export interface SysUserType
   roles: string | string[] | any
   email: string
   status?: boolean | number
+  password: string | null
 }

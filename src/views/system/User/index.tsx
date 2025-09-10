@@ -30,6 +30,7 @@ import {
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import AddUser from '../Role/AddUser'
 import UserAuthority from './UserAuthority'
+import ResetUserPassword from './ResetUserPassword'
 import { filterKeys } from '@/utils/tool'
 import { SelectUserOptions } from './config'
 
@@ -65,6 +66,14 @@ const User: React.FC = () => {
   }>({
     visible: false,
     userId: '',
+  })
+
+  const [resetPassword, setResetPassword] = useState<{
+    visible: boolean
+    currentRow: Pick<SysUserType, 'userId' | 'username' | 'password'> | null
+  }>({
+    visible: false,
+    currentRow: null,
   })
 
   const columns: TableProps['columns'] = [
@@ -176,7 +185,20 @@ const User: React.FC = () => {
             >
               权限设置
             </Button>
-            <Button type="link" size="small" onClick={() => resetPassword(_)}>
+            <Button
+              type="link"
+              size="small"
+              onClick={() =>
+                setResetPassword({
+                  visible: true,
+                  currentRow: filterKeys(
+                    _,
+                    ['userId', 'username', 'password'],
+                    true
+                  ),
+                })
+              }
+            >
               重置密码
             </Button>
           </Space>
@@ -221,7 +243,7 @@ const User: React.FC = () => {
         await addUserList(roleData)
       } else {
         // 编辑数据
-        await editUserList(roleData)
+        await editUserList({ ...filterKeys(roleData, ['password'], false) })
       }
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, editRow: null })
@@ -243,14 +265,15 @@ const User: React.FC = () => {
     })
   }
 
-  const resetPassword = (row: SysUserType) => {
+  const resetUserPassword = (row: SysUserType) => {
     modal.confirm({
       title: `重置${row.username}的密码`,
       icon: <ExclamationCircleFilled />,
       content: `确定重置${row.username}的密码吗？数据重置后将无法恢复！`,
       onOk() {
-        updateUserPassword({ userId: row.userId }).then(() => {
-          message.success('操作成功')
+        updateUserPassword(row).then(() => {
+          message.success('重置成功')
+          setResetPassword({ visible: false, currentRow: null })
           // 刷新表格数据
           onUpdateSearch(searchDefaultForm)
         })
@@ -361,6 +384,11 @@ const User: React.FC = () => {
         params={athorityDrawer}
         onCancel={() => setAuthorityDrawer({ visible: false, userId: '' })}
         onOk={saveUserAuthority}
+      />
+      <ResetUserPassword
+        params={resetPassword}
+        onCancel={() => setResetPassword({ visible: false, currentRow: null })}
+        onOk={resetUserPassword}
       />
     </>
   )

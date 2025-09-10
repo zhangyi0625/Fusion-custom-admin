@@ -3497,7 +3497,7 @@ export default defineMock([
               {
                 menuId: '1960260306726891521',
                 parentId: '1',
-                title: '登录日志',
+                title: '登陆日志',
                 path: '/system/loginLog',
                 component: 'system/LoginLog',
                 menuType: 1,
@@ -3539,7 +3539,7 @@ export default defineMock([
               {
                 menuId: '1960264387969241089',
                 parentId: '1',
-                title: '登录日志查询',
+                title: '登陆日志查询',
                 path: '/system/loginLog',
                 component: '',
                 menuType: 2,
