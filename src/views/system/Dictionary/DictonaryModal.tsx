@@ -95,7 +95,7 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
             showSearch
             allowClear
             options={dictionaryClass as unknown as SelectProps['options']}
-            fieldNames={{ value: 'id', label: 'name' }}
+            fieldNames={{ value: 'key', label: 'title' }}
           />
         </Form.Item>
         <Form.Item

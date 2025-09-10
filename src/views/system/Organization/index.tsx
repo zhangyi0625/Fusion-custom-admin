@@ -27,11 +27,11 @@ import {
 } from '@/services/system/organization/organization'
 import { SearchTable } from 'customer-search-form-table'
 import AddOrganization from './AddOrganization'
-import { buildTree, filterKeys } from '@/utils/tool'
 import type {
   SysOrganizationParams,
   SysOrganizationType,
 } from '@/services/system/organization/organizationModel'
+import { buildTree } from '@/utils/tool'
 
 /**
  * 系统角色维护

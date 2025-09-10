@@ -15,4 +15,6 @@ export interface SysDictionaryType extends SysDictionaryClassType {
 
 export interface SysDictionaryParams
   extends Pick<SysDictionaryType, 'dictId'>,
-    DefaultPaging {}
+    DefaultPaging {
+  keywords: string
+}
