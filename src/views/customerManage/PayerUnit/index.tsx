@@ -50,7 +50,7 @@ const PayerUnit: React.FC = () => {
       key: 'name',
       dataIndex: 'name',
       align: 'center',
-      width: 200,
+      width: 220,
     },
     {
       title: '社会统一信用代码',

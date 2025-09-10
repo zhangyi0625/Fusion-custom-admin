@@ -71,7 +71,7 @@ const Supplier: React.FC = () => {
       title: '供应商',
       key: 'name',
       align: 'center',
-      width: 150,
+      width: 220,
       render(value) {
         return (
           <div
@@ -111,14 +111,14 @@ const Supplier: React.FC = () => {
       key: 'contactName',
       dataIndex: 'contactName',
       align: 'center',
-      width: 100,
+      width: 120,
     },
     {
       title: '手机号',
       key: 'contactPhone',
       dataIndex: 'contactPhone',
       align: 'center',
-      width: 100,
+      width: 120,
     },
     {
       title: '登录账号',
@@ -132,6 +132,7 @@ const Supplier: React.FC = () => {
       key: 'createTime',
       dataIndex: 'createTime',
       align: 'center',
+      width: 200,
     },
     {
       title: '操作',

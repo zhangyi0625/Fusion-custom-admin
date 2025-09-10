@@ -98,6 +98,7 @@ export const AddSupplierForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'username',
     formType: 'input',
     span: 24,
+    isRules: true,
     hiddenItem: false,
   },
   {
