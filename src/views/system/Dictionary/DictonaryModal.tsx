@@ -75,7 +75,7 @@ const DictonaryModal: React.FC<DictonaryModalProps> = ({
     <DragModal
       width="40%"
       open={visible}
-      title={currentRow ? '编辑字典分类' : '新增字典分类'}
+      title={currentRow ? '编辑字典项' : '新增字典项'}
       okButtonProps={{ className: view ? 'hidden' : '' }}
       onOk={handleOk}
       onCancel={onCancel}
