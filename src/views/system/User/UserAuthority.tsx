@@ -69,9 +69,14 @@ const UserAuthority: React.FC<UserAuthorityProps> = ({
           }
         })
       })
-      const selectData = result[2].map(
+      const userIdList = result[0].map((item: SysUserType) => item.userId)
+      const isSelectData = result[2].filter((el: { viewId: string }) =>
+        userIdList.includes(el.viewId)
+      )
+      const selectData = isSelectData.map(
         (item: { viewId: string }) => item.viewId
       )
+      console.log(transformData(result[1], expanded))
       setTreeData(result[1])
       setExpandedKeys(expanded)
       setChecked(selectData)
