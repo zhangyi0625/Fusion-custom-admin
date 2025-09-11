@@ -80,9 +80,7 @@ export default defineConfig({
     host: '::',
     port: 3008,
     open: false,
-    // historyApiFallback: {
-    //   index: '/index.tsx',
-    // },
+    historyApiFallback: true,
     proxy: {
       '/api': {
         target: process.env.VITE_BASE_API,
