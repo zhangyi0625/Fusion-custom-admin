@@ -151,7 +151,7 @@ const OpenEnquiry: React.FC = () => {
       },
     },
     {
-      title: '城市/区县',
+      title: '交货地区',
       key: 'address',
       dataIndex: 'address',
       align: 'center',

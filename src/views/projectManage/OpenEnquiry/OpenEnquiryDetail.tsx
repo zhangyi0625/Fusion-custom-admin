@@ -181,7 +181,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         value: enquiryDrawerInfo.detail?.customerPhone,
       },
       {
-        label: '城市/区县：',
+        label: '交货地区：',
         value: enquiryDrawerInfo.detail?.address,
       },
       {

@@ -8,7 +8,7 @@ import { ContractsParams } from '../Contracts/ContractsModel'
 export enum SupplierManageApi {
   SupplierManage = '/business/supplier',
   SupplierManageByPage = '/business/supplier/page',
-  SupplierManageRecord = 'business/supplier-event/',
+  SupplierManageRecord = '/business/supplier-event/',
   SupplierContracts = '/business/supplier-contact/page',
   SupplierPassword = '/business/supplier/changePassword',
 }
