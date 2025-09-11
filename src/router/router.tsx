@@ -81,5 +81,6 @@ export const Router = () => {
     dynamicRoutes[0].children = [...handleRouter(menus), ...errorRoutes]
     return generateRouter(dynamicRoutes)
   }, [menus])
+
   return useRoutes(memoizedRoutes)
 }
