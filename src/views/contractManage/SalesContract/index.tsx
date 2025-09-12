@@ -148,14 +148,14 @@ const SalesContract: React.FC = () => {
       key: 'companyName',
       dataIndex: 'companyName',
       align: 'center',
-      width: 100,
+      width: 200,
     },
     {
       title: '项目名称',
       key: 'projectName',
       dataIndex: 'projectName',
       align: 'center',
-      width: 150,
+      width: 300,
     },
     {
       title: '业务员',

@@ -124,7 +124,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
   const uploadProps: UploadProps = {
     name: 'file',
     multiple: false,
-    accept: '.doc,.docx',
+    accept: '.doc,.docx,.pdf',
     beforeUpload(file) {
       setFileList(fileList.concat([file]))
       return false

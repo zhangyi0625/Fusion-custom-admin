@@ -149,7 +149,7 @@ const SaleProject: React.FC = () => {
       title: '项目名称',
       key: 'name',
       align: 'center',
-      width: 200,
+      width: 300,
       render(value) {
         return (
           <div>

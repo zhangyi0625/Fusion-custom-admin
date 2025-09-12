@@ -31,7 +31,7 @@ export type SupplierInfoProps = {
 }
 
 const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
-  ({ projectId, detail, onFreshDetail }) => {
+  ({ source, projectId, detail, onFreshDetail }) => {
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState([])
@@ -334,7 +334,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       <>
         <div className="w-full flex items-center justify-end mb-[8px]">
           <Space>
-            {!detail.confirmSupplierId && (
+            {!detail.confirmSupplierId && source === 'SaleProject' && (
               <Button
                 onClick={() =>
                   setEditModal({ editQuotation: false, confirmQuotation: true })
