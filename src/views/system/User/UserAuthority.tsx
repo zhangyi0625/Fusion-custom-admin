@@ -76,7 +76,7 @@ const UserAuthority: React.FC<UserAuthorityProps> = ({
       const selectData = isSelectData.map(
         (item: { viewId: string }) => item.viewId
       )
-      console.log(transformData(result[1], expanded))
+      transformData(result[1], expanded)
       setTreeData(result[1])
       setExpandedKeys(expanded)
       setChecked(selectData)
