@@ -338,7 +338,7 @@ const BusinessEnquiry: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '确定删除该商机吗？数据删除后将无法恢复！',
           onOk() {
-            deleteBusinessEnquiryList(row.roleId).then(() => {
+            deleteBusinessEnquiryList(row.id).then(() => {
               // 刷新表格数据
               onUpdateSearch(searchDefaultForm)
             })

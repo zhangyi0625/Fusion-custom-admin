@@ -87,7 +87,7 @@ export const editUserList = (params: SysUserType) => {
 export const updateUserPassword = (params: Pick<SysUserType, 'userId'>) => {
   return HttpRequest.put(
     {
-      url: UserApi.userManage,
+      url: UserApi.resetUserPassword,
       data: params,
     },
     {
