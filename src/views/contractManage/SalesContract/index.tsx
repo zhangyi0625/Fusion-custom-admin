@@ -370,7 +370,7 @@ const SalesContract: React.FC = () => {
             columns={searchColumns}
             gutterWidth={24}
             labelPosition="left"
-            showRow={1}
+            defaultColsNumber={1}
             defaultFormItemLayout={{
               labelCol: {
                 xs: { span: 24 },

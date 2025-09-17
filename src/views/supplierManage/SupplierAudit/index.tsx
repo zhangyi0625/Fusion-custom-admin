@@ -154,7 +154,7 @@ const SupplierAudit: React.FC = () => {
             columns={SupplierAuditSearchColumns}
             gutterWidth={24}
             labelPosition="left"
-            showRow={2}
+            defaultColsNumber={2}
             defaultFormItemLayout={{
               labelCol: {
                 xs: { span: 24 },
