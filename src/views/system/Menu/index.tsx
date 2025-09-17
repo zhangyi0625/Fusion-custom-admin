@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import './menu.scss'
 import {
   App,
   Button,

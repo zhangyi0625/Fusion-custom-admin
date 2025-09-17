@@ -56,7 +56,11 @@ export default defineConfig({
     lazyCompilation: true,
   },
   // 构建产物相关配置
-  output: {},
+  output: {
+    cssModules: {
+      exportGlobals: true,
+    },
+  },
   // 构建优化相关
   performance: {
     chunkSplit: {
@@ -87,11 +91,6 @@ export default defineConfig({
         changeOrigin: true,
         pathRewrite: (path) => path.replace(/^\/api/, ''),
       },
-      // '/api': {
-      //   target: 'http://localhost:3008',
-      //   changeOrigin: true,
-      //   pathRewrite: (path) => path.replace(/^\/api/, ''),
-      // },
     },
   },
 })
