@@ -68,7 +68,7 @@ export const SalesContractSearchColumns: CustomColumn[] = [
   {
     label: null,
     name: 'createTime',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     hiddenItem: false,
     selectFetch: false,
@@ -134,7 +134,7 @@ export const PurchaseContractSearchColumns: CustomColumn[] = [
   {
     label: null,
     name: 'createTime',
-    formType: 'date-picker',
+    formType: 'range-picker',
     span: 6,
     hiddenItem: false,
     selectFetch: false,
