@@ -404,8 +404,16 @@ export const AddSalesContractNoteForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'INVOICE',
       },
       {
-        label: '付款',
+        label: '收款',
         value: 'RECEIPT',
+      },
+      {
+        label: '付款',
+        value: 'PAYMENT',
+      },
+      {
+        label: '收票',
+        value: 'RECEIVE_INVOICE',
       },
     ],
     isRules: false,

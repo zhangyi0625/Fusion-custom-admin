@@ -10,14 +10,16 @@ import {
 import type { SaleContractNoteType } from '@/services/contractManage/SalesContract/SalesContractModel'
 import AddSalesContractNote from './AddSalesContractNote'
 import { formatTime } from '@/utils/format'
+import { AddSalesContractNoteForm } from '../../config'
 
 export type SalesContractNoteProps = {
   detailId: string
+  source: 'SalesContract' | 'PurchaseContract'
   onRefresh: () => void
 }
 
 const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
-  ({ detailId, onRefresh }) => {
+  ({ detailId, onRefresh, source }) => {
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState([])
@@ -55,7 +57,14 @@ const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
         align: 'center',
         width: 100,
         render(value) {
-          return <div>{value.type === 'INVOICE' ? '开票' : '付款'}</div>
+          let options = AddSalesContractNoteForm.find(
+            (item) => item.name === 'type'
+          )?.options
+          return (
+            <div>
+              {options?.find((item) => value.type === item.value)?.label}
+            </div>
+          )
         },
       },
       {
@@ -167,6 +176,7 @@ const SalesContractNote: React.FC<SalesContractNoteProps> = memo(
               currentRow: null,
             })
           }
+          source={source}
           onOk={onEditOk}
         />
       </>

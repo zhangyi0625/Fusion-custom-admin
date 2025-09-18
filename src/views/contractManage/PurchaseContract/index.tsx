@@ -73,11 +73,11 @@ const PurchaseContract: React.FC = () => {
   const [drawer, setDrawer] = useState<{
     drawerShow: boolean
     detailId: string | null
-    source: 'SalesContract'
+    source: 'SalesContract' | 'PurchaseContract'
   }>({
     drawerShow: false,
     detailId: null,
-    source: 'SalesContract',
+    source: 'PurchaseContract',
   })
 
   const [confirmParams, setConfirmParams] = useState<{
@@ -115,7 +115,7 @@ const PurchaseContract: React.FC = () => {
               setDrawer({
                 drawerShow: true,
                 detailId: value.id,
-                source: 'SalesContract',
+                source: 'PurchaseContract',
               })
             }
           >
@@ -419,7 +419,7 @@ const PurchaseContract: React.FC = () => {
           setDrawer({
             drawerShow: false,
             detailId: null,
-            source: 'SalesContract',
+            source: 'PurchaseContract',
           })
         }
         onRefresh={() => {}}

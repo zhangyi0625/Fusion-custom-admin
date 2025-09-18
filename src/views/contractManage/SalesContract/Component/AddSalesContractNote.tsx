@@ -10,12 +10,14 @@ export type AddSalesContractNoteProps = {
     visible: boolean
     currentRow: SaleContractNoteType | null
   }
+  source: 'SalesContract' | 'PurchaseContract'
   onOk: (params: SaleContractNoteType) => void
   onCancel: () => void
 }
 
 const AddSalesContractNote: React.FC<AddSalesContractNoteProps> = ({
   params,
+  source,
   onCancel,
   onOk,
 }) => {
@@ -78,7 +80,11 @@ const AddSalesContractNote: React.FC<AddSalesContractNoteProps> = ({
                   <Select
                     placeholder={`请选择${item.label}`}
                     filterOption
-                    options={item.options}
+                    options={
+                      source === 'SalesContract'
+                        ? item.options?.slice(0, 2)
+                        : item.options?.slice(2, 4)
+                    }
                     allowClear
                   />
                 )}

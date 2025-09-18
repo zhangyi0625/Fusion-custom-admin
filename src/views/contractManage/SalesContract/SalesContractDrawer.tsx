@@ -28,7 +28,7 @@ const SalesContractDrawer: React.FC<SalesContractDrawerProps> = ({
   onCancel,
   onRefresh,
 }) => {
-  const { drawerShow, detailId } = drawer
+  const { drawerShow, detailId, source } = drawer
 
   const [defaultActiveKey, setDefaultActiveKey] = useState<string>(
     'SalesContractDetail'
@@ -140,6 +140,7 @@ const SalesContractDrawer: React.FC<SalesContractDrawerProps> = ({
         <SalesContractNote
           detailId={detailId as string}
           onRefresh={onRefresh}
+          source={source}
         />
       ),
     },
