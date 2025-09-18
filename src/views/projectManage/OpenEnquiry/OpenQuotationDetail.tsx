@@ -66,7 +66,7 @@ const OpenQuotationDetail: React.FC<OpenQuotationDetailProps> = ({
       },
       0
     )
-    return value.toFixed(1)
+    return value.toFixed(2)
   }, [currentRow])
 
   return (

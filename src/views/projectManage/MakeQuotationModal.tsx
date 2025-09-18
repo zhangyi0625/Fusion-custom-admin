@@ -93,7 +93,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         adjPrice: item.adjPrice ? item.adjPrice : item.price,
         adjAmount: item.adjAmount
           ? item.adjAmount
-          : Number(item.amount).toFixed(1),
+          : Number(item.amount).toFixed(2),
       }
     })
     setQuotationData(newData)
@@ -228,7 +228,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         handleSave({
           ...record,
           ...values,
-          adjAmount: (record.qty * Number(values.adjPrice)).toFixed(1),
+          adjAmount: (record.qty * Number(values.adjPrice)).toFixed(2),
         })
       } catch (errInfo) {
         console.log('Save failed:', errInfo)
@@ -291,7 +291,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
       },
       0
     )
-    return value.toFixed(1)
+    return value.toFixed(2)
   }, [quotationData])
 
   const getChangeSum = useMemo(() => {
@@ -301,7 +301,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
       },
       0
     )
-    return sum.toFixed(1)
+    return sum.toFixed(2)
   }, [quotationData])
 
   const adjustPrice = () => {
@@ -328,7 +328,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
             Number(item.price) +
             Number(item.price) * (Number(inputNumberVal.price) / 100)
           ).toFixed(2)
-          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(1)
+          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(2)
         } else {
           // 非锁定行分摊总价
           if (selectedRowKeys.includes(item.id)) {
@@ -345,7 +345,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
       radioDefaultValue === 'sumPrice' &&
         newData.map((item) => {
           item.adjPrice = (Number(item.price) * half).toFixed(2)
-          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(1)
+          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(2)
         })
       setQuotationData(newData)
     }
