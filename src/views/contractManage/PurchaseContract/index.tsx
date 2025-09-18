@@ -304,7 +304,11 @@ const PurchaseContract: React.FC = () => {
       Object.entries(info ?? {}).filter(([, value]) => !!value)
     )
 
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'source', 'sort'],
+      true
+    )
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
