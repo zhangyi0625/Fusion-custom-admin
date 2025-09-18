@@ -14,6 +14,21 @@ export type PreviewFileType = {
   onCancel: () => void
 }
 
+const fileTypeMap = {
+  xls: 'application/vnd.ms-excel',
+  xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  doc: 'application/msword',
+  docx: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  pdf: 'application/pdf',
+  ppt: 'application/pdf',
+  pptx: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  png: 'image/png',
+  gif: 'image/gif',
+  jpeg: 'image/jpeg',
+  jpg: 'image/jpeg',
+  txt: 'text/plain',
+}
+
 const PreviewFile: React.FC<PreviewFileType> = ({ params, onCancel }) => {
   const { code, fileId } = params
 
@@ -45,9 +60,7 @@ const PreviewFile: React.FC<PreviewFileType> = ({ params, onCancel }) => {
   }
 
   useEffect(() => {
-    if (!modalVisit) onClose
-
-    // getCode(code)
+    if (!modalVisit) onClose()
   }, [modalVisit])
 
   const onClear = () => {
@@ -87,6 +100,7 @@ const PreviewFile: React.FC<PreviewFileType> = ({ params, onCancel }) => {
         const blob = new Blob([resp])
         let reader = new FileReader()
         if (fileType === 'xls' || fileType === 'xlsx') {
+          console.log(fileType, 'xlsx')
           reader.readAsArrayBuffer(blob)
           reader.onload = async (e: any) => {
             const box = document.createElement('div')
@@ -110,6 +124,49 @@ const PreviewFile: React.FC<PreviewFileType> = ({ params, onCancel }) => {
               freviewFileDom.removeChild(freviewFileDom.firstChild)
             }
             freviewFileDom?.appendChild(box)
+          }
+        } else {
+          console.log(fileType, 'fileType')
+          reader.readAsText(blob)
+          reader.onload = async () => {
+            if (fileType === 'doc' || fileType === 'docx') {
+              const blob = new Blob([resp], { type: fileTypeMap[fileType] })
+              const box = document.createElement('div')
+              box.style.width = '80%'
+              box.style.minHeight = '700px'
+              box.style.marginLeft = '10%'
+              const freviewFileDom = document.getElementById('freviewFile')
+              while (freviewFileDom?.firstChild) {
+                freviewFileDom.removeChild(freviewFileDom.firstChild)
+              }
+              freviewFileDom?.appendChild(box)
+              let docx = require('docx-preview')
+              docx
+                .renderAsync(blob, box)
+                .then(() => {
+                  setLoading(false)
+                })
+                .catch(() => {
+                  setLoading(false)
+                  box.innerHTML = '文件解析失败，可下载预览'
+                })
+            } else if (fileType === 'pdf' || fileType === 'txt') {
+              const blob = new Blob([resp], { type: fileTypeMap[fileType] })
+              const blobUrl = URL.createObjectURL(blob)
+              const iframe = document.createElement('iframe')
+              iframe.src = blobUrl
+              setBlobUrl(() => blobUrl)
+              iframe.style.width = '100%'
+              iframe.style.minHeight = '700px'
+              iframe.onload = function () {
+                setLoading(false)
+              }
+              const freviewFileDom = document.getElementById('freviewFile')
+              while (freviewFileDom?.firstChild) {
+                freviewFileDom.removeChild(freviewFileDom.firstChild)
+              }
+              freviewFileDom?.appendChild(iframe)
+            }
           }
         }
       })

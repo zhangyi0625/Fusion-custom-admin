@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import { App, Button, Space, Table, TableProps } from 'antd'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import {
@@ -9,6 +9,7 @@ import {
 import { SaleContractAttachmentType } from '@/services/contractManage/SalesContract/SalesContractModel'
 import { postDownlFile } from '@/services/upload/UploadApi'
 import AttachemntModal from '@/components/AttachementModal'
+import PreviewFile from '@/components/PreviewFile'
 
 export type SalesContractAttachmentProps = {
   detailId: string
@@ -28,6 +29,14 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       currentRow: null,
     })
 
+    const [fileParams, setFileParams] = useState<{
+      code: string
+      fileId: string
+    }>({
+      code: '',
+      fileId: '',
+    })
+
     const [visible, setVisible] = useState<boolean>(false)
 
     useEffect(() => {
@@ -43,9 +52,20 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       {
         title: '文件名称',
         key: 'fileName',
-        dataIndex: 'fileName',
         align: 'center',
         width: 100,
+        render(value) {
+          return (
+            <div
+              className="cursor-pointer text-blue-500"
+              onClick={() =>
+                setFileParams({ code: value.fileName, fileId: value.fileId })
+              }
+            >
+              {value.fileName}
+            </div>
+          )
+        },
       },
       {
         title: '创建时间',
@@ -126,6 +146,15 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       })
     }
 
+    const handleContextMenu = useCallback((event: MouseEvent) => {
+      event.preventDefault() // 阻止默认的上下文菜单
+    }, [])
+
+    const onClosePreviewFile = () => {
+      setFileParams({ code: '', fileId: '' })
+      document.removeEventListener('contextmenu', handleContextMenu)
+    }
+
     return (
       <>
         <div className="w-full flex items-center justify-end mb-[8px]">
@@ -153,6 +182,7 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
           onOk={importAttachmentSuccess}
           uploadAccept={['.doc', '.docx', '.pdf ', '.jpg']}
         />
+        <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
   }
