@@ -236,7 +236,12 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
                   <Select
                     onChange={() => selectChange(item)}
                     placeholder={`请选择${item.label}`}
-                    filterOption
+                    showSearch={item.name === 'salesProjectId'}
+                    filterOption={(input, option) =>
+                      String(option?.name ?? '')
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
                     options={item.options}
                     allowClear
                     fieldNames={

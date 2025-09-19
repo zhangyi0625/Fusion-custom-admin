@@ -215,7 +215,7 @@ const SaleProject: React.FC = () => {
       title: '询价供应商',
       key: 'supplierCount',
       align: 'center',
-      width: 150,
+      width: 100,
       render(value) {
         return (
           <div

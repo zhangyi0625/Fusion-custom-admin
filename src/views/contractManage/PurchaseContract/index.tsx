@@ -129,14 +129,14 @@ const PurchaseContract: React.FC = () => {
       key: 'supplierName',
       dataIndex: 'supplierName',
       align: 'center',
-      width: 100,
+      width: 150,
     },
     {
       title: '项目名称',
       key: 'projectName',
       dataIndex: 'projectName',
       align: 'center',
-      width: 150,
+      width: 300,
     },
     {
       title: '合同类型',

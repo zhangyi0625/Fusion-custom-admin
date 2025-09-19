@@ -277,14 +277,6 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
 ]
 
 export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
-  // {
-  //   label: '合同编号',
-  //   name: 'number',
-  //   formType: 'input',
-  //   span: 12,
-  //   isRules: true,
-  //   hiddenItem: false,
-  // },
   {
     label: '项目名称',
     name: 'salesProjectId',
