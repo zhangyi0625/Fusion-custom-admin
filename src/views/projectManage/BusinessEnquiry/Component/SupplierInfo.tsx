@@ -1,4 +1,4 @@
-import { memo, useEffect, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { App, Button, Space, Table, TableProps } from 'antd'
 import { CheckCircleOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import {
@@ -22,6 +22,7 @@ import type {
 import { getSupplierDetail } from '@/services/supplierManage/Supplier/SupplierApi'
 import { postDownlFile } from '@/services/upload/UploadApi'
 import { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
+import PreviewFile from '@/components/PreviewFile'
 
 export type SupplierInfoProps = {
   source: 'BusinessEnquiry' | 'PurchaseBargain' | 'SaleProject'
@@ -77,6 +78,14 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       edit: false,
     })
 
+    const [fileParams, setFileParams] = useState<{
+      code: string
+      fileId: string
+    }>({
+      code: '',
+      fileId: '',
+    })
+
     const [editModal, setEditModal] = useState<{
       editQuotation: boolean
       confirmQuotation: boolean
@@ -107,7 +116,10 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                   : 'text-dull-grey'
               }
               onClick={() =>
-                downLoadFile(value.inquiryFile, value.inquiryNumber)
+                setFileParams({
+                  code: value.inquiryFile + '.xlsx',
+                  fileId: value.inquiryFile,
+                })
               }
             >
               {value.inquiryNumber ?? '未上传'}
@@ -213,6 +225,15 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
         },
       },
     ]
+
+    const handleContextMenu = useCallback((event: MouseEvent) => {
+      event.preventDefault() // 阻止默认的上下文菜单
+    }, [])
+
+    const onClosePreviewFile = () => {
+      setFileParams({ code: '', fileId: '' })
+      document.removeEventListener('contextmenu', handleContextMenu)
+    }
 
     const downLoadFile = (fileId: string, fileName: string) => {
       if (!fileId) return
@@ -416,6 +437,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
           )}
           onOk={ConfirmQuotationBySupplier}
         />
+        <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
   }
