@@ -484,7 +484,7 @@ const BusinessEnquiry: React.FC = () => {
           totalKey="count"
           fetchResultKey="list"
           immediate={immediate}
-          scroll={{ x: 'max-content', y: height - 158 }}
+          scroll={{ x: 'max-content', y: height - 168 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getBusinessEnquiryListPage}
           searchFilter={searchDefaultForm}

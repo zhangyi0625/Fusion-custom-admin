@@ -58,9 +58,24 @@ const AddProduct: React.FC<AddProductProps> = ({
     if (currentRow) {
       form.setFieldsValue({ ...currentRow, status: Number(currentRow.status) })
     } else {
-      form.setFieldsValue({ status: 1 })
+      form.setFieldsValue({ status: 1, unit: '米' })
     }
   }, [visible])
+
+  const removeSpecialChars = (str: string) => {
+    if (!str) return
+    // 匹配非字母、数字、汉字、空格和常见标点的字符
+    else return str.replace(/[^\w\u4e00-\u9fa5\s.,!?;:]/g, '')
+  }
+
+  const selectChange = () => {
+    if (form.getFieldValue('model') && form.getFieldValue('spec')) {
+      let model = removeSpecialChars(form.getFieldValue('model')) ?? ''
+      let spec = removeSpecialChars(form.getFieldValue('spec')) ?? ''
+      let value = model + spec
+      form.setFieldsValue({ pinyin: value })
+    }
+  }
 
   const onConfirm = () => {
     form
@@ -161,6 +176,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                         .toLowerCase()
                         .includes(input.toLowerCase())
                     }
+                    onChange={selectChange}
                   />
                 )}
                 {item.formType === 'radio' && (

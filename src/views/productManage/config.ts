@@ -78,13 +78,6 @@ export const AddProductForm: Omit<
   'selectFetch' | 'hiddenItem'
 >[] = [
   {
-    label: '拼音码',
-    name: 'pinyin',
-    formType: 'input',
-    span: 12,
-    isRules: true,
-  },
-  {
     label: '产品型号',
     name: 'model',
     formType: 'normalSelect',
@@ -111,6 +104,13 @@ export const AddProductForm: Omit<
   {
     label: '单位',
     name: 'unit',
+    formType: 'input',
+    span: 12,
+    isRules: true,
+  },
+  {
+    label: '拼音码',
+    name: 'pinyin',
     formType: 'input',
     span: 12,
     isRules: true,
