@@ -10,10 +10,10 @@ const BaseInfoCom: React.FC<BaseInfoComProps> = memo(({ detail }) => {
     <>
       <div className="grid grid-cols-2 text-gray-500 gap-y-[10px] mb-[30px]">
         {(detail || []).map((item) => (
-          <p key={item.label} className="flex items-center">
+          <div key={item.label} className="flex items-center">
             {item.label}
             <span className="text-dull-grey">{item.value}</span>
-          </p>
+          </div>
         ))}
       </div>
     </>

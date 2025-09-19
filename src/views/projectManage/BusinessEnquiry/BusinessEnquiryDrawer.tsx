@@ -285,10 +285,10 @@ const BusinessEnquiryDrawer: React.FC<BusinessEnquiryDrawerProps> = ({
         {baseInfo()
           .slice(0, 4)
           .map((item) => (
-            <p key={item.label} className="flex items-center">
+            <div key={item.label} className="flex items-center">
               {item.label}
               <span className="text-dull-grey">{item.value}</span>
-            </p>
+            </div>
           ))}
       </div>
       <Tabs
