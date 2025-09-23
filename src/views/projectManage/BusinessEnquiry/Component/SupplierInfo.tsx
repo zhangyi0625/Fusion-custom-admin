@@ -262,6 +262,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       }).then(() => {
         onFreshDetail()
         setEditModal({ ...editModal, confirmQuotation: false })
+        loadSupplierDetail()
       })
     }
 
@@ -365,7 +366,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                 确认报价
               </Button>
             )}
-            {detail.confirmSupplierId && (
+            {detail.confirmSupplierId && source === 'SaleProject' && (
               <div className="flex items-center text-green-500">
                 <CheckCircleOutlined twoToneColor="#52C41A" />
                 <p className="ml-[12px]">
