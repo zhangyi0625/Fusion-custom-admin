@@ -123,7 +123,6 @@ export const AddBusinessEnquiryForm: Omit<
       value: 'id',
     },
     span: 12,
-    isRules: true,
   },
   {
     label: '付款方',
@@ -135,7 +134,6 @@ export const AddBusinessEnquiryForm: Omit<
       value: 'id',
     },
     span: 12,
-    isRules: true,
   },
   {
     label: '预计采购日期',

@@ -1,9 +1,9 @@
-import { defineMock } from 'rspack-plugin-mock/helper';
+import { defineMock } from 'rspack-plugin-mock/helper'
 
 export default defineMock([
   {
-    url: 'api/engine/endpointConfig/queryEndpointConfigType',
-    enabled: false,
+    url: '/api/engine/endpointConfig/queryEndpointConfigType',
+    enabled: true,
     method: 'GET',
     body() {
       return {
@@ -169,7 +169,7 @@ export default defineMock([
             ],
           },
         ],
-      };
+      }
     },
   },
-]);
+])

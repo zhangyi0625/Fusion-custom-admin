@@ -198,12 +198,6 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
               layout="horizontal"
               labelCol={{ span: 6 }}
               colon={false}
-              rules={[
-                {
-                  required: true,
-                  message: '请上传logo',
-                },
-              ]}
             >
               <Upload {...uploadProps}>
                 <Button
