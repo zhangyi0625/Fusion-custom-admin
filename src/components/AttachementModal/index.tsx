@@ -17,9 +17,11 @@ export type AttachemntModalProps = {
   title: string
   uploadAccept: string[]
   uploadFileKey: string
-  onOk: (params: any) => void
+  onOk: (params: { [key: string]: string }) => void
   onCancel: () => void
 }
+
+// type ParamsKey = AttachemntModalProps['uploadFileKey']
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
@@ -61,7 +63,6 @@ const AttachemntModal: React.FC<AttachemntModalProps> = ({
         postUploadFile(formdata).then((resp) => {
           form.setFieldsValue({
             ...form.getFieldsValue(),
-            // inquiryFile: resp.data.id,
             [uploadFileKey]: resp.data.id,
           })
         })

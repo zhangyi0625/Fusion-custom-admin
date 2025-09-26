@@ -6,7 +6,6 @@ import {
   deleteContractAttachment,
   getContractAttachment,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
-import { SaleContractAttachmentType } from '@/services/contractManage/SalesContract/SalesContractModel'
 import { postDownlFile } from '@/services/upload/UploadApi'
 import AttachemntModal from '@/components/AttachementModal'
 import PreviewFile from '@/components/PreviewFile'
@@ -20,14 +19,6 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
     const { modal, message } = App.useApp()
 
     const [dataSource, setDataSource] = useState([])
-
-    const [params, setParams] = useState<{
-      visible: boolean
-      currentRow: SaleContractAttachmentType | null
-    }>({
-      visible: false,
-      currentRow: null,
-    })
 
     const [fileParams, setFileParams] = useState<{
       code: string
@@ -135,7 +126,7 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
       })
     }
 
-    const importAttachmentSuccess = (current: any) => {
+    const importAttachmentSuccess = (current: { [key: string]: string }) => {
       addContractAttachment({
         contractId: detailId,
         fileId: current['fileId'],
