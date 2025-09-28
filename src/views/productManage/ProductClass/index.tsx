@@ -156,7 +156,12 @@ const ProductClass: React.FC = () => {
   }
 
   const changeProductClass = (id: string) => {
-    setSearchDefaultForm({ ...searchDefaultForm, parentId: id })
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      parentId: id,
+      page: 1,
+      limit: 10,
+    })
     setImmediate(false)
   }
 

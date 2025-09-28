@@ -95,6 +95,30 @@ const AddProduct: React.FC<AddProductProps> = ({
         form.focusField(errorInfo.errorFields[0].name)
       })
   }
+
+  const getFilterOption = (input: string, option: any) => {
+    let searchValue = input.trim()
+    let filterValue = String(removeSpecialChars(option?.name) ?? '').trim()
+    if (searchValue.length > filterValue.length) return false
+    else {
+      for (let i = 0; i < searchValue.length; i++) {
+        if (searchValue[i] !== filterValue[i]) {
+          return false
+        }
+      }
+      return true
+    }
+  }
+
+  const onBlurSelect = (
+    e: React.FocusEvent<HTMLElement>,
+    item: CustomColumn
+  ) => {
+    // Try to get the value from the event target if possible
+    const value = (e.target as HTMLInputElement).value ?? ''
+    value && form.setFieldsValue({ [item.name]: value })
+    value && selectChange()
+  }
   return (
     <DragModal
       width={type === 'customizedProducts' ? '45%' : '50%'}
@@ -171,12 +195,9 @@ const AddProduct: React.FC<AddProductProps> = ({
                       }
                     }
                     showSearch
-                    filterOption={(input, option) =>
-                      String(option?.name ?? '')
-                        .toLowerCase()
-                        .includes(input.toLowerCase())
-                    }
+                    filterOption={getFilterOption}
                     onChange={selectChange}
+                    onBlur={(e) => onBlurSelect(e, item)}
                   />
                 )}
                 {item.formType === 'radio' && (
