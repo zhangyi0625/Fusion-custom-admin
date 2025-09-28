@@ -13,6 +13,7 @@ import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { ProductSearchColumns } from '../config'
 import useParentSize from '@/hooks/useParentSize'
 import type {
+  ProductManageClassType,
   ProductManageParams,
   ProductManageType,
 } from '@/services/productManage/productManageModel'
@@ -22,22 +23,19 @@ import {
   updateProduct,
   getProductByPage,
   getProductClassList,
+  getProductListByParentId,
 } from '@/services/productManage/productManageApi'
 import AddProduct from './AddProduct'
 import { filterKeys } from '@/utils/tool'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
 
 const Product: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { modal, message } = App.useApp()
 
-  const dispatch = useDispatch()
-
-  const essential = useSelector((state: RootState) => state.essentail)
-
   const [immediate, setImmediate] = useState<boolean>(true)
+
+  const [refreshProduct, setRefreshProduct] = useState<boolean>(false)
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<ProductManageParams>({
@@ -57,44 +55,37 @@ const Product: React.FC = () => {
   })
 
   useEffect(() => {
-    setImmediate(true)
-    if (!essential.productClass?.length) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [essential])
+    loadSearchList()
+  }, [refreshProduct])
 
-  // 重新更新查询部分数据 并存储进redux
+  // 重新更新查询部分数据
   const loadSearchList = async () => {
     let resp = await getProductClassList({ parentId: 0, sort: 'sort' })
     for (let item of resp) {
-      let res = await getProductClassList({
-        parentId: item.id,
-        sort: 'sort',
-      })
+      let res = await getProductListByParentId(item.id)
       Reflect.set(item, 'children', res)
     }
-    dispatch(setEssentail({ value: resp, key: 'productClass' }))
-    getReduxData()
+    getReduxData(resp)
   }
 
-  const getReduxData = () => {
-    let { productClass } = essential
+  const getReduxData = (resp: ProductManageClassType[]) => {
     searchColumns.map((item) => {
       if (
         item.customPlaceholder &&
-        productClass?.find((el) =>
-          el.name?.includes(item.customPlaceholder as string)
-        )
+        resp.find((el) => el.name?.includes(item.customPlaceholder as string))
       ) {
-        item.options = productClass?.find((el) =>
-          el.name?.includes(item.customPlaceholder as string)
-        )?.children
+        //清除缓存
+        if (item.options) {
+          item.options.length = 0
+          item.options = resp.find((el) =>
+            el.name?.includes(item.customPlaceholder as string)
+          )?.children
+        }
       }
     })
     setSearchColumns([...searchColumns])
     setImmediate(false)
+    setRefreshProduct(false)
   }
 
   const tableColumns: TableProps['columns'] = [
@@ -218,6 +209,7 @@ const Product: React.FC = () => {
           message.success('删除成功')
           // 刷新表格数据
           onUpdateSearch(searchDefaultForm)
+          setRefreshProduct(true)
         })
       },
     })
@@ -249,6 +241,7 @@ const Product: React.FC = () => {
       // 操作成功，关闭弹窗，刷新数据
       setParams({ visible: false, currentRow: null })
       onUpdateSearch(searchDefaultForm)
+      !params.currentRow && setRefreshProduct(true)
     } catch (error) {}
   }
 
@@ -292,6 +285,7 @@ const Product: React.FC = () => {
         style={{ flex: 1, marginTop: '8px', minHeight: 0 }}
         styles={{ body: { height: '100%' } }}
         ref={parentRef}
+        loading={refreshProduct}
       >
         <Space className="mb-[8px] float-right">
           <Button

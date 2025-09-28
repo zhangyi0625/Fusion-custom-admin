@@ -14,6 +14,7 @@ export enum ProductManageApi {
   ProductManageByPage = '/business/product/page',
   ProductManageClass = '/business/product-attr',
   ProductManageClassByPage = '/business/product-attr/page',
+  ProductManageByParentId = '/business/product-attr/child/',
 }
 
 /**
@@ -79,6 +80,22 @@ export const getProductClassList = (
     {
       url: ProductManageApi.ProductManageClass,
       params: params,
+    },
+    {
+      successMessageMode: 'none',
+    }
+  )
+}
+
+/**
+ * 获取产品各个分类明细列表
+ * @param params 产品管理参数
+ * @returns 产品管理列表
+ */
+export const getProductListByParentId = (parentId: string) => {
+  return HttpRequest.get(
+    {
+      url: ProductManageApi.ProductManageByParentId + parentId,
     },
     {
       successMessageMode: 'none',
