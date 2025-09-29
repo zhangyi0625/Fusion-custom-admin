@@ -49,6 +49,7 @@ interface EditableCellProps {
 
 interface InputNumberValType {
   price: number | string
+  reducePrice: number | string
   sumPrice: number | string
 }
 
@@ -73,6 +74,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
 
   const [inputNumberVal, setInputNumberVal] = useState<InputNumberValType>({
     price: 0,
+    reducePrice: 0,
     sumPrice: 0,
   })
 
@@ -324,8 +326,20 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         if (radioDefaultValue === 'price') {
           if (selectedRowKeys.includes(item.id)) return
           // 非锁定行单价上调
+          // item.adjPrice = (
+          //   Number(item.price) +
+          //   Number(item.price) * (Number(inputNumberVal.price) / 100)
+          // ).toFixed(2)
           item.adjPrice = (
-            Number(item.price) +
+            Number(item.price) /
+            ((100 - Number(inputNumberVal.price)) / 100)
+          ).toFixed(2)
+          item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(2)
+        } else if (radioDefaultValue === 'reducePrice') {
+          if (selectedRowKeys.includes(item.id)) return
+          // 非锁定行单价上调
+          item.adjPrice = (
+            Number(item.price) -
             Number(item.price) * (Number(inputNumberVal.price) / 100)
           ).toFixed(2)
           item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(2)
@@ -353,7 +367,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
 
   const resetPrice = () => {
     setRadioDefaultValue(null)
-    setInputNumberVal({ price: 0, sumPrice: 0 })
+    setInputNumberVal({ price: 0, reducePrice: 0, sumPrice: 0 })
     loadQuotation()
   }
 
@@ -364,6 +378,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
           <p className="mr-[8px]">非锁定行单价上调%</p>
           <InputNumber
             min={0}
+            max={100}
             style={{ width: '180px' }}
             addonBefore="+"
             addonAfter="%"
@@ -376,6 +391,26 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
         </div>
       ),
       value: 'price',
+    },
+    {
+      label: (
+        <div className="flex items-center">
+          <p className="mr-[8px]">非锁定行单价下调%</p>
+          <InputNumber
+            min={0}
+            max={100}
+            style={{ width: '180px' }}
+            addonBefore="-"
+            addonAfter="%"
+            defaultValue={0}
+            value={inputNumberVal.reducePrice}
+            onChange={(e: any) =>
+              setInputNumberVal({ ...inputNumberVal, reducePrice: e })
+            }
+          />
+        </div>
+      ),
+      value: 'reducePrice',
     },
     {
       label: (
@@ -410,7 +445,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
   const close = () => {
     setSelectedRowKeys([])
     setRadioDefaultValue(null)
-    setInputNumberVal({ price: 0, sumPrice: 0 })
+    setInputNumberVal({ price: 0, reducePrice: 0, sumPrice: 0 })
     onCancel()
   }
 
@@ -483,7 +518,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
             <span className="text-red-500 ml-[60px]">{getChangeSum}</span>
           </div>
         </div>
-        <div className="h-[128px] p-[24px]" style={{ background: '#F0F4FA' }}>
+        <div className="h-[158px] p-[24px]" style={{ background: '#F0F4FA' }}>
           <div className="flex items-start">
             <p className="text-stone-900 mt-[4px]">
               选择一种调价方式调整价格：
