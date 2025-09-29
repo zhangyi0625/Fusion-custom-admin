@@ -11,8 +11,9 @@ export interface AddOrganizationProps {
     visible: boolean
     // 弹窗需要的数据
     currentRow: SysOrganizationType | null
+    // 组织机构父级Id
+    parentId: string | null
   }
-  parentId: string | null
   // 点击确定的回调
   onOk: (params: SysOrganizationType) => void
   // 点击取消的回调
@@ -21,17 +22,14 @@ export interface AddOrganizationProps {
 
 const AddOrganization: React.FC<AddOrganizationProps> = ({
   params,
-  parentId,
   onOk,
   onCancel,
 }) => {
-  const { visible, currentRow } = params
+  const { visible, currentRow, parentId } = params
 
   const [form] = Form.useForm()
 
   const organizationRef = useRef<InputRef>(null)
-
-  const [organization, setOrganization] = useState([])
 
   const [formMap, setFormMap] = useState(AddOrganizationForm)
 
@@ -55,7 +53,6 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
 
   const getAllOranization = () => {
     getOrganizationList().then((resp) => {
-      setOrganization(resp)
       formMap.map((item) => {
         if (item.name === 'parentId') item.options = resp
       })

@@ -1,7 +1,4 @@
-import type React from 'react'
-import { Key, useEffect, useState } from 'react'
-import useParentSize from '@/hooks/useParentSize'
-
+import { Key, useEffect, useRef, useState } from 'react'
 import {
   App,
   Button,
@@ -15,8 +12,17 @@ import {
   Col,
   Tree,
   Input,
+  Empty,
+  Dropdown,
+  MenuProps,
 } from 'antd'
-import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
+import {
+  DeleteOutlined,
+  DownOutlined,
+  EditOutlined,
+  ExclamationCircleFilled,
+  PlusCircleOutlined,
+} from '@ant-design/icons'
 import {
   getOrganizationListByPage,
   addOrganization,
@@ -25,16 +31,19 @@ import {
   deleteBatchOrganization,
   getOrganizationList,
 } from '@/services/system/organization/organization'
+import useParentSize from '@/hooks/useParentSize'
 import { SearchTable } from 'customer-search-form-table'
 import AddOrganization from './AddOrganization'
 import type {
   SysOrganizationParams,
   SysOrganizationType,
 } from '@/services/system/organization/organizationModel'
-import { buildTree } from '@/utils/tool'
+import { buildTree, filterKeys } from '@/utils/tool'
+
+type SysOrganizationTypeWithKey = SysOrganizationType & { key: Key }
 
 /**
- * 系统角色维护
+ * 系统组织机构维护
  * @returns
  */
 const Organization: React.FC = () => {
@@ -44,16 +53,43 @@ const Organization: React.FC = () => {
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
+  const organizationKeys = [
+    'key',
+    'organizationId',
+    'parentId',
+    'organizationTypeName',
+    'organizationName',
+    'organizationFullName',
+    'sortNumber',
+    'comments',
+  ]
+
+  // 右键菜单位置
+  const [contextMenuPosition, setContextMenuPosition] = useState<{
+    x: number
+    y: number
+  }>({ x: 0, y: 0 })
+
+  const [visible, setVisible] = useState<boolean>(false)
+
+  // 选中的节点
+  const [selectedNode, setSelectedNode] =
+    useState<SysOrganizationTypeWithKey | null>(null)
+
   // 当前选中的行数据
   const [selRows, setSelectedRows] = useState<string[]>([])
+
+  const dropdownRef = useRef<HTMLDivElement>(null)
 
   // 将当前编辑行和窗口开关合并为一个状态对象
   const [params, setParams] = useState<{
     visible: boolean
-    currentRow: any
+    currentRow: SysOrganizationType | null
+    parentId: string | null
   }>({
     visible: false,
     currentRow: null,
+    parentId: null,
   })
 
   const [searchDefaultForm, setSearchDefaultForm] =
@@ -64,7 +100,25 @@ const Organization: React.FC = () => {
       parentId: null,
     })
 
+  // 点击其他地方关闭菜单
   useEffect(() => {
+    // 监听点击事件，如果点击的是dropdown，则不关闭
+    const handleClick = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setVisible(false)
+      }
+    }
+    document.addEventListener('click', handleClick)
+    return () => {
+      document.removeEventListener('click', handleClick)
+    }
+  }, [])
+
+  useEffect(() => {
+    setImmediate(true)
     getAllOranization('first')
   }, [])
 
@@ -127,7 +181,11 @@ const Organization: React.FC = () => {
               type="link"
               size="small"
               onClick={() => {
-                setParams({ visible: true, currentRow: record })
+                setParams({
+                  visible: true,
+                  currentRow: record as SysOrganizationType,
+                  parentId: record.parentId,
+                })
               }}
             >
               修改
@@ -146,6 +204,60 @@ const Organization: React.FC = () => {
     },
   ]
 
+  // 右键菜单选项
+  const contextMenu: MenuProps['items'] = [
+    {
+      key: 'add',
+      label: '添加同级',
+      icon: <PlusCircleOutlined />,
+      extra: <>⌘ + N</>,
+      disabled: selectedNode?.parentId === '0',
+      onClick: () => {
+        setParams({
+          visible: true,
+          currentRow: null,
+          parentId: selectedNode?.parentId as string,
+        })
+        setVisible(false)
+      },
+    },
+    {
+      key: 'addSub',
+      label: '添加下级',
+      icon: <PlusCircleOutlined />,
+      extra: <>⌘ + A</>,
+      onClick: () => {
+        setParams({
+          visible: true,
+          currentRow: null,
+          parentId: selectedNode?.organizationId as string,
+        })
+        setVisible(false)
+      },
+    },
+    {
+      key: 'edit',
+      label: '编辑机构',
+      icon: <EditOutlined />,
+      extra: <>⌘ + E</>,
+      onClick: () => {
+        setParams({
+          visible: true,
+          currentRow: selectedNode,
+          parentId: selectedNode?.parentId as string,
+        })
+        setVisible(false)
+      },
+    },
+    {
+      key: 'delete',
+      label: '删除机构',
+      extra: <>⌘ + D</>,
+      icon: <DeleteOutlined />,
+      onClick: () => deleteDic(selectedNode?.organizationId as string),
+    },
+  ]
+
   const getAllOranization = (isFirst?: string) => {
     getOrganizationList().then((resp) => {
       let newArr = resp.map((item: SysOrganizationType) => {
@@ -156,9 +268,19 @@ const Organization: React.FC = () => {
         }
       })
       let parId = newArr.find(
-        (item: SysOrganizationType) => item.parentId === '0'
+        (item: SysOrganizationTypeWithKey) => item.parentId === '0'
       ).organizationId
       setTreeData(buildTree(newArr, 'organizationId') as any)
+      isFirst &&
+        setSelectedNode(
+          filterKeys(
+            newArr.filter(
+              (item: SysOrganizationTypeWithKey) => item.key === parId
+            )[0],
+            organizationKeys,
+            true
+          )
+        )
       isFirst
         ? setSearchDefaultForm({ ...searchDefaultForm, parentId: parId })
         : setSearchDefaultForm({ ...searchDefaultForm })
@@ -191,7 +313,7 @@ const Organization: React.FC = () => {
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
+      setParams({ visible: false, currentRow: null, parentId: null })
       getAllOranization()
     } catch (error) {}
   }
@@ -218,8 +340,35 @@ const Organization: React.FC = () => {
     })
   }
 
-  const treeClick = (e: Key[]) => {
-    setSearchDefaultForm({ ...searchDefaultForm, parentId: e[0] as string })
+  const treeClick = (e: React.Key[], info: any) => {
+    const node = info.node
+    setSelectedNode(e.length ? filterKeys(node, organizationKeys, true) : null)
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      parentId: e.length ? (e[0] as string) : null,
+    })
+  }
+
+  // 右击点击事件
+  const handleRightClick = (event: any) => {
+    event.event.preventDefault()
+    // 如果是右键的配置节点，则不响应, 这里类型判断有误dang，需要处理
+    if (event.node.isConfig) {
+      return
+    }
+    const { clientX, clientY } = event.event
+    const { innerWidth, innerHeight } = window
+
+    // 计算菜单位置，避免溢出
+    const menuWidth = 160 // 假设菜单宽度
+    const menuHeight = 136 // 假设菜单高度
+    const x = clientX + menuWidth > innerWidth ? clientX - menuWidth : clientX
+    const y =
+      clientY + menuHeight > innerHeight ? clientY - menuHeight : clientY
+    setContextMenuPosition({ x: x, y: y })
+    const node = event.node
+    setSelectedNode(filterKeys(node, organizationKeys, true))
+    setVisible(true)
   }
 
   return (
@@ -236,13 +385,41 @@ const Organization: React.FC = () => {
             <div
               className={`w-[220px] rounded-[2px] h-full border-1 border-slate-100 p-[10px]`}
             >
-              <Tree
-                defaultExpandAll
-                switcherIcon={<DownOutlined />}
-                treeData={treeData}
-                onSelect={treeClick}
-                defaultSelectedKeys={[searchDefaultForm.parentId] as string[]}
-              />
+              {!treeData.length ? (
+                <Empty
+                  className="mt-[20px]"
+                  description="暂无权限机构！"
+                ></Empty>
+              ) : (
+                <Tree
+                  defaultExpandAll
+                  switcherIcon={<DownOutlined />}
+                  treeData={treeData}
+                  selectedKeys={selectedNode ? [selectedNode.key] : []}
+                  defaultSelectedKeys={[searchDefaultForm.parentId] as string[]}
+                  onSelect={treeClick}
+                  onRightClick={handleRightClick}
+                />
+              )}
+              {visible && (
+                <div
+                  ref={dropdownRef}
+                  style={{
+                    position: 'fixed',
+                    top: contextMenuPosition.y,
+                    left: contextMenuPosition.x,
+                    zIndex: 1000,
+                  }}
+                >
+                  <Dropdown
+                    menu={{ items: contextMenu }}
+                    trigger={['click']}
+                    open={visible}
+                  >
+                    <div />
+                  </Dropdown>
+                </div>
+              )}
             </div>
             <div
               className="ml-[24px] h-full"
@@ -273,6 +450,7 @@ const Organization: React.FC = () => {
                           setParams({
                             visible: true,
                             currentRow: null,
+                            parentId: selectedNode?.parentId as string,
                           })
                         }
                       >
@@ -298,7 +476,7 @@ const Organization: React.FC = () => {
                 fetchResultKey="list"
                 isPagination={true}
                 rowKey="organizationId"
-                scroll={{ x: 'max-content', y: height - 158 }}
+                scroll={{ x: 'max-content', y: height - 168 }}
                 fetchData={getOrganizationListByPage}
                 searchFilter={searchDefaultForm}
                 isSelection={true}
@@ -312,9 +490,10 @@ const Organization: React.FC = () => {
         </Card>
       </ConfigProvider>
       <AddOrganization
-        parentId={searchDefaultForm.parentId}
         params={params}
-        onCancel={() => setParams({ visible: false, currentRow: null })}
+        onCancel={() =>
+          setParams({ visible: false, currentRow: null, parentId: null })
+        }
         onOk={onEditOk}
       />
     </>
