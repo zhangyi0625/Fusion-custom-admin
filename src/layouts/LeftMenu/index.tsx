@@ -1,4 +1,4 @@
-import type React from 'react'
+import './leftMenu.scss'
 import { memo, useEffect, useState } from 'react'
 import {
   Layout,
@@ -18,8 +18,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { type RootState, updatePreferences } from '@/stores/store.ts'
 import logo from '@/assets/images/icon-192.png'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-
-import './leftMenu.scss'
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -117,7 +115,7 @@ const LeftMenu: React.FC = memo(() => {
     const route = searchRoute(pathname, menus)
     if (route && Object.keys(route).length) {
       const title = route.title
-      if (title) document.title = `${title} - 在舱光速抢舱管理平台`
+      if (title) document.title = `${title} - 销售协同管理平台`
       if (!collapsed) setOpenKeys(openKey)
     }
   }, [pathname, collapsed, menus])

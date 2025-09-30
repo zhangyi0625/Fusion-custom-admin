@@ -22,6 +22,11 @@ export default defineConfig({
       sassLoaderOptions: {
         additionalData: `@use 'src/styles/variables.scss' as *;`,
       },
+      // sassLoaderOptions: {
+      //   sassOptions: {
+      //     silenceDeprecations: ['import'],
+      //   },
+      // },
     }),
     // mock 插件
     pluginMockServer({

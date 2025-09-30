@@ -110,7 +110,7 @@ const Login: React.FC = () => {
             navigate(homePath)
             antdUtils.notification?.success({
               message: '登录成功',
-              description: '欢迎来到在舱光速抢舱管理平台!',
+              description: '欢迎来到销售协同管理平台!',
             })
           }
           break
