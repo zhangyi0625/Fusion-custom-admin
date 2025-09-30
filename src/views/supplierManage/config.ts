@@ -87,8 +87,15 @@ export const AddSupplierForm: Omit<CustomColumn, 'selectFetch'>[] = [
     hiddenItem: false,
   },
   {
-    label: '手机号',
+    label: '主联系人手机号',
     name: 'contactPhone',
+    formType: 'input',
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '手机号',
+    name: 'phone',
     formType: 'input',
     span: 24,
     hiddenItem: false,
@@ -104,6 +111,13 @@ export const AddSupplierForm: Omit<CustomColumn, 'selectFetch'>[] = [
   {
     label: '用户密码',
     name: 'password',
+    formType: 'input',
+    span: 24,
+    hiddenItem: false,
+  },
+  {
+    label: '用户地址',
+    name: 'address',
     formType: 'input',
     span: 24,
     hiddenItem: false,

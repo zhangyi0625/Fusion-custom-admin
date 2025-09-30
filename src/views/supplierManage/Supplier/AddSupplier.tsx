@@ -42,6 +42,8 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
+  const [quotationTemplate, setQuotationTemplate] = useState<UploadFile[]>([])
+
   const [formMap, setFormMap] = useState(AddSupplierForm)
 
   const [contracts, setContracts] = useState<ContractsType[]>([])
@@ -56,9 +58,16 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
     if (currentRow) {
       form.setFieldsValue({ ...currentRow })
       setFileList([{ name: currentRow.logoName, uid: currentRow.logo }])
+      setQuotationTemplate([
+        {
+          name: currentRow.quotationTemplate,
+          uid: currentRow.quotationTemplate,
+        },
+      ])
     } else {
       form.setFieldsValue({ status: 1 })
       setFileList([])
+      setQuotationTemplate([])
     }
   }, [visible])
 
@@ -108,6 +117,33 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
       }
     },
     fileList,
+  }
+
+  const uploadQuotationProps: UploadProps = {
+    name: 'file',
+    multiple: false,
+    accept: '.xlsx,.xls',
+    beforeUpload(file) {
+      setQuotationTemplate([file])
+      return false
+    },
+    onChange(info) {
+      if (info.file.status !== 'uploading') {
+        !info.fileList.length && setQuotationTemplate([])
+      }
+      if (info.fileList.length) {
+        const formdata = new FormData()
+        formdata.append('file', info.file as FileType) //将每一个文件图片都加进formdata
+        postUploadFile(formdata).then((resp) => {
+          form.setFieldsValue({
+            ...form.getFieldsValue(),
+            quotationTemplate: resp.data.id,
+            quotationTemplateName: resp.data.name,
+          })
+        })
+      }
+    },
+    fileList: quotationTemplate,
   }
 
   const onConfirm = () => {
@@ -200,6 +236,25 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
               colon={false}
             >
               <Upload {...uploadProps}>
+                <Button
+                  color="primary"
+                  variant="outlined"
+                  icon={<UploadOutlined />}
+                >
+                  上传文件
+                </Button>
+              </Upload>
+            </Form.Item>
+          </Col>
+          <Col span={24} hidden={editPassword}>
+            <Form.Item
+              name={'quotationTemplate'}
+              label="报价单模版"
+              layout="horizontal"
+              labelCol={{ span: 6 }}
+              colon={false}
+            >
+              <Upload {...uploadQuotationProps}>
                 <Button
                   color="primary"
                   variant="outlined"

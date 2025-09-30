@@ -8,6 +8,8 @@ export interface SupplierType {
   contactPhone: string
   logo: string
   logoName: string
+  quotationTemplate: string
+  quotationTemplateName: string
   contactId?: string
   username: string
   password: string
