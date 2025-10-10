@@ -33,10 +33,6 @@ const OpenEnquiry: React.FC = () => {
 
   const { modal, message } = App.useApp()
 
-  const [immediate, setImmediate] = useState<boolean>(false)
-
-  const [searchColumns, setSearchColumns] = useState(OpenEnquirySearchColumns)
-
   const [drawer, setDrawer] = useState<{
     drawerShow: boolean
     detailId: string | null
@@ -347,7 +343,6 @@ const OpenEnquiry: React.FC = () => {
           fetchResultKey="list"
           pageIndexKey="page"
           pageSizeKey="limit"
-          immediate={immediate}
           scroll={{ x: 'max-content', y: height - 138 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getOpenEnquiryListPage}

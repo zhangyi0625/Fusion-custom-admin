@@ -23,7 +23,7 @@ import AddSupplier from '../Supplier/AddSupplier'
 const SupplierAudit: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
-  const { modal, message } = App.useApp()
+  const { message } = App.useApp()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState({
     page: 1,

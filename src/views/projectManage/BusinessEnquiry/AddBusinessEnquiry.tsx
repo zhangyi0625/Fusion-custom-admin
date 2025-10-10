@@ -12,7 +12,7 @@ export type AddBusinessEnquiryProps = {
   params: {
     visible: boolean
     currentRow: BusinessEnquiryType | null
-    source: 'BusinessEnquiry' | 'SaleProject'
+    source: 'BusinessEnquiry' | 'SaleProject' | 'PurchaseBargain'
   }
   onOk: (params: BusinessEnquiryType) => void
   onCancel: () => void

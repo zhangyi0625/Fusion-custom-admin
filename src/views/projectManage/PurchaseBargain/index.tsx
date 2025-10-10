@@ -22,13 +22,12 @@ import {
   addSaleProjectList,
   updateSaleProjectList,
 } from '@/services/projectManage/SaleProject/SaleProjectApi'
+import AddBusinessEnquiry from '../BusinessEnquiry/AddBusinessEnquiry'
 
 const PurchaseBargain: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { message } = App.useApp()
-
-  const [immediate, setImmediate] = useState<boolean>(false)
 
   const [searchDefaultForm, setSearchDefaultForm] = useState({
     page: 1,
@@ -40,9 +39,11 @@ const PurchaseBargain: React.FC = () => {
   const [params, setParams] = useState<{
     visible: boolean
     currentRow: BusinessEnquiryType | null
+    source: 'PurchaseBargain'
   }>({
     visible: false,
     currentRow: null,
+    source: 'PurchaseBargain',
   })
 
   const [drawer, setDrawer] = useState<{
@@ -161,7 +162,13 @@ const PurchaseBargain: React.FC = () => {
         return (
           <Space>
             <Button
-              onClick={() => setParams({ visible: true, currentRow: _ })}
+              onClick={() =>
+                setParams({
+                  visible: true,
+                  currentRow: _,
+                  source: 'PurchaseBargain',
+                })
+              }
               type="link"
             >
               编辑
@@ -202,7 +209,7 @@ const PurchaseBargain: React.FC = () => {
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ visible: false, currentRow: null })
+      setParams({ visible: false, currentRow: null, source: 'PurchaseBargain' })
       onUpdateSearch()
     } catch (error) {}
   }
@@ -272,7 +279,6 @@ const PurchaseBargain: React.FC = () => {
           fetchResultKey="data"
           pageIndexKey="page"
           pageSizeKey="limit"
-          immediate={immediate}
           scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getBusinessEnquiryListPage}
           searchFilter={searchDefaultForm}
@@ -281,11 +287,17 @@ const PurchaseBargain: React.FC = () => {
           onUpdatePagination={onUpdatePagination}
         />
       </Card>
-      {/* <AddBusinessEnquiry
+      <AddBusinessEnquiry
         params={params}
-        onCancel={() => setParams({ visible: false, currentRow: null })}
+        onCancel={() =>
+          setParams({
+            visible: false,
+            currentRow: null,
+            source: 'PurchaseBargain',
+          })
+        }
         onOk={onEditOk}
-      /> */}
+      />
       <BusinessEnquiryDrawer
         drawer={drawer}
         onCancel={() =>
