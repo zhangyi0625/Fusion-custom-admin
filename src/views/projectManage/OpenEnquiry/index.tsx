@@ -1,4 +1,3 @@
-// @ts-ignore
 import '../index.scss'
 import { useState } from 'react'
 import {
