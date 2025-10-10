@@ -1,3 +1,4 @@
+// @ts-ignore
 import '../index.scss'
 import { useEffect, useState } from 'react'
 import {
@@ -469,6 +470,8 @@ const SaleProject: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 178 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}

@@ -365,6 +365,8 @@ const User: React.FC = () => {
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="userId"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           fetchResultKey="list"
           isPagination={true}
           fetchData={getUserListByPage}

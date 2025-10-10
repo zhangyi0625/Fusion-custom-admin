@@ -369,6 +369,8 @@ const Dictionary: React.FC = () => {
                 rowKey="dictDataId"
                 totalKey="count"
                 fetchResultKey="list"
+                pageIndexKey="page"
+                pageSizeKey="limit"
                 fetchData={getDictionaryListByIdPage}
                 searchFilter={searchDefaultForm}
                 scroll={{ x: 'max-content', y: height - 158 }}

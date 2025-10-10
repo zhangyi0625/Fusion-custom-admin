@@ -315,6 +315,8 @@ const Role: React.FC = () => {
           scroll={{ x: 'max-content', y: height - 158 }}
           rowKey="roleId"
           totalKey="count"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           fetchResultKey="list"
           isPagination={true}
           fetchData={getRoleListByPage}

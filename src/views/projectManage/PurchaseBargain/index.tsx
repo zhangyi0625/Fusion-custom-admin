@@ -270,6 +270,8 @@ const PurchaseBargain: React.FC = () => {
           rowKey="id"
           totalKey="total"
           fetchResultKey="data"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getBusinessEnquiryListPage}

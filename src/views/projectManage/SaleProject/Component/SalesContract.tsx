@@ -285,6 +285,8 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
         rowKey="id"
         totalKey="total"
         fetchResultKey="data"
+        pageIndexKey="page"
+        pageSizeKey="limit"
         searchFilter={searchDefaultForm}
         fetchData={getContractManage}
         isSelection={false}

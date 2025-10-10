@@ -159,6 +159,8 @@ const ContractingUnits: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 208 }}
           fetchData={getContractingByPage}
           searchFilter={searchDefaultForm}

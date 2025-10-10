@@ -112,6 +112,8 @@ const LoginLog: React.FC = () => {
             scroll={{ x: 'max-content', y: height - 118 }}
             rowKey="id"
             totalKey="count"
+            pageIndexKey="page"
+            pageSizeKey="limit"
             fetchResultKey="list"
             isPagination={true}
             fetchData={getLoginLog}

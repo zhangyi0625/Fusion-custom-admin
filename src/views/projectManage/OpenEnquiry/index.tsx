@@ -1,3 +1,4 @@
+// @ts-ignore
 import '../index.scss'
 import { useState } from 'react'
 import {
@@ -345,6 +346,8 @@ const OpenEnquiry: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 138 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}

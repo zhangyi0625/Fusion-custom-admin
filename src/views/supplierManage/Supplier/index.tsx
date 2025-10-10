@@ -310,6 +310,8 @@ const Supplier: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 168 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
           fetchData={getSupplierByPage}

@@ -201,6 +201,8 @@ const SupplierAudit: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 168 }}
           fetchData={getSupplierByPage}
           searchFilter={searchDefaultForm}

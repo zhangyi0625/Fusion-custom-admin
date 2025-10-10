@@ -269,6 +269,8 @@ const ProductClass: React.FC = () => {
                 rowKey="id"
                 totalKey="count"
                 fetchResultKey="list"
+                pageIndexKey="page"
+                pageSizeKey="limit"
                 immediate={immediate}
                 scroll={{ x: 'max-content', y: height - 188 }}
                 fetchData={getProductClassByPage}

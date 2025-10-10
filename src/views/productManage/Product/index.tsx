@@ -303,6 +303,8 @@ const Product: React.FC = () => {
           rowKey="id"
           totalKey="count"
           fetchResultKey="list"
+          pageIndexKey="page"
+          pageSizeKey="limit"
           immediate={immediate}
           scroll={{ x: 'max-content', y: height - 168 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
