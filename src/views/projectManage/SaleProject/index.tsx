@@ -84,17 +84,18 @@ const SaleProject: React.FC = () => {
 
   useEffect(() => {
     setImmediate(true)
-    if (
-      !essential.userData?.length ||
-      !essential.customerData?.length ||
-      !essential.contractingData?.length ||
-      !essential.payerUnitData?.length
-    ) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [essential])
+    // if (
+    //   !essential.userData?.length ||
+    //   !essential.customerData?.length ||
+    //   !essential.contractingData?.length ||
+    //   !essential.payerUnitData?.length
+    // ) {
+    //   loadSearchList()
+    // } else {
+    //   getReduxData()
+    // }
+    loadSearchList()
+  }, [])
 
   // 重新更新查询部分数据 并存储进redux
   const loadSearchList = () => {

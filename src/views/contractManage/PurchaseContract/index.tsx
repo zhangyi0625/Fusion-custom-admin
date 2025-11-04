@@ -90,16 +90,17 @@ const PurchaseContract: React.FC = () => {
 
   useEffect(() => {
     setImmediate(true)
-    if (
-      !essential.userData?.length ||
-      !essential.customerData?.length ||
-      !essential.supplierData?.length
-    ) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
-  }, [essential])
+    // if (
+    //   !essential.userData?.length ||
+    //   !essential.customerData?.length ||
+    //   !essential.supplierData?.length
+    // ) {
+    //   loadSearchList()
+    // } else {
+    //   getReduxData()
+    // }
+    loadSearchList()
+  }, [])
 
   const tableColumns: TableProps['columns'] = [
     {

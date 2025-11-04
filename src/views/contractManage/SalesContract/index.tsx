@@ -87,15 +87,16 @@ const SalesContract: React.FC = () => {
 
   useEffect(() => {
     setImmediate(true)
-    if (
-      !essential.userData?.length ||
-      !essential.customerData?.length ||
-      !essential.payerUnitData?.length
-    ) {
-      loadSearchList()
-    } else {
-      getReduxData()
-    }
+    // if (
+    //   !essential.userData?.length ||
+    //   !essential.customerData?.length ||
+    //   !essential.payerUnitData?.length
+    // ) {
+    //   loadSearchList()
+    // } else {
+    //   getReduxData()
+    // }
+    loadSearchList()
     let isJump = sessionStorage.getItem('SaleContractDetail') ?? null
     if (isJump) {
       setDrawer({
@@ -104,7 +105,7 @@ const SalesContract: React.FC = () => {
         source: 'SalesContract',
       })
     }
-  }, [essential])
+  }, [])
 
   const tableColumns: TableProps['columns'] = [
     {
