@@ -339,7 +339,7 @@ const MakeQuotationModal: React.FC<MakeQuotationModalProps> = ({
           // 非锁定行单价上调
           item.adjPrice = (
             Number(item.price) -
-            Number(item.price) * (Number(inputNumberVal.price) / 100)
+            Number(item.price) * (Number(inputNumberVal.reducePrice) / 100)
           ).toFixed(2)
           item.adjAmount = (item.qty * Number(item.adjPrice)).toFixed(2)
         } else {
