@@ -206,8 +206,8 @@ const Login: React.FC = () => {
                 name="login"
                 labelCol={{ span: 5 }}
                 initialValues={{
-                  username: 'admin',
-                  password: '123456',
+                  // username: 'admin',
+                  // password: '123456',
                   remember: true,
                 }}
                 size="large"
@@ -224,7 +224,7 @@ const Login: React.FC = () => {
                     autoFocus
                     autoComplete="off"
                     allowClear
-                    placeholder="用户名：admin"
+                    placeholder="用户名"
                     prefix={<UserOutlined />}
                   />
                 </Form.Item>
@@ -236,7 +236,7 @@ const Login: React.FC = () => {
                     size="large"
                     allowClear
                     autoComplete="off"
-                    placeholder="密码：123456qwe,."
+                    placeholder="密码"
                     prefix={<LockOutlined />}
                   />
                 </Form.Item>
