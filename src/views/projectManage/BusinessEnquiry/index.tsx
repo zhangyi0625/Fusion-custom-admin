@@ -12,7 +12,11 @@ import {
   TableProps,
   Tooltip,
 } from 'antd'
-import { DownOutlined, ExclamationCircleFilled } from '@ant-design/icons'
+import {
+  DownloadOutlined,
+  DownOutlined,
+  ExclamationCircleFilled,
+} from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import { BusinessEnquirySearchColumns, ProjectStatusOptions } from '../config'
 import useParentSize from '@/hooks/useParentSize'
@@ -38,6 +42,7 @@ import { getContractingList } from '@/services/system/contractingUnits/Contracti
 import { formatTime } from '@/utils/format'
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 import { useIntl, injectIntl } from 'react-intl'
+import { ExportTableDataByXLSX } from '@/utils/export'
 
 const BusinessEnquiry: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -51,6 +56,8 @@ const BusinessEnquiry: React.FC = () => {
   const essential = useSelector((state: RootState) => state.essentail)
 
   const [immediate, setImmediate] = useState<boolean>(true)
+
+  const [downLoading, setDownLoading] = useState<boolean>(false)
 
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<BusinessEnquiryParams>({
@@ -403,6 +410,26 @@ const BusinessEnquiry: React.FC = () => {
     })
   }
 
+  const downloadData = async () => {
+    setDownLoading(true)
+    try {
+      const resp = await getBusinessEnquiryListPage({
+        ...searchDefaultForm,
+        page: 1,
+        limit: 9999,
+      })
+      ExportTableDataByXLSX(
+        resp.list,
+        tableColumns.splice(0, tableColumns.length - 1),
+        '商机项目导出列表'
+      )
+      setDownLoading(false)
+    } catch {
+      message.error('导出列表异常，请联系相关人员～')
+      setDownLoading(false)
+    }
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -475,6 +502,16 @@ const BusinessEnquiry: React.FC = () => {
             }
           >
             创建项目
+          </Button>
+          <Button
+            color="blue"
+            variant="outlined"
+            style={{ zIndex: 99, marginLeft: '10px' }}
+            loading={downLoading}
+            icon={<DownloadOutlined />}
+            onClick={downloadData}
+          >
+            导出列表
           </Button>
         </Space>
         <SearchTable

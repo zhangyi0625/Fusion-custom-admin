@@ -8,7 +8,7 @@ import {
   TablePaginationConfig,
   TableProps,
 } from 'antd'
-import { ExclamationCircleFilled } from '@ant-design/icons'
+import { DownloadOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import useParentSize from '@/hooks/useParentSize'
 import { filterKeys } from '@/utils/tool'
@@ -25,6 +25,7 @@ import type {
   CustomerParams,
   CustomerType,
 } from '@/services/customerManage/Customer/CustomerModel'
+import { ExportTableDataByXLSX } from '@/utils/export'
 
 const Customer: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -52,6 +53,8 @@ const Customer: React.FC = () => {
     visible: false,
     id: '',
   })
+
+  const [downLoading, setDownLoading] = useState<boolean>(false)
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -190,6 +193,26 @@ const Customer: React.FC = () => {
       limit: pagination.pageSize as number,
     })
   }
+
+  const downloadData = async () => {
+    setDownLoading(true)
+    try {
+      const resp = await getCustomerByPage({
+        ...searchDefaultForm,
+        page: 1,
+        limit: 9999,
+      })
+      ExportTableDataByXLSX(
+        resp.list,
+        tableColumns.splice(0, tableColumns.length - 1),
+        '客户管理导出列表'
+      )
+      setDownLoading(false)
+    } catch {
+      message.error('导出列表异常，请联系相关人员～')
+      setDownLoading(false)
+    }
+  }
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -231,6 +254,16 @@ const Customer: React.FC = () => {
             onClick={() => setParams({ visible: true, currentRow: null })}
           >
             新增客户
+          </Button>
+          <Button
+            color="blue"
+            variant="outlined"
+            style={{ zIndex: 99, marginLeft: '10px' }}
+            loading={downLoading}
+            icon={<DownloadOutlined />}
+            onClick={downloadData}
+          >
+            导出列表
           </Button>
         </Space>
         <SearchTable

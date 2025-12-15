@@ -10,7 +10,7 @@ import {
   TableProps,
   Tooltip,
 } from 'antd'
-import { ExclamationCircleFilled } from '@ant-design/icons'
+import { DownloadOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import { SearchForm, SearchTable } from 'customer-search-form-table'
 import useParentSize from '@/hooks/useParentSize'
 import { filterKeys } from '@/utils/tool'
@@ -34,6 +34,7 @@ import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
 import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 import { formatTime } from '@/utils/format'
+import { ExportTableDataByXLSX } from '@/utils/export'
 
 const SaleProject: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -60,6 +61,7 @@ const SaleProject: React.FC = () => {
       status: null,
       sort: 'create_time desc',
     })
+  const [downLoading, setDownLoading] = useState<boolean>(false)
 
   const [params, setParams] = useState<{
     visible: boolean
@@ -395,6 +397,26 @@ const SaleProject: React.FC = () => {
     })
   }
 
+  const downloadData = async () => {
+    setDownLoading(true)
+    try {
+      const resp = await getBusinessEnquiryListPage({
+        ...searchDefaultForm,
+        page: 1,
+        limit: 9999,
+      })
+      ExportTableDataByXLSX(
+        resp.list,
+        tableColumns.splice(0, tableColumns.length - 1),
+        '销售项目导出列表'
+      )
+      setDownLoading(false)
+    } catch {
+      message.error('导出列表异常，请联系相关人员～')
+      setDownLoading(false)
+    }
+  }
+
   return (
     <>
       {/* 菜单检索条件栏 */}
@@ -461,6 +483,16 @@ const SaleProject: React.FC = () => {
             }
           >
             创建项目
+          </Button>
+          <Button
+            color="blue"
+            variant="outlined"
+            style={{ zIndex: 99, marginLeft: '10px' }}
+            loading={downLoading}
+            icon={<DownloadOutlined />}
+            onClick={downloadData}
+          >
+            导出列表
           </Button>
         </Space>
         <SearchTable
