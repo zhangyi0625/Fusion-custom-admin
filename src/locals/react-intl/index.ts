@@ -8,34 +8,30 @@ export const reactIntlLangConfig: { [key: string]: { [key: string]: string } } =
   {
     'zh-CN': zhCn,
     'en-US': enUs,
+    zh: zhCn,
+    en: enUs,
   }
-
-const currentLang = 'zh-CN'
-
-const messages = {
-  'zh-CN': zhCn,
-  'en-US': enUs,
-}
 
 export const antMessages = {
   'zh-CN': zhCN,
   'en-US': enUS,
+  zh: zhCN,
+  en: enUS,
 }
 
-export const getAntMessages = () => antMessages[currentLang]
+export const getAntMessages = (lang: string) =>
+  antMessages[lang as keyof typeof antMessages] || zhCN
 
-export const getCurrentMessages = () => messages[currentLang]
+export const getCurrentMessages = (lang: string) =>
+  reactIntlLangConfig[lang as keyof typeof reactIntlLangConfig] || zhCn
 
-export const getCurrentLang = () => currentLang
-
-const cache = createIntlCache()
-
-const intl = createIntl(
-  {
-    locale: currentLang,
-    messages: reactIntlLangConfig[currentLang],
-  },
-  cache
-)
-
-export default intl
+export const createIntlInstance = (lang: string) => {
+  const cache = createIntlCache()
+  return createIntl(
+    {
+      locale: lang,
+      messages: getCurrentMessages(lang),
+    },
+    cache,
+  )
+}

@@ -71,7 +71,7 @@ const BusinessEnquiry: React.FC = () => {
     })
 
   const [searchColumns, setSearchColumns] = useState(
-    BusinessEnquirySearchColumns
+    BusinessEnquirySearchColumns,
   )
 
   const [params, setParams] = useState<{
@@ -145,7 +145,7 @@ const BusinessEnquiry: React.FC = () => {
 
   const tableColumns: TableProps['columns'] = [
     {
-      title: '项目编号',
+      title: formatMessage({ id: '项目编号' }),
       key: 'number',
       align: 'center',
       render(value) {
@@ -160,7 +160,7 @@ const BusinessEnquiry: React.FC = () => {
       },
     },
     {
-      title: '项目名称',
+      title: formatMessage({ id: '项目名称' }),
       key: 'name',
       align: 'center',
       width: 300,
@@ -170,8 +170,14 @@ const BusinessEnquiry: React.FC = () => {
             <Tooltip
               title={
                 <div className="text-stone-900 p-[10px]">
-                  <p>客户付款方：{value.companyName ?? '-'}</p>
-                  <p>我司签约：{value.entrustName ?? '-'}</p>
+                  <p>
+                    {formatMessage({ id: '客户付款方' })}：
+                    {value.companyName ?? '-'}
+                  </p>
+                  <p>
+                    {formatMessage({ id: '我司签约' })}：
+                    {value.entrustName ?? '-'}
+                  </p>
                 </div>
               }
               color="white"
@@ -183,21 +189,21 @@ const BusinessEnquiry: React.FC = () => {
       },
     },
     {
-      title: '客户',
+      title: formatMessage({ id: '客户' }),
       key: 'customerName',
       dataIndex: 'customerName',
       align: 'center',
       width: 100,
     },
     {
-      title: '业务员',
+      title: formatMessage({ id: '业务员' }),
       key: 'salespersonName',
       dataIndex: 'salespersonName',
       align: 'center',
       width: 100,
     },
     {
-      title: '状态',
+      title: formatMessage({ id: '状态' }),
       key: 'status',
       align: 'center',
       render(value) {
@@ -209,8 +215,8 @@ const BusinessEnquiry: React.FC = () => {
                   value.status === 'PENDING_PURCHASE'
                     ? 'bg-gray-500'
                     : value.status === 'TERMINATED'
-                    ? 'bg-red-500'
-                    : 'bg-green-500'
+                      ? 'bg-red-500'
+                      : 'bg-green-500'
                 }
                   `}
             ></div>
@@ -226,7 +232,7 @@ const BusinessEnquiry: React.FC = () => {
       width: 150,
     },
     {
-      title: '询价供应商',
+      title: formatMessage({ id: '询价供应商' }),
       key: 'supplierCount',
       align: 'center',
       width: 100,
@@ -242,7 +248,7 @@ const BusinessEnquiry: React.FC = () => {
       },
     },
     {
-      title: '预计采购日期',
+      title: formatMessage({ id: '预计采购日期' }),
       key: 'estimatedPurchaseTime',
       align: 'center',
       width: 180,
@@ -251,48 +257,57 @@ const BusinessEnquiry: React.FC = () => {
       },
     },
     {
-      title: '项目类型',
+      title: formatMessage({ id: '项目类型' }),
       key: 'type',
       align: 'center',
       width: 120,
       render(value) {
         return (
-          <div>{value.type === 'FRAME_CONTRACT' ? '框架合同' : '即期合同'}</div>
+          <div>
+            {value.type === 'FRAME_CONTRACT'
+              ? formatMessage({ id: '框架合同' })
+              : formatMessage({ id: '即期合同' })}
+          </div>
         )
       },
     },
     {
-      title: '预估金额',
+      title: formatMessage({ id: '预估金额' }),
       key: 'price',
       align: 'center',
       width: 150,
       render(value) {
-        return <div>{value.price}万元</div>
+        return (
+          <div>
+            {value.price}
+            {formatMessage({ id: '万元' })}
+          </div>
+        )
       },
     },
     {
-      title: '付款方式',
+      title: formatMessage({ id: '付款方式' }),
       key: 'payMethod',
       dataIndex: 'payMethod',
       align: 'center',
       width: 120,
     },
     {
-      title: '创建时间',
+      title: formatMessage({ id: '创建时间' }),
       key: 'createTime',
       dataIndex: 'createTime',
       align: 'center',
       width: 200,
     },
     {
-      title: '创建者',
+      title: formatMessage({ id: '创建者' }),
       key: 'createName',
       dataIndex: 'createName',
       align: 'center',
       width: 120,
     },
     {
-      title: '操作',
+      title: formatMessage({ id: '操作' }),
       width: '10%',
       fixed: 'right',
       align: 'center',
@@ -309,12 +324,12 @@ const BusinessEnquiry: React.FC = () => {
               }
               type="link"
             >
-              编辑
+              {formatMessage({ id: '编辑' })}
             </Button>
             <Dropdown menu={{ items: more(_) }}>
               <a onClick={(e) => e.preventDefault()}>
                 <Space>
-                  更多
+                  {formatMessage({ id: '更多' })}
                   <DownOutlined style={{ width: '10px', height: '10px' }} />
                 </Space>
               </a>
@@ -328,7 +343,7 @@ const BusinessEnquiry: React.FC = () => {
   const more: (row: any) => MenuProps['items'] = (row) => [
     {
       key: 'edit',
-      label: <p className="text-blue-500">升级</p>,
+      label: <p className="text-blue-500">{formatMessage({ id: '升级' })}</p>,
       onClick: () => {
         upgradeBusinessEnquiry(row.id).then(() => {
           message.success('升级成功')
@@ -338,13 +353,15 @@ const BusinessEnquiry: React.FC = () => {
     },
     {
       key: 'delete',
-      label: <p className="text-red-400">删除</p>,
+      label: <p className="text-red-400">{formatMessage({ id: '删除' })}</p>,
       onClick: () => {
         // 删除选中的行数据
         modal.confirm({
-          title: '删除商机',
+          title: formatMessage({ id: '删除商机' }),
           icon: <ExclamationCircleFilled />,
-          content: '确定删除该商机吗？数据删除后将无法恢复！',
+          content: formatMessage({
+            id: '确定删除该商机吗？数据删除后将无法恢复！',
+          }),
           onOk() {
             deleteBusinessEnquiryList(row.id).then(() => {
               // 刷新表格数据
@@ -358,12 +375,12 @@ const BusinessEnquiry: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'isInquiry', 'status', 'sort'],
-      true
+      true,
     )
     console.log(pageInfo, filteredObj, info)
 
@@ -421,7 +438,7 @@ const BusinessEnquiry: React.FC = () => {
       ExportTableDataByXLSX(
         resp.list,
         tableColumns.splice(0, tableColumns.length - 1),
-        '商机项目导出列表'
+        '商机项目导出列表',
       )
       setDownLoading(false)
     } catch {
@@ -501,7 +518,7 @@ const BusinessEnquiry: React.FC = () => {
               })
             }
           >
-            创建项目
+            {formatMessage({ id: '创建项目' })}
           </Button>
           <Button
             color="blue"
@@ -511,7 +528,7 @@ const BusinessEnquiry: React.FC = () => {
             icon={<DownloadOutlined />}
             onClick={downloadData}
           >
-            导出列表
+            {formatMessage({ id: '导出列表' })}
           </Button>
         </Space>
         <SearchTable
