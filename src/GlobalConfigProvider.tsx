@@ -11,8 +11,6 @@ const GlobalConfigProvider = () => {
   const { theme } = useSelector((state: RootState) => state.preferences)
   const { locale } = useSelector((state: RootState) => state.preferences.app)
 
-  console.log(getAntMessages(locale), 'getAntMessages(locale)')
-
   return (
     <ConfigProvider
       theme={{
