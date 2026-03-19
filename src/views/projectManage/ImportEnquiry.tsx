@@ -12,7 +12,7 @@ import DragModal from '@/components/modal/DragModal'
 import ImportIcon from '@/assets/svg/icon/import.svg'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import { loadAnalysis } from './loadAnalysis'
-import type { BussinesEnquiryImportType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessEnquiryImportType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type ImportEnquiryProps = {
   params: {
@@ -20,7 +20,7 @@ export type ImportEnquiryProps = {
     isFirst: boolean
     id: string | null
   }
-  onOk: (params: BussinesEnquiryImportType) => void
+  onOk: (params: BusinessEnquiryImportType) => void
   onCancel: () => void
 }
 
@@ -90,7 +90,7 @@ const ImportEnquiry: React.FC<ImportEnquiryProps> = ({
       .then(() => {
         console.log(
           { ...form.getFieldsValue(), products: fileResults, id: id },
-          'form.getFieldsValue()'
+          'form.getFieldsValue()',
         )
         onOk({ ...form.getFieldsValue(), products: fileResults, id: id })
       })

@@ -2,10 +2,10 @@ import { HttpRequest } from '@/utils/request'
 import type {
   BusinessEnquiryParams,
   BusinessEnquiryType,
-  BussinesEnquiryDownloadType,
-  BussinesEnquiryImportType,
-  BussinesEnquiryProductType,
-  BussinesFollowRecordType,
+  BusinessEnquiryDownloadType,
+  BusinessEnquiryImportType,
+  BusinessEnquiryProductType,
+  BusinessFollowRecordType,
 } from './BusinessEnquiryModel'
 import { MakeQuotationTableType } from '../SaleProject/SaleProjectModel'
 
@@ -16,19 +16,19 @@ export enum BusinessEnquiryApi {
   businessEnquiryList = '/business/project',
   businessEnquiryListByPage = '//business/project/page',
   businessUpgrade = '/business/project/upgrade/',
-  bussinesOperationRecord = '/business/project-event/',
-  bussinesEnquiryRecord = '/business/project-inquiry-quote/',
-  bussinesEnquiryProduct = '/business/project-inquiry-product',
-  bussinesBatchEnquiryProduct = '/business/project-inquiry-product/allot',
-  bussinesFollowRecord = '/business/project-follow',
-  bussinesSupplier = '/business/project-supplier',
-  bussinesBatchSupplier = '/business/project-supplier/allot',
-  bussinesDownloadEnquiry = '/business/project-supplier/download/quotation',
-  bussinesImportEnquiry = '/business/project-supplier/inquiry',
-  confirmBussinesSupplier = '/business/project-supplier/confirmSupplier',
-  bussinessProductList = '/business/project-supplier/product',
-  batchBussinessProductList = '/business/project-supplier/product/batch',
-  downloadbusinessProject = '/business/project-inquiry-product/download/',
+  businessOperationRecord = '/business/project-event/',
+  businessEnquiryRecord = '/business/project-inquiry-quote/',
+  businessEnquiryProduct = '/business/project-inquiry-product',
+  businessBatchEnquiryProduct = '/business/project-inquiry-product/allot',
+  businessFollowRecord = '/business/project-follow',
+  businessSupplier = '/business/project-supplier',
+  businessBatchSupplier = '/business/project-supplier/allot',
+  businessDownloadEnquiry = '/business/project-supplier/download/quotation',
+  businessImportEnquiry = '/business/project-supplier/inquiry',
+  confirmBusinessSupplier = '/business/project-supplier/confirmSupplier',
+  businessProductList = '/business/project-supplier/product',
+  batchBusinessProductList = '/business/project-supplier/product/batch',
+  downloadBusinessProject = '/business/project-inquiry-product/download/',
 }
 
 /**
@@ -37,7 +37,7 @@ export enum BusinessEnquiryApi {
  * @returns 商机询价列表
  */
 export const getBusinessEnquiryList = (
-  params: Partial<BusinessEnquiryParams>
+  params: Partial<BusinessEnquiryParams>,
 ) => {
   return HttpRequest.get(
     {
@@ -46,7 +46,7 @@ export const getBusinessEnquiryList = (
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -63,7 +63,7 @@ export const getBusinessEnquiryListPage = (params: BusinessEnquiryParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -80,7 +80,7 @@ export const addBusinessEnquiryList = (params: BusinessEnquiryType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -97,7 +97,7 @@ export const updateBusinessEnquiryList = (params: BusinessEnquiryType) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -113,7 +113,7 @@ export const deleteBusinessEnquiryList = (id: string | number) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -129,7 +129,7 @@ export const getBusinessEnquiryDetail = (id: string | number) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -145,7 +145,7 @@ export const upgradeBusinessEnquiry = (id: string | number) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -157,11 +157,11 @@ export const upgradeBusinessEnquiry = (id: string | number) => {
 export const getBusinessOperationRecord = (id: string | number) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesOperationRecord + '/' + id,
+      url: BusinessEnquiryApi.businessOperationRecord + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -172,16 +172,16 @@ export const getBusinessOperationRecord = (id: string | number) => {
  */
 export const getBusinessEnquiryRecord = (
   id: string | number,
-  params: { isInquery: boolean | string }
+  params: { isInquiry: boolean | string },
 ) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesEnquiryRecord + id,
+      url: BusinessEnquiryApi.businessEnquiryRecord + id,
       params: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -192,16 +192,16 @@ export const getBusinessEnquiryRecord = (
  */
 export const getBusinessEnquiryProduct = (
   id: string | number,
-  params?: { keyword: string }
+  params?: { keyword: string },
 ) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesEnquiryProduct + '/' + id,
+      url: BusinessEnquiryApi.businessEnquiryProduct + '/' + id,
       params: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -211,16 +211,16 @@ export const getBusinessEnquiryProduct = (
  * @returns 商机询价列表
  */
 export const putBusinessEnquiryProduct = (
-  params: BussinesEnquiryProductType
+  params: BusinessEnquiryProductType,
 ) => {
   return HttpRequest.put(
     {
-      url: BusinessEnquiryApi.bussinesEnquiryProduct,
+      url: BusinessEnquiryApi.businessEnquiryProduct,
       params: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -232,11 +232,11 @@ export const putBusinessEnquiryProduct = (
 export const deleteBusinessEnquiryProduct = (id: string | number) => {
   return HttpRequest.delete(
     {
-      url: BusinessEnquiryApi.bussinesEnquiryProduct + '/' + id,
+      url: BusinessEnquiryApi.businessEnquiryProduct + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -247,16 +247,16 @@ export const deleteBusinessEnquiryProduct = (id: string | number) => {
  */
 export const batchBusinessEnquiryProduct = (params: {
   projectId: string
-  products: BussinesEnquiryProductType[]
+  products: BusinessEnquiryProductType[]
 }) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.bussinesBatchEnquiryProduct,
+      url: BusinessEnquiryApi.businessBatchEnquiryProduct,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -268,11 +268,11 @@ export const batchBusinessEnquiryProduct = (params: {
 export const getBusinessFollowRecord = (id: string | number) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesFollowRecord + '/' + id,
+      url: BusinessEnquiryApi.businessFollowRecord + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -281,15 +281,15 @@ export const getBusinessFollowRecord = (id: string | number) => {
  * @param params 商机询价参数
  * @returns 商机询价列表
  */
-export const addBusinessFollowRecord = (params: BussinesFollowRecordType) => {
+export const addBusinessFollowRecord = (params: BusinessFollowRecordType) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.bussinesFollowRecord,
+      url: BusinessEnquiryApi.businessFollowRecord,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -299,16 +299,16 @@ export const addBusinessFollowRecord = (params: BussinesFollowRecordType) => {
  * @returns 商机询价列表
  */
 export const updateBusinessFollowRecord = (
-  params: BussinesFollowRecordType
+  params: BusinessFollowRecordType,
 ) => {
   return HttpRequest.put(
     {
-      url: BusinessEnquiryApi.bussinesFollowRecord,
+      url: BusinessEnquiryApi.businessFollowRecord,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -320,11 +320,11 @@ export const updateBusinessFollowRecord = (
 export const deleteBusinessFollowRecord = (id: string | number) => {
   return HttpRequest.delete(
     {
-      url: BusinessEnquiryApi.bussinesFollowRecord + '/' + id,
+      url: BusinessEnquiryApi.businessFollowRecord + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -336,11 +336,11 @@ export const deleteBusinessFollowRecord = (id: string | number) => {
 export const getBusinessSupplier = (id: string) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinesSupplier + '/' + id,
+      url: BusinessEnquiryApi.businessSupplier + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -352,11 +352,11 @@ export const getBusinessSupplier = (id: string) => {
 export const deleteBusinessSupplier = (id: string) => {
   return HttpRequest.delete(
     {
-      url: BusinessEnquiryApi.bussinesSupplier + '/' + id,
+      url: BusinessEnquiryApi.businessSupplier + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -371,12 +371,12 @@ export const addBatchBusinessSupplier = (params: {
 }) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.bussinesBatchSupplier,
+      url: BusinessEnquiryApi.businessBatchSupplier,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -386,16 +386,16 @@ export const addBatchBusinessSupplier = (params: {
  * @returns 商机询价列表
  */
 export const downloadBusinessEnquiry = (
-  params: BussinesEnquiryDownloadType
+  params: BusinessEnquiryDownloadType,
 ) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.bussinesDownloadEnquiry,
+      url: BusinessEnquiryApi.businessDownloadEnquiry,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -404,15 +404,15 @@ export const downloadBusinessEnquiry = (
  * @param params 商机询价参数
  * @returns 商机询价列表
  */
-export const importBusinessEnquiry = (params: BussinesEnquiryImportType) => {
+export const importBusinessEnquiry = (params: BusinessEnquiryImportType) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.bussinesImportEnquiry,
+      url: BusinessEnquiryApi.businessImportEnquiry,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -421,18 +421,18 @@ export const importBusinessEnquiry = (params: BussinesEnquiryImportType) => {
  * @param params 商机询价参数
  * @returns 商机询价列表
  */
-export const confirmBussinesSupplier = (params: {
+export const confirmBusinessSupplier = (params: {
   projectId: string
   supplierId: string
 }) => {
   return HttpRequest.post(
     {
-      url: BusinessEnquiryApi.confirmBussinesSupplier,
+      url: BusinessEnquiryApi.confirmBusinessSupplier,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -444,11 +444,11 @@ export const confirmBussinesSupplier = (params: {
 export const getBusinessSupplierProduct = (id: string) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.bussinessProductList + '/' + id,
+      url: BusinessEnquiryApi.businessProductList + '/' + id,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -458,16 +458,16 @@ export const getBusinessSupplierProduct = (id: string) => {
  * @returns 商机询价列表
  */
 export const putBusinessSupplierProduct = (
-  params: MakeQuotationTableType[]
+  params: MakeQuotationTableType[],
 ) => {
   return HttpRequest.put(
     {
-      url: BusinessEnquiryApi.batchBussinessProductList,
+      url: BusinessEnquiryApi.batchBusinessProductList,
       data: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -479,12 +479,12 @@ export const putBusinessSupplierProduct = (
 export const downloadBusinessProject = (id: string) => {
   return HttpRequest.get(
     {
-      url: BusinessEnquiryApi.downloadbusinessProject + '/' + id,
+      url: BusinessEnquiryApi.downloadBusinessProject + '/' + id,
       responseType: 'blob',
     },
     {
       successMessageMode: 'none',
       isTransformResponse: true,
-    }
+    },
   )
 }

@@ -16,7 +16,7 @@ import {
 import { filterKeys } from '@/utils/tool'
 import { formatTime } from '@/utils/format'
 import { AddSalesContractForm } from '@/views/contractManage/config'
-import { postDownlFile } from '@/services/upload/UploadApi'
+import { postDownloadFile } from '@/services/upload/UploadApi'
 import { ExclamationCircleFilled } from '@ant-design/icons'
 import type { BusinessEnquiryType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { useNavigate } from 'react-router-dom'
@@ -119,7 +119,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       width: 150,
       render(value) {
         let options = AddSalesContractForm.find(
-          (item) => item.name === 'status'
+          (item) => item.name === 'status',
         )?.options
         return options?.find((item) => item.value === value.status)?.label
       },
@@ -185,7 +185,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
       let fileIds = resp ?? []
       if (!fileIds || !fileIds.length) return
       fileIds.map((item: { fileId: string; fileName: string }) => {
-        postDownlFile(item.fileId).then((resp) => {
+        postDownloadFile(item.fileId).then((resp) => {
           let blobUrl = window.URL.createObjectURL(resp)
           const aElement = document.createElement('a')
           document.body.appendChild(aElement)
@@ -208,7 +208,7 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
     let filterRow = filterKeys(
       detail,
       ['salesProjectId', 'customerId', 'companyId', 'salespersonId'],
-      true
+      true,
     )
     let info = {
       ...customerRow,
@@ -232,12 +232,12 @@ const SalesContract: React.FC<SalesContractProps> = ({ projectId, detail }) => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'isInquiry', 'status'],
-      true
+      true,
     )
     setSearchDefaultForm({
       ...pageInfo,

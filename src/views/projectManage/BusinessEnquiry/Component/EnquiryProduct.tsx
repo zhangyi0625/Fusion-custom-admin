@@ -21,7 +21,7 @@ import {
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import type {
   BusinessEnquiryType,
-  BussinesEnquiryProductType,
+  BusinessEnquiryProductType,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import ProductTransfer from '../../ProductTransfer'
 import ImportProduct from '../../ImportProduct'
@@ -44,7 +44,7 @@ interface EditableCellProps {
   editable: boolean
   dataIndex: keyof any
   record: any
-  handleSave: (record: BussinesEnquiryProductType) => void
+  handleSave: (record: BusinessEnquiryProductType) => void
 }
 
 const EditableContext = React.createContext<FormInstance<any> | null>(null)
@@ -57,7 +57,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
 
     const [params, setParams] = useState<{
       visible: boolean
-      selected: BussinesEnquiryProductType[] | null
+      selected: BusinessEnquiryProductType[] | null
     }>({
       visible: false,
       selected: null,
@@ -84,7 +84,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
         keyword: searchValue ?? null,
       })
       setDataSource(
-        res.sort((a: { sort: number }, b: { sort: number }) => a.sort - b.sort)
+        res.sort((a: { sort: number }, b: { sort: number }) => a.sort - b.sort),
       )
     }
 
@@ -316,7 +316,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
     }
 
     const updateEnquiryProduct = async (
-      currentRow: BussinesEnquiryProductType[]
+      currentRow: BusinessEnquiryProductType[],
     ) => {
       let params = {
         projectId: projectId,
@@ -379,7 +379,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
           />
         </div>
         <div className="editable-row">
-          <Table<BussinesEnquiryProductType>
+          <Table<BusinessEnquiryProductType>
             components={components}
             rowClassName={() => 'editable-row'}
             bordered
@@ -406,7 +406,7 @@ const EnquiryProductCom: React.FC<EnquiryProductProps> = memo(
         />
       </>
     )
-  }
+  },
 )
 
 export default EnquiryProductCom

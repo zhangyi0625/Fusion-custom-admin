@@ -12,7 +12,7 @@ import {
 import { postUploadFile } from '@/services/upload/UploadApi'
 import ImportIcon from '@/assets/svg/icon/import.svg'
 
-export type AttachemntModalProps = {
+export type AttachmentModalProps = {
   visible: boolean
   title: string
   uploadAccept: string[]
@@ -21,11 +21,9 @@ export type AttachemntModalProps = {
   onCancel: () => void
 }
 
-// type ParamsKey = AttachemntModalProps['uploadFileKey']
-
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
-const AttachemntModal: React.FC<AttachemntModalProps> = ({
+const AttachmentModal: React.FC<AttachmentModalProps> = ({
   visible,
   title = '添加附件',
   uploadAccept = ['.doc', 'docx'],
@@ -99,7 +97,7 @@ const AttachemntModal: React.FC<AttachemntModalProps> = ({
       title={title}
       onOk={onConfirm}
       onCancel={onCancel}
-      wrapClassName="attachement-modal"
+      wrapClassName="attachment-modal"
     >
       {/* {!isFirst && ( */}
       <Form form={form} labelCol={{ span: 3 }}>
@@ -145,4 +143,4 @@ const AttachemntModal: React.FC<AttachemntModalProps> = ({
   )
 }
 
-export default AttachemntModal
+export default AttachmentModal

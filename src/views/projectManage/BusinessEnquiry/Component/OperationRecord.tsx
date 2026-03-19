@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useImperativeHandle } from 'react'
 import { Empty, Timeline } from 'antd'
 import { getBusinessOperationRecord } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
-import type { BussinesOperationRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessOperationRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type OperationRecordProps = {
   projectId: string
@@ -27,7 +27,7 @@ const OperationRecordCom = React.forwardRef<
 
   const loadBusinessOperationRecord = () => {
     getBusinessOperationRecord(projectId).then((resp) => {
-      let data = resp.map((item: BussinesOperationRecordType) => {
+      let data = resp.map((item: BusinessOperationRecordType) => {
         return {
           children: (
             <div className="text-gray-400">

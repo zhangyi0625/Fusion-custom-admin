@@ -18,17 +18,17 @@ import {
 import { UploadOutlined } from '@ant-design/icons'
 import DragModal from '@/components/modal/DragModal'
 import { AddFollowRecordForm } from '../../config'
-import { BussinesFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import dayjs from 'dayjs'
 
 export type AddFollowRecordProps = {
   params: {
     visible: boolean
-    currentRow: BussinesFollowRecordType
+    currentRow: BusinessFollowRecordType
   }
   supplier: TreeSelectProps['treeData']
-  onOk: (params: BussinesFollowRecordType) => void
+  onOk: (params: BusinessFollowRecordType) => void
   onCancel: () => void
 }
 

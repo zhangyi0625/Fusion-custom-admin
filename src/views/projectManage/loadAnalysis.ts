@@ -1,6 +1,6 @@
 import * as XLSX from 'xlsx'
 import { message } from 'antd'
-import { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { BusinessEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { isString } from 'lodash-es'
 import { filterKeys } from '@/utils/tool'
 
@@ -34,14 +34,14 @@ const importXLSXContentType: Record<string, ImportXLSXContentType> = {
   // },
 }
 
-type importType = BussinesEnquiryProductType[]
+type importType = BusinessEnquiryProductType[]
 
 type ImportSource = 'ImportEnquiry'
 
 export function loadAnalysis(
   file: File,
   callback: any,
-  importSource: ImportSource
+  importSource: ImportSource,
 ) {
   const reader = new FileReader()
   reader.onload = (e) => {
@@ -63,7 +63,7 @@ export function loadAnalysis(
     let inquiryNumber = jsonData[0] as unknown as string[]
     // 去除头部标题和尾部栏目(表格内容一定包含序号)
     let sliceJsonData = jsonData.filter(
-      (item) => item[0] && !isString(item[0]) && Number(item[0])
+      (item) => item[0] && !isString(item[0]) && Number(item[0]),
     )
     let arr: importType[] = []
     // 校验剩余内容是否符合格式标准
@@ -71,7 +71,7 @@ export function loadAnalysis(
       sliceJsonData.find(
         (item: string[]) =>
           item.length < 4 ||
-          item.length > importXLSXContentType[importSource].xlsxKey.length
+          item.length > importXLSXContentType[importSource].xlsxKey.length,
       )
     ) {
       message.error('询价表导入格式有误，请下载正确的询价表导入模版！')
@@ -90,7 +90,7 @@ export function loadAnalysis(
             ...filterKeys(
               params,
               ['productUnit', 'qty', 'price', 'amount'],
-              true
+              true,
             ),
             productModel: params['productModel/productSpec']?.split('/')[0],
             productSpec: params['productModel/productSpec']?.split('/')[1],
@@ -105,7 +105,7 @@ export function loadAnalysis(
         'jsonData',
         sliceJsonData,
         arr,
-        inquiryNumber[5]
+        inquiryNumber[5],
       )
       callback(arr)
     }

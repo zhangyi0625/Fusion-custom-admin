@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { essentailPreferences } from './storeState'
+import { essentialPreferences } from './storeState'
 
-export type Category = keyof essentailPreferences
+export type Category = keyof essentialPreferences
 
-export const initEssential: essentailPreferences = {
+export const initEssential: essentialPreferences = {
   // routeData: undefined,
   // porPortData: undefined,
   // fndPortData: undefined,
@@ -23,11 +23,11 @@ export const essentialSlice = createSlice({
   name: 'essential',
   initialState: initEssential,
   reducers: {
-    setEssentail(
-      state: essentailPreferences,
+    setEssential(
+      state: essentialPreferences,
       action: {
-        payload: { value: essentailPreferences; key: string }
-      }
+        payload: { value: essentialPreferences[Category]; key: Category }
+      },
     ) {
       const { key, value } = action.payload
       state[key] = value

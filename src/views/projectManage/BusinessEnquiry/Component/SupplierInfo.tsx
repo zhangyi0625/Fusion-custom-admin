@@ -3,7 +3,7 @@ import { App, Button, Space, Table, TableProps } from 'antd'
 import { CheckCircleOutlined, ExclamationCircleFilled } from '@ant-design/icons'
 import {
   addBatchBusinessSupplier,
-  confirmBussinesSupplier,
+  confirmBusinessSupplier,
   deleteBusinessSupplier,
   downloadBusinessEnquiry,
   getBusinessSupplier,
@@ -17,10 +17,10 @@ import EditQuotation from '../../EditQuotation'
 import ConfirmQuotation from '../../ConfirmQuotation'
 import type {
   BusinessEnquiryType,
-  BussinesEnquiryImportType,
+  BusinessEnquiryImportType,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { getSupplierDetail } from '@/services/supplierManage/Supplier/SupplierApi'
-import { postDownlFile } from '@/services/upload/UploadApi'
+import { postDownloadFile } from '@/services/upload/UploadApi'
 import { MakeQuotationTableType } from '@/services/projectManage/SaleProject/SaleProjectModel'
 import PreviewFile from '@/components/PreviewFile'
 
@@ -48,7 +48,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
     const [supplierName, setSupplierName] = useState<string | null>(null)
 
     const [editProducts, setEditProducts] = useState<MakeQuotationTableType[]>(
-      []
+      [],
     )
 
     useEffect(() => {
@@ -237,7 +237,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
 
     const downLoadFile = (fileId: string, fileName: string) => {
       if (!fileId) return
-      postDownlFile(fileId).then((resp) => {
+      postDownloadFile(fileId).then((resp) => {
         let blobUrl = window.URL.createObjectURL(resp)
         const aElement = document.createElement('a')
         document.body.appendChild(aElement)
@@ -256,7 +256,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
     }
 
     const ConfirmQuotationBySupplier = (params: { supplierId: string }) => {
-      confirmBussinesSupplier({
+      confirmBusinessSupplier({
         projectId: projectId,
         supplierId: params.supplierId,
       }).then(() => {
@@ -308,7 +308,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
       })
     }
 
-    const confirmImportEnquiry = (current: BussinesEnquiryImportType) => {
+    const confirmImportEnquiry = (current: BusinessEnquiryImportType) => {
       importBusinessEnquiry({
         ...current,
         inquiryNumber: current.products[0].inquiryNumber as string,
@@ -381,7 +381,7 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
                 setParams({
                   visible: true,
                   selected: dataSource.map(
-                    (item: { supplierId: string }) => item.supplierId
+                    (item: { supplierId: string }) => item.supplierId,
                   ),
                 })
               }
@@ -434,14 +434,14 @@ const SupplierInfoCom: React.FC<SupplierInfoProps> = memo(
             setEditModal({ ...editModal, confirmQuotation: false })
           }
           options={dataSource.filter(
-            (item: { quotationNumber: string }) => item.quotationNumber
+            (item: { quotationNumber: string }) => item.quotationNumber,
           )}
           onOk={ConfirmQuotationBySupplier}
         />
         <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
-  }
+  },
 )
 
 export default SupplierInfoCom

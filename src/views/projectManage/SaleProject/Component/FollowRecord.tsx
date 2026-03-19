@@ -9,8 +9,8 @@ import {
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import AddFollowRecord from './AddFollowRecord'
 import { ExclamationCircleFilled } from '@ant-design/icons'
-import type { BussinesFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import { postDownlFile } from '@/services/upload/UploadApi'
+import type { BusinessFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { postDownloadFile } from '@/services/upload/UploadApi'
 import { filterKeys } from '@/utils/tool'
 
 export type FollowRecordProps = {
@@ -157,7 +157,7 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
 
   const download = (fileId: string, fileName: string) => {
     if (!fileId) return
-    postDownlFile(fileId).then((resp) => {
+    postDownloadFile(fileId).then((resp) => {
       let blobUrl = window.URL.createObjectURL(resp)
       const aElement = document.createElement('a')
       document.body.appendChild(aElement)
@@ -182,9 +182,9 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
     })
   }
 
-  const onEditOk = async (customerRow: BussinesFollowRecordType) => {
+  const onEditOk = async (customerRow: BusinessFollowRecordType) => {
     let isSupplier = (supplier || []).find(
-      (item) => item.value === customerRow.supplierId
+      (item) => item.value === customerRow.supplierId,
     )
       ? 'customerId'
       : 'supplierId'

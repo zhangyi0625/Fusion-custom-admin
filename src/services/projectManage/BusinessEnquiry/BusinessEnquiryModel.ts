@@ -27,27 +27,26 @@ export interface BusinessEnquiryType {
 }
 
 export interface BusinessEnquiryParams
-  extends Partial<BusinessEnquiryType>,
-    DefaultPaging {
+  extends Partial<BusinessEnquiryType>, DefaultPaging {
   sort: string
   // customerKeyword: string | null
   powerType: number | string
   keyword: string | null
 }
 
-export interface BussinesOperationRecordType {
+export interface BusinessOperationRecordType {
   createName: string
   createTime: string
   content: string
 }
 
-export interface BussinesEnquiryRecordType extends BussinesOperationRecordType {
-  isInquery: boolean
+export interface BusinessEnquiryRecordType extends BusinessOperationRecordType {
+  isInquiry: boolean
   fileId: string
   fileName: string
 }
 
-export interface BussinesEnquiryProductType {
+export interface BusinessEnquiryProductType {
   id?: string | null
   productModel: string
   productName: string
@@ -58,7 +57,7 @@ export interface BussinesEnquiryProductType {
   productId?: string
 }
 
-export interface BussinesFollowRecordType {
+export interface BusinessFollowRecordType {
   id?: string
   projectId: string
   supplierId: string
@@ -69,13 +68,13 @@ export interface BussinesFollowRecordType {
   fileName: string
 }
 
-export interface BussinesSupplierType {
+export interface BusinessSupplierType {
   id?: string
   projectId: string
   supplierId: string
 }
 
-export interface BussinesEnquiryProduct extends BussinesEnquiryProductType {
+export interface BusinessEnquiryProduct extends BusinessEnquiryProductType {
   adjAmount?: number | string
   adjPrice?: number | string
   amount: string
@@ -83,15 +82,15 @@ export interface BussinesEnquiryProduct extends BussinesEnquiryProductType {
   inquiryNumber?: string
 }
 
-export interface BussinesEnquiryDownloadType {
+export interface BusinessEnquiryDownloadType {
   id: string
   modifyReason?: string
   products: MakeQuotationTableType[]
 }
 
-export interface BussinesEnquiryImportType {
+export interface BusinessEnquiryImportType {
   id: string
   inquiryFile: string
   inquiryNumber: string
-  products: BussinesEnquiryProduct[]
+  products: BusinessEnquiryProduct[]
 }

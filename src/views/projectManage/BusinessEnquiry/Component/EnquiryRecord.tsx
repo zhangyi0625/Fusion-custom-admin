@@ -12,8 +12,8 @@ import {
   getBusinessEnquiryRecord,
   getBusinessSupplier,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
-import { BussinesEnquiryRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
-import { postDownlFile } from '@/services/upload/UploadApi'
+import { BusinessEnquiryRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import { postDownloadFile } from '@/services/upload/UploadApi'
 import PreviewFile from '@/components/PreviewFile'
 import { SupplierType } from '@/services/supplierManage/Supplier/SupplierModel'
 
@@ -23,7 +23,7 @@ export type EnquiryRecordProps = {
 }
 
 type RecordType = {
-  isInquery: string | boolean
+  isInquiry: string | boolean
   projectSupplierId: string
 }
 
@@ -34,7 +34,7 @@ export type EnquiryRecordRef = {
 const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
   ({ source, projectId }, ref) => {
     const [searchDefaultForm, setSearchDefaultForm] = useState<RecordType>({
-      isInquery: '',
+      isInquiry: '',
       projectSupplierId: '',
     })
 
@@ -93,7 +93,7 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
 
     const download = (fileId: string, fileName: string) => {
       if (!fileId) return
-      postDownlFile(fileId).then((resp) => {
+      postDownloadFile(fileId).then((resp) => {
         let blobUrl = window.URL.createObjectURL(resp)
         const aElement = document.createElement('a')
         document.body.appendChild(aElement)
@@ -109,12 +109,12 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
       await loadSupplierList()
       getBusinessEnquiryRecord(projectId, type ? type : searchDefaultForm).then(
         (resp) => {
-          let data = resp.map((item: BussinesEnquiryRecordType) => {
+          let data = resp.map((item: BusinessEnquiryRecordType) => {
             return {
               dot: (
                 <div>
                   <img
-                    src={item.isInquery ? EnquiryIcon : QuotationIcon}
+                    src={item.isInquiry ? EnquiryIcon : QuotationIcon}
                     className="w-[36px] h-[36px]"
                     alt=""
                   />
@@ -158,7 +158,7 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
             }
           })
           setEnquiryRecord(data)
-        }
+        },
       )
     }
 
@@ -182,8 +182,8 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
               allowClear
               placeholder="请选择"
               showSearch
-              value={searchDefaultForm.isInquery}
-              onChange={(e: boolean | string) => changeType(e, 'isInquery')}
+              value={searchDefaultForm.isInquiry}
+              onChange={(e: boolean | string) => changeType(e, 'isInquiry')}
               options={recordTypeOptions}
               filterOption={(input, option) =>
                 String(option?.label ?? '')
@@ -216,7 +216,7 @@ const EnquiryRecordCom = React.forwardRef<EnquiryRecordRef, EnquiryRecordProps>(
         <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
-  }
+  },
 )
 
 export default EnquiryRecordCom

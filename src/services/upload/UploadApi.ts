@@ -18,20 +18,20 @@ export const postUploadFile = (params: FormData) => {
       url: UploadApi.uploadFile,
       params,
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   )
 }
 
 /**
  * 下载文件
  */
-export const postDownlFile = (id: string) => {
+export const postDownloadFile = (id: string) => {
   return HttpRequest.get(
     {
       url: UploadApi.downloadFile + id,
       responseType: 'blob',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   )
 }
 
@@ -44,6 +44,6 @@ export const postPreviewFile = (id: string) => {
       url: UploadApi.previewFile + id,
       responseType: 'blob',
     },
-    { isTransformResponse: false }
+    { isTransformResponse: false },
   )
 }

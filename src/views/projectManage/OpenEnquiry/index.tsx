@@ -19,7 +19,7 @@ import { filterKeys } from '@/utils/tool'
 import {
   getOpenEnquiryListPage,
   postAllocationEnquiry,
-  postAuidtEnquiry,
+  postAuditEnquiry,
 } from '@/services/projectManage/OpenEnquiry/OpenEnquiryApi'
 import {
   OpenEnquiryParams,
@@ -41,7 +41,7 @@ const OpenEnquiry: React.FC = () => {
     detailId: null,
   })
 
-  const [auidtDrawer, setAuditDrawer] = useState<{
+  const [auditDrawer, setAuditDrawer] = useState<{
     visible: boolean
     currentRow: OpenEnquiryType | null
   }>({
@@ -57,7 +57,7 @@ const OpenEnquiry: React.FC = () => {
       title: '',
       status: null,
       sort: 'create_time desc',
-    }
+    },
   )
 
   const tableColumns: TableProps['columns'] = [
@@ -104,15 +104,15 @@ const OpenEnquiry: React.FC = () => {
                       value.status === 'PENDING_REVIEW'
                         ? 'bg-gray-500'
                         : value.status === 'ENDED'
-                        ? 'bg-red-500'
-                        : 'bg-green-500'
+                          ? 'bg-red-500'
+                          : 'bg-green-500'
                     }
                       `}
             ></div>
             <p className="ml-[8px]">
               {
                 OpenEnquiryStatusOptions.find(
-                  (item) => item.value === value.status
+                  (item) => item.value === value.status,
                 )?.label
               }
             </p>
@@ -196,7 +196,7 @@ const OpenEnquiry: React.FC = () => {
                 onClick={() => cancelEnquiry(_.id)}
                 disabled={
                   OpenEnquiryStatusOptions.findIndex(
-                    (item) => item.value === _.status
+                    (item) => item.value === _.status,
                   ) > 4
                 }
                 color="danger"
@@ -217,11 +217,11 @@ const OpenEnquiry: React.FC = () => {
       icon: <ExclamationCircleFilled />,
       content: '确定取消该询价吗？询价取消后将无法恢复！',
       onOk() {
-        postAuidtEnquiry({ cause: null, id: id, status: 'CANCELLED' }).then(
+        postAuditEnquiry({ cause: null, id: id, status: 'CANCELLED' }).then(
           () => {
             // 刷新表格数据
             onUpdateSearch(searchDefaultForm)
-          }
+          },
         )
       },
     })
@@ -229,12 +229,12 @@ const OpenEnquiry: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'sort', 'status'],
-      true
+      true,
     )
     setSearchDefaultForm({
       ...pageInfo,
@@ -257,12 +257,12 @@ const OpenEnquiry: React.FC = () => {
   const onAuditEnquiry = (
     status: string,
     rejectReason?: string,
-    params?: ProductManageType[] | null
+    params?: ProductManageType[] | null,
   ) => {
     if (params?.length) {
       postAllocationEnquiry(
-        auidtDrawer.currentRow?.id as string,
-        params as ProductManageType[]
+        auditDrawer.currentRow?.id as string,
+        params as ProductManageType[],
       ).then(() => {
         loadEnquiryResult(status, rejectReason)
       })
@@ -272,8 +272,8 @@ const OpenEnquiry: React.FC = () => {
   }
 
   const loadEnquiryResult = (status: string, rejectReason?: string) => {
-    postAuidtEnquiry({
-      id: auidtDrawer.currentRow?.id as string,
+    postAuditEnquiry({
+      id: auditDrawer.currentRow?.id as string,
       status: status,
       cause: rejectReason as string,
     }).then(() => {
@@ -353,7 +353,7 @@ const OpenEnquiry: React.FC = () => {
         />
       </Card>
       <OpenEnquiryAudit
-        params={auidtDrawer}
+        params={auditDrawer}
         onCancel={() => setAuditDrawer({ visible: false, currentRow: null })}
         onAuditEnquiry={onAuditEnquiry}
       />

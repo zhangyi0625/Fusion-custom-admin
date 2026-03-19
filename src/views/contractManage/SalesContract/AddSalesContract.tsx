@@ -46,12 +46,12 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
 
   const [form] = Form.useForm()
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [formMap, setFormMap] = useState(
     contractType === 'SalesContract'
       ? AddSalesContractForm
-      : AddPurchaseContractForm
+      : AddPurchaseContractForm,
   )
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -112,10 +112,10 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
           item.name === 'customerId'
             ? customerData
             : item.name === 'salespersonId'
-            ? userData
-            : item.name === 'companyId'
-            ? payerUnitData
-            : supplierData
+              ? userData
+              : item.name === 'companyId'
+                ? payerUnitData
+                : supplierData
       if (item.name === 'salesProjectId') item.options = res
     })
     setFormMap([...formMap])
@@ -155,7 +155,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
   }
 
   const selectChange = (
-    item: Omit<CustomColumn, 'selectFetch' | 'hiddenItem'>
+    item: Omit<CustomColumn, 'selectFetch' | 'hiddenItem'>,
   ) => {
     if (item.name !== 'customerId') return
     else {
@@ -164,7 +164,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
       form.setFieldsValue({
         ...form.getFieldsValue(),
         companyId: company?.find(
-          (el) => el.id === form.getFieldValue('customerId')
+          (el) => el.id === form.getFieldValue('customerId'),
         )?.companyId,
       })
     }

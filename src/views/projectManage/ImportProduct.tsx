@@ -12,12 +12,8 @@ export type ImportProductProps = {
   onCancel: () => void
 }
 
-const ImportProduct: React.FC<ImportProductProps> = ({
-  params,
-  onCancel,
-  onOk,
-}) => {
-  const { visible, source } = params
+const ImportProduct: React.FC<ImportProductProps> = ({ params, onCancel }) => {
+  const { visible } = params
 
   const { Dragger } = Upload
 

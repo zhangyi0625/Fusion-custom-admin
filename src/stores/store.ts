@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   menuState: menuSlice.reducer,
   preferences: preferencesSlice.reducer,
   publicSetting: sysSettingSlice.reducer,
-  essentail: essentialSlice.reducer,
+  essential: essentialSlice.reducer,
 })
 
 // 持久化存储配置
@@ -51,4 +51,4 @@ export const updatePreferences = (category: Category, key: any, value: any) =>
 
 export const { setPublicData } = sysSettingSlice.actions
 
-export const { setEssentail } = essentialSlice.actions
+export const { setEssential } = essentialSlice.actions

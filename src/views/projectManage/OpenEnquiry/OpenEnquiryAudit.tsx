@@ -16,7 +16,7 @@ import {
 import ProductTransfer from '../ProductTransfer'
 import AddProduct from '@/views/productManage/Product/AddProduct'
 import EditQuotation from '../EditQuotation'
-import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { ProductSearchColumns } from '@/views/productManage/config'
 import type { ProductManageType } from '@/services/productManage/productManageModel'
 import {
@@ -35,7 +35,7 @@ export type OpenEnquiryAuditProps = {
   onAuditEnquiry: (
     status: string,
     rejectReason?: string,
-    selectedArr?: ProductManageType[]
+    selectedArr?: ProductManageType[],
   ) => void
 }
 
@@ -50,7 +50,7 @@ interface EditableCellProps {
   editable: boolean
   dataIndex: keyof any
   record: any
-  handleSave: (record: BussinesEnquiryProductType) => void
+  handleSave: (record: BusinessEnquiryProductType) => void
 }
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
@@ -68,7 +68,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
 
   const [selectProduct, setSelectProduct] = useState<{
     visible: boolean
-    selected: BussinesEnquiryProductType[] | null
+    selected: BusinessEnquiryProductType[] | null
   }>({
     visible: false,
     selected: null,
@@ -277,15 +277,15 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
     },
   }
 
-  const deleteItem = (row: BussinesEnquiryProductType) => {
+  const deleteItem = (row: BusinessEnquiryProductType) => {
     let filter = dataSource.filter(
-      (item) => item.productName !== row.productName
+      (item) => item.productName !== row.productName,
     )
     setDataSource(filter)
   }
 
-  const updateEnquiryProduct = (current: BussinesEnquiryProductType[]) => {
-    let newArr: BussinesEnquiryProductType[] = []
+  const updateEnquiryProduct = (current: BusinessEnquiryProductType[]) => {
+    let newArr: BusinessEnquiryProductType[] = []
     current.map((item) => {
       if (
         dataSource.find((el) => el.productName !== item.productName) ||
@@ -301,7 +301,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
     })
     postAllocationEnquiry(
       currentRow?.id as string,
-      newArr as unknown as ProductManageType[]
+      newArr as unknown as ProductManageType[],
     ).then(() => {
       loadEnquiryDetail()
       setSelectProduct({ visible: false, selected: null })
@@ -372,7 +372,7 @@ const OpenEnquiryAudit: React.FC<OpenEnquiryAuditProps> = ({
             </Button>
           </Space>
         </div>
-        <Table<BussinesEnquiryProductType>
+        <Table<BusinessEnquiryProductType>
           components={components}
           rowClassName={() => 'editable-row'}
           bordered

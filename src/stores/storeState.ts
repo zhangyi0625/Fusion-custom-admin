@@ -298,7 +298,7 @@ export interface sysSettingPreferences {
  * 基础数据维护
  */
 
-export interface essentailPreferences {
+export interface essentialPreferences {
   // /** 细分航线缓存 */
   // routeData: RouteMangeType[] | undefined
   // /** 起运港缓存 */

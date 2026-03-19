@@ -35,7 +35,7 @@ import AddBusinessEnquiry from './AddBusinessEnquiry'
 import BusinessEnquiryDrawer from './BusinessEnquiryDrawer'
 import { filterKeys } from '@/utils/tool'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
+import { RootState, setEssential } from '@/stores/store'
 import { getRoleUser } from '@/services/system/role/roleApi'
 import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
 import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
@@ -53,7 +53,7 @@ const BusinessEnquiry: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
@@ -120,7 +120,7 @@ const BusinessEnquiry: React.FC = () => {
     ]).then((resp) => {
       let key = ['userData', 'customerData', 'contractingData', 'payerUnitData']
       key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
+        dispatch(setEssential({ value: resp[index], key: key[index] }))
       })
       getReduxData()
     })

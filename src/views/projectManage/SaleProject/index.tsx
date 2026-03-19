@@ -28,7 +28,7 @@ import {
   updateBusinessEnquiryList,
 } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryApi'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
+import { RootState, setEssential } from '@/stores/store'
 import { getRoleUser } from '@/services/system/role/roleApi'
 import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
 import { getContractingList } from '@/services/system/contractingUnits/ContractingUnits'
@@ -43,12 +43,12 @@ const SaleProject: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [immediate, setImmediate] = useState<boolean>(false)
 
   const [searchColumns, setSearchColumns] = useState(
-    BusinessEnquirySearchColumns
+    BusinessEnquirySearchColumns,
   )
 
   const [searchDefaultForm, setSearchDefaultForm] =
@@ -109,7 +109,7 @@ const SaleProject: React.FC = () => {
     ]).then((resp) => {
       let key = ['userData', 'customerData', 'contractingData', 'payerUnitData']
       key.map((_, index: number) => {
-        dispatch(setEssentail({ value: resp[index], key: key[index] }))
+        dispatch(setEssential({ value: resp[index], key: key[index] }))
       })
       getReduxData()
     })
@@ -198,8 +198,8 @@ const SaleProject: React.FC = () => {
                   value.status === 'PENDING_PURCHASE'
                     ? 'bg-gray-500'
                     : value.status === 'TERMINATED'
-                    ? 'bg-red-500'
-                    : 'bg-green-500'
+                      ? 'bg-red-500'
+                      : 'bg-green-500'
                 }
                   `}
             ></div>
@@ -308,7 +308,7 @@ const SaleProject: React.FC = () => {
               }
               disabled={
                 ProjectStatusOptions.findIndex(
-                  (item) => item.text === _.status
+                  (item) => item.text === _.status,
                 ) > 4
               }
               color="danger"
@@ -327,7 +327,7 @@ const SaleProject: React.FC = () => {
       () => {
         message.success('中止成功')
         onUpdateSearch(searchDefaultForm)
-      }
+      },
     )
   }
 
@@ -347,12 +347,12 @@ const SaleProject: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'isInquiry', 'status', 'sort'],
-      true
+      true,
     )
     setSearchDefaultForm({
       ...pageInfo,
@@ -408,7 +408,7 @@ const SaleProject: React.FC = () => {
       ExportTableDataByXLSX(
         resp.list,
         tableColumns.splice(0, tableColumns.length - 1),
-        '销售项目导出列表'
+        '销售项目导出列表',
       )
       setDownLoading(false)
     } catch {

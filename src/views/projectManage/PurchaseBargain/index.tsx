@@ -149,8 +149,8 @@ const PurchaseBargain: React.FC = () => {
     },
     {
       title: '创建者',
-      key: 'createdr',
-      dataIndex: 'creater',
+      key: 'createdName',
+      dataIndex: 'createdName',
       align: 'center',
     },
     {
@@ -181,7 +181,7 @@ const PurchaseBargain: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({

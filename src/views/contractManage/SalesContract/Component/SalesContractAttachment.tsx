@@ -6,8 +6,8 @@ import {
   deleteContractAttachment,
   getContractAttachment,
 } from '@/services/contractManage/SalesContract/SalesContractApi'
-import { postDownlFile } from '@/services/upload/UploadApi'
-import AttachemntModal from '@/components/AttachementModal'
+import { postDownloadFile } from '@/services/upload/UploadApi'
+import AttachmentModal from '@/components/AttachementModal'
 import PreviewFile from '@/components/PreviewFile'
 
 export type SalesContractAttachmentProps = {
@@ -114,7 +114,7 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
 
     const downLoadFile = (fileId: string, fileName: string) => {
       if (!fileId) return
-      postDownlFile(fileId).then((resp) => {
+      postDownloadFile(fileId).then((resp) => {
         let blobUrl = window.URL.createObjectURL(resp)
         const aElement = document.createElement('a')
         document.body.appendChild(aElement)
@@ -165,7 +165,7 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
             scroll={{ x: 'max-content', y: 208 }}
           />
         )}
-        <AttachemntModal
+        <AttachmentModal
           title="添加附件"
           visible={visible}
           uploadFileKey="fileId"
@@ -176,7 +176,7 @@ const SalesContractAttachment: React.FC<SalesContractAttachmentProps> = memo(
         <PreviewFile params={fileParams} onCancel={onClosePreviewFile} />
       </>
     )
-  }
+  },
 )
 
 export default SalesContractAttachment

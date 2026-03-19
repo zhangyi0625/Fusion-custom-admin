@@ -6,7 +6,7 @@ import type {
 } from '@/services/projectManage/OpenEnquiry/OpenEnquiryModel'
 import { OpenEnquiryStatusOptions } from '../config'
 import type { BaseInfoDetail } from '../BusinessEnquiry/BusinessEnquiryDrawer'
-import { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { getOpenEnquiryListDetail } from '@/services/projectManage/OpenEnquiry/OpenEnquiryApi'
 import OpenQuotationDetail from './OpenQuotationDetail'
 import { formatTime } from '@/utils/format'
@@ -32,7 +32,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
     detail: null,
   })
 
-  const [dataSource, setDataSource] = useState<BussinesEnquiryProductType[]>([])
+  const [dataSource, setDataSource] = useState<BusinessEnquiryProductType[]>([])
 
   const [quotations, setQuotations] = useState<QuotationsType[]>([])
 
@@ -47,7 +47,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
     currentRow: null,
   })
 
-  const inventoryTableColumns: TableProps<BussinesEnquiryProductType>['columns'] =
+  const inventoryTableColumns: TableProps<BusinessEnquiryProductType>['columns'] =
     [
       {
         title: '序号',
@@ -169,11 +169,11 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
           enquiryDrawerInfo.detail?.status === 'PENDING_REVIEW'
             ? 'text-stone-900'
             : enquiryDrawerInfo.detail?.status === 'ENDED'
-            ? 'text-red-500'
-            : 'text-green-500'
+              ? 'text-red-500'
+              : 'text-green-500'
         }`,
         value: OpenEnquiryStatusOptions.find(
-          (item) => item.value === enquiryDrawerInfo.detail?.status
+          (item) => item.value === enquiryDrawerInfo.detail?.status,
         )?.label,
       },
       {
@@ -188,7 +188,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
         label: '截止报价日期：',
         value: formatTime(
           enquiryDrawerInfo.detail?.deadline as string,
-          'Y-M-D'
+          'Y-M-D',
         ),
       },
       {
@@ -220,7 +220,7 @@ const OpenEnquiryDetail: React.FC<OpenEnquiryDetailProps> = ({
           ))}
         </div>
         <p className="font-semibold mt-[36px] mb-[12px]">询价清单</p>
-        <Table<BussinesEnquiryProductType>
+        <Table<BusinessEnquiryProductType>
           bordered
           rowKey={'id'}
           size="small"

@@ -30,7 +30,7 @@ import AddSalesContract, {
 import SalesContractDrawer from '../SalesContract/SalesContractDrawer'
 import ConfirmSaleContractStatus from '../SalesContract/Component/ConfirmSaleContractStatus'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
+import { RootState, setEssential } from '@/stores/store'
 import { filterKeys } from '@/utils/tool'
 import { getRoleUser } from '@/services/system/role/roleApi'
 import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
@@ -44,12 +44,12 @@ const PurchaseContract: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
   const [searchColumns, setSearchColumns] = useState(
-    PurchaseContractSearchColumns
+    PurchaseContractSearchColumns,
   )
 
   const [searchDefaultForm, setSearchDefaultForm] =
@@ -185,7 +185,7 @@ const PurchaseContract: React.FC = () => {
       width: 100,
       render(value) {
         let options = AddSalesContractForm.find(
-          (item) => item.name === 'status'
+          (item) => item.name === 'status',
         )?.options
         return options?.find((item) => item.value === value.status)?.label
       },
@@ -282,10 +282,10 @@ const PurchaseContract: React.FC = () => {
       (resp) => {
         let key = ['userData', 'customerData', 'supplierData']
         key.map((_, index: number) => {
-          dispatch(setEssentail({ value: resp[index], key: key[index] }))
+          dispatch(setEssential({ value: resp[index], key: key[index] }))
         })
         getReduxData()
-      }
+      },
     )
   }
 
@@ -302,13 +302,13 @@ const PurchaseContract: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
 
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'source', 'sort'],
-      true
+      true,
     )
     setSearchDefaultForm({
       ...pageInfo,

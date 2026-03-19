@@ -1,5 +1,5 @@
 import DragModal from '@/components/modal/DragModal'
-import { Form, Input, Select } from 'antd'
+import { Form, Input } from 'antd'
 import React, { useCallback } from 'react'
 
 export type EditQuotationProps = {

@@ -4,15 +4,15 @@ import { App, Table, Transfer } from 'antd'
 import type { GetProp, TableColumnsType, TableProps, TransferProps } from 'antd'
 import { getProductList } from '@/services/productManage/productManageApi'
 import { ProductManageType } from '@/services/productManage/productManageModel'
-import type { BussinesEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
+import type { BusinessEnquiryProductType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 
 export type ProductTransferProps = {
   params: {
     visible: boolean
-    selected: BussinesEnquiryProductType[] | null
+    selected: BusinessEnquiryProductType[] | null
   }
   projectId: string | null
-  onOk: (params: BussinesEnquiryProductType[]) => void
+  onOk: (params: BusinessEnquiryProductType[]) => void
   onCancel: () => void
 }
 
@@ -41,8 +41,8 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
 
   const [mockData, setMockData] = useState<DataSourceType[]>([])
 
-  const [selectedArr, setSelectedArr] = useState<BussinesEnquiryProductType[]>(
-    []
+  const [selectedArr, setSelectedArr] = useState<BusinessEnquiryProductType[]>(
+    [],
   )
 
   useEffect(() => {
@@ -68,13 +68,13 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
   }
 
   const onConfirm = () => {
-    let newArr: BussinesEnquiryProductType[] = []
+    let newArr: BusinessEnquiryProductType[] = []
     if (targetKeys?.length === 0) {
       message.error('至少选择一个产品！')
       return
     }
     let filterArr = mockData.filter(
-      (item) => targetKeys?.includes(item.name)
+      (item) => targetKeys?.includes(item.name),
       // &&
       //   !selectedArr.map((el) => el.productName).includes(item.name)
     )
@@ -89,13 +89,8 @@ const ProductTransfer: React.FC<ProductTransferProps> = ({
         projectId: projectId ?? '',
       })
     })
-    setSelectedArr(newArr.concat(selected as BussinesEnquiryProductType[]))
-    // console.log(newArr, 'newArr', selectedArr, filterArr, targetKeys)
-
+    setSelectedArr(newArr.concat(selected as BusinessEnquiryProductType[]))
     onOk(newArr)
-    // return
-    // console.log(targetKeys, 'targetKeys', selectedArr, newArr, selected)
-    // onOk(newArr.concat(selected as BussinesEnquiryProductType[]))
   }
 
   const TableTransfer: React.FC<TableTransferProps> = (props) => {

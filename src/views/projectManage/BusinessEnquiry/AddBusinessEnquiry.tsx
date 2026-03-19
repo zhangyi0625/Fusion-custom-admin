@@ -25,7 +25,7 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
 }) => {
   const { visible, currentRow, source } = params
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [form] = Form.useForm()
 
@@ -60,27 +60,27 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
           item.name === 'customerId'
             ? customerData
             : item.name === 'salespersonId'
-            ? userData
-            : item.name === 'entrustId'
-            ? contractingData
-            : payerUnitData
+              ? userData
+              : item.name === 'entrustId'
+                ? contractingData
+                : payerUnitData
       }
     })
     return arr
   }
 
   const selectChange = (
-    item: Omit<CustomColumn, 'selectFetch' | 'hiddenItem'>
+    item: Omit<CustomColumn, 'selectFetch' | 'hiddenItem'>,
   ) => {
     if (item.name !== 'customerId') return
     else {
       let company = getBusinessEnquiryForm().find(
-        (item) => item.name === 'customerId'
+        (item) => item.name === 'customerId',
       )?.options as any[]
       form.setFieldsValue({
         ...form.getFieldsValue(),
         companyId: company?.find(
-          (el) => el.id === form.getFieldValue('customerId')
+          (el) => el.id === form.getFieldValue('customerId'),
         )?.companyId,
       })
     }

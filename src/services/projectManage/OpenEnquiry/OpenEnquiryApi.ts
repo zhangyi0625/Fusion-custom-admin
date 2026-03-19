@@ -9,7 +9,7 @@ export enum OpenEnquiryApi {
   openEnquiryList = '/business/customer-inquiry',
   openListByPage = '/business/customer-inquiry/page',
   allocationEnquiry = '/business/customer-inquiry/allot/product/',
-  auidtEnquiry = '/business/customer-inquiry/review',
+  auditEnquiry = '/business/customer-inquiry/review',
 }
 
 /**
@@ -25,7 +25,7 @@ export const getOpenEnquiryList = (params: Partial<OpenEnquiryParams>) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -42,7 +42,7 @@ export const getOpenEnquiryListPage = (params: OpenEnquiryParams) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -58,7 +58,7 @@ export const getOpenEnquiryListDetail = (id: string) => {
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -69,7 +69,7 @@ export const getOpenEnquiryListDetail = (id: string) => {
  */
 export const postAllocationEnquiry = (
   id: string,
-  params: ProductManageType[]
+  params: ProductManageType[],
 ) => {
   return HttpRequest.post(
     {
@@ -78,7 +78,7 @@ export const postAllocationEnquiry = (
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }
 
@@ -87,18 +87,18 @@ export const postAllocationEnquiry = (
  * @param params 开放询价参数
  * @returns 开放询价列表
  */
-export const postAuidtEnquiry = (params: {
+export const postAuditEnquiry = (params: {
   cause: string | null
   id: string
   status: string
 }) => {
   return HttpRequest.post(
     {
-      url: OpenEnquiryApi.auidtEnquiry,
+      url: OpenEnquiryApi.auditEnquiry,
       params: params,
     },
     {
       successMessageMode: 'none',
-    }
+    },
   )
 }

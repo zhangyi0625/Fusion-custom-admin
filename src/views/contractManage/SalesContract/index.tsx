@@ -29,7 +29,7 @@ import AddSalesContract, { AddSalesContractProps } from './AddSalesContract'
 import SalesContractDrawer from './SalesContractDrawer'
 import ConfirmSaleContractStatus from './Component/ConfirmSaleContractStatus'
 import { useDispatch, useSelector } from 'react-redux'
-import { RootState, setEssentail } from '@/stores/store'
+import { RootState, setEssential } from '@/stores/store'
 import { filterKeys } from '@/utils/tool'
 import { getRoleUser } from '@/services/system/role/roleApi'
 import { getCustomerList } from '@/services/customerManage/Customer/CustomerApi'
@@ -43,7 +43,7 @@ const SalesContract: React.FC = () => {
 
   const dispatch = useDispatch()
 
-  const essential = useSelector((state: RootState) => state.essentail)
+  const essential = useSelector((state: RootState) => state.essential)
 
   const [immediate, setImmediate] = useState<boolean>(true)
 
@@ -211,7 +211,7 @@ const SalesContract: React.FC = () => {
       width: 100,
       render(value) {
         let options = AddSalesContractForm.find(
-          (item) => item.name === 'status'
+          (item) => item.name === 'status',
         )?.options
         return options?.find((item) => item.value === value.status)?.label
       },
@@ -309,10 +309,10 @@ const SalesContract: React.FC = () => {
       (resp) => {
         let key = ['userData', 'customerData', 'payerUnitData']
         key.map((_, index: number) => {
-          dispatch(setEssentail({ value: resp[index], key: key[index] }))
+          dispatch(setEssential({ value: resp[index], key: key[index] }))
         })
         getReduxData()
-      }
+      },
     )
   }
 
@@ -329,13 +329,13 @@ const SalesContract: React.FC = () => {
 
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
-      Object.entries(info ?? {}).filter(([, value]) => !!value)
+      Object.entries(info ?? {}).filter(([, value]) => !!value),
     )
 
     let pageInfo = filterKeys(
       searchDefaultForm,
       ['page', 'limit', 'source', 'sort'],
-      true
+      true,
     )
     setSearchDefaultForm({
       ...pageInfo,
@@ -446,12 +446,12 @@ const SalesContract: React.FC = () => {
       <SalesContractDrawer
         drawer={drawer}
         onCancel={() => {
-          sessionStorage.removeItem('SaleContractDetail'),
+          ;(sessionStorage.removeItem('SaleContractDetail'),
             setDrawer({
               drawerShow: false,
               detailId: null,
               source: 'SalesContract',
-            })
+            }))
         }}
         onRefresh={() => setSearchDefaultForm({ ...searchDefaultForm })}
       />
