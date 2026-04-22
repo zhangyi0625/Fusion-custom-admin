@@ -35,6 +35,7 @@ import { getContractingList } from '@/services/system/contractingUnits/Contracti
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
 import { formatTime } from '@/utils/format'
 import { ExportTableDataByXLSX } from '@/utils/export'
+import { useSearchParams } from 'react-router-dom'
 
 const SaleProject: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -51,6 +52,8 @@ const SaleProject: React.FC = () => {
     BusinessEnquirySearchColumns,
   )
 
+  const [searchParams] = useSearchParams()
+
   const [searchDefaultForm, setSearchDefaultForm] =
     useState<BusinessEnquiryParams>({
       page: 1,
@@ -62,6 +65,8 @@ const SaleProject: React.FC = () => {
       sort: 'create_time desc',
     })
   const [downLoading, setDownLoading] = useState<boolean>(false)
+
+  const [formMaps, setFormMaps] = useState(BusinessEnquirySearchColumns)
 
   const [params, setParams] = useState<{
     visible: boolean
@@ -83,6 +88,24 @@ const SaleProject: React.FC = () => {
     detailId: null,
     source: 'SaleProject',
   })
+
+  useEffect(() => {
+    const id = searchParams.get('id')
+
+    if (id) {
+      setSearchDefaultForm({
+        ...searchDefaultForm,
+        number: id,
+      })
+      formMaps.map((item) => {
+        if (item.name === 'keyword') {
+          item.defaultValue = id
+        }
+      })
+      console.log(id, formMaps)
+      setSearchColumns([...formMaps])
+    }
+  }, [searchParams, formMaps])
 
   useEffect(() => {
     setImmediate(true)
@@ -423,7 +446,7 @@ const SaleProject: React.FC = () => {
       <ConfigProvider>
         <Card>
           <SearchForm
-            columns={BusinessEnquirySearchColumns}
+            columns={formMaps}
             gutterWidth={24}
             labelPosition="left"
             defaultColsNumber={1}

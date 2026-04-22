@@ -17,7 +17,7 @@ import {
 } from 'antd'
 import { UploadOutlined } from '@ant-design/icons'
 import DragModal from '@/components/modal/DragModal'
-import { AddFollowRecordForm } from '../../config'
+import { AddCustomerFollowRecordForm, AddFollowRecordForm } from '../../config'
 import type { BusinessFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import dayjs from 'dayjs'
@@ -28,6 +28,7 @@ export type AddFollowRecordProps = {
     currentRow: BusinessFollowRecordType
   }
   supplier: TreeSelectProps['treeData']
+  isCustomer?: boolean
   onOk: (params: BusinessFollowRecordType) => void
   onCancel: () => void
 }
@@ -36,6 +37,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0]
 
 const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
   params,
+  isCustomer,
   supplier,
   onOk,
   onCancel,
@@ -88,7 +90,9 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
   }
 
   const getFollowRecordForm = useCallback(() => {
-    const arr = [...AddFollowRecordForm]
+    const arr = !isCustomer
+      ? [...AddFollowRecordForm]
+      : [...AddCustomerFollowRecordForm]
     arr.map((item) => {
       if (item.name === 'supplierId') item.options = supplier as any
     })
@@ -156,6 +160,12 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
                       autoComplete="off"
                     />
                   )}
+                  {item.formType === 'input' && (
+                    <Input
+                      placeholder={`请输入${item.label}`}
+                      autoComplete="off"
+                    />
+                  )}
                   {item.formType === 'select' && (
                     <Select
                       placeholder={`请选择${item.label}`}
@@ -197,6 +207,7 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
                   <Button
                     color="primary"
                     variant="outlined"
+                    style={{ marginLeft: '10px' }}
                     icon={<UploadOutlined />}
                   >
                     上传文件

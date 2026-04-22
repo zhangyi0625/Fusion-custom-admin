@@ -240,6 +240,33 @@ export const AddFollowRecordForm: Omit<
   },
 ]
 
+export const AddCustomerFollowRecordForm: Omit<
+  CustomColumn,
+  'selectFetch' | 'hiddenItem'
+>[] = [
+  {
+    label: '跟进方式',
+    name: 'followedMethod',
+    formType: 'input',
+    isRules: true,
+    span: 12,
+  },
+  {
+    label: '跟进时间',
+    name: 'followedAt',
+    formType: 'date-picker',
+    isRules: true,
+    span: 12,
+  },
+  {
+    label: '跟进内容',
+    name: 'content',
+    formType: 'textarea',
+    isRules: true,
+    span: 24,
+  },
+]
+
 export const ProjectStatusOptions = [
   {
     text: '全部',

@@ -16,12 +16,12 @@ import { CustomerSearchColumns } from '../config'
 import {
   addCustomer,
   deleteCustomer,
-  getCustomerByPageCommon,
+  getCustomerByPage,
   updateCustomer,
-  receiveCustomer,
+  releaseCustomer,
 } from '@/services/customerManage/Customer/CustomerApi'
-import AddCustomer from './AddCustomer'
-import CustomerRecord from './CustomerRecord'
+import AddCustomer from '../Customer/AddCustomer'
+import CustomerRecord from '../Customer/CustomerRecord'
 import type {
   CustomerParams,
   CustomerType,
@@ -29,12 +29,12 @@ import type {
 import { ExportTableDataByXLSX } from '@/utils/export'
 import { useNavigate } from 'react-router-dom'
 
-const Customer: React.FC = () => {
+const MyCustomer: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
-  const navigate = useNavigate()
-
   const { modal, message } = App.useApp()
+
+  const navigate = useNavigate()
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<CustomerParams>({
     page: 1,
@@ -50,8 +50,6 @@ const Customer: React.FC = () => {
     currentRow: null,
   })
 
-  const [selectedRows, setSelectedRows] = useState<string[]>([])
-
   const [customerDrawer, setCustomerDrawer] = useState<{
     visible: boolean
     id: string
@@ -61,6 +59,8 @@ const Customer: React.FC = () => {
   })
 
   const [downLoading, setDownLoading] = useState<boolean>(false)
+
+  const [selectedRows, setSelectedRows] = useState<string[]>([])
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -98,8 +98,10 @@ const Customer: React.FC = () => {
             {value.refCompanyName ? value.refCompanyName : value.companyName}
             {value.refCompanyName ? (
               <span
-                onClick={() => navigate(`/customerManage/payerUnit`)}
                 className="underline text-[#1677FF] cursor-pointer ml-[4px]"
+                onClick={() =>
+                  navigate(`/customerManage/payerUnit/${value.companyId}}`)
+                }
               >
                 查看
               </span>
@@ -234,7 +236,7 @@ const Customer: React.FC = () => {
   const downloadData = async () => {
     setDownLoading(true)
     try {
-      const resp = await getCustomerByPageCommon({
+      const resp = await getCustomerByPage({
         ...searchDefaultForm,
         page: 1,
         limit: 9999,
@@ -253,17 +255,17 @@ const Customer: React.FC = () => {
 
   const getCommonCustomer = async () => {
     if (selectedRows.length === 0) {
-      message.error('请选择要领取的客户')
+      message.error('请选择要释放的客户')
       return
     }
     try {
-      await receiveCustomer(selectedRows)
-      message.success('领取成功')
+      await releaseCustomer(selectedRows)
+      message.success('释放成功')
       // 刷新表格数据
       onUpdateSearch({ ...searchDefaultForm })
       setSelectedRows([])
     } catch (error) {
-      // message.error('领取客户异常，请联系相关人员～')
+      // message.error('释放客户异常，请联系相关人员～')
     }
   }
   return (
@@ -303,18 +305,18 @@ const Customer: React.FC = () => {
         <Space className="mb-[8px] float-right">
           <Button
             type="primary"
-            style={{ zIndex: 99 }}
+            style={{ zIndex: 99, background: '#FAAD14' }}
             onClick={getCommonCustomer}
           >
-            领取
+            释放
           </Button>
-          <Button
+          {/* <Button
             type="primary"
             style={{ zIndex: 99 }}
             onClick={() => setParams({ visible: true, currentRow: null })}
           >
             新增客户
-          </Button>
+          </Button> */}
           <Button
             color="blue"
             variant="outlined"
@@ -337,7 +339,7 @@ const Customer: React.FC = () => {
           pageSizeKey="limit"
           scroll={{ x: 'max-content', y: height - 168 }}
           rowClassName={(_, index) => (index % 2 === 1 ? 'even' : 'odd')}
-          fetchData={getCustomerByPageCommon}
+          fetchData={getCustomerByPage}
           searchFilter={searchDefaultForm}
           isSelection={true}
           isPagination={true}
@@ -358,4 +360,4 @@ const Customer: React.FC = () => {
   )
 }
 
-export default Customer
+export default MyCustomer

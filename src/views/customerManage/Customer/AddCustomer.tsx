@@ -5,6 +5,7 @@ import { AddCustomerForm } from '../config'
 import { CheckboxGroupProps } from 'antd/es/checkbox'
 import type { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
 import { getPayerUnit } from '@/services/customerManage/PayerUnit/PayerUnitApi'
+import { getDictionaryListByIdPage } from '@/services/system/dictionary/dictionaryApi'
 
 export type AddCustomerProps = {
   params: {
@@ -31,17 +32,34 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
     loadPayerUnit()
     form.resetFields()
     if (currentRow) {
-      form.setFieldsValue({ ...currentRow, status: Number(currentRow.status) })
+      form.setFieldsValue({
+        ...currentRow,
+        status: Number(currentRow.status),
+        companyId: currentRow.companyId
+          ? [currentRow.companyId]
+          : currentRow.companyName
+            ? [currentRow.companyName]
+            : null,
+      })
     } else {
       form.setFieldsValue({ status: 1 })
     }
+    console.log(form.getFieldsValue(), 'customerForm', currentRow)
   }, [visible])
 
   const loadPayerUnit = async () => {
     const res = await getPayerUnit()
+    const result = await getDictionaryListByIdPage({
+      dictId: '2046798065079304194',
+    })
     customerForm.map((item) => {
-      if (item.formType === 'select') {
+      if (item.formType === 'select' && item.label === '单位名称') {
         item.options = res
+      } else if (item.formType === 'select' && item.label !== '单位名称') {
+        item.options = result.list.map((el: { dictDataName: string }) => ({
+          label: el.dictDataName,
+          value: el.dictDataName,
+        }))
       }
     })
     setCustomerForm([...customerForm])
@@ -51,7 +69,18 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
     form
       .validateFields()
       .then(() => {
-        onOk({ ...form.getFieldsValue() })
+        const formValues = form.getFieldsValue()
+        let company = customerForm.find((item) => item.label === '单位名称')
+          ?.options as any[]
+        let isCreateCompany =
+          company?.find((el) => el.id === formValues.companyId[0])?.id ?? null
+        console.log(isCreateCompany, 'is', company, formValues)
+
+        onOk({
+          ...formValues,
+          companyId: isCreateCompany,
+          companyName: !isCreateCompany ? formValues.companyId[0] : '',
+        })
       })
       .catch((errorInfo) => {
         // 滚动并聚焦到第一个错误字段
@@ -97,11 +126,13 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
                     : undefined
                 }
               >
-                {item.formType === 'select' && (
+                {item.formType === 'select' && item.label === '单位名称' && (
                   <Select
                     placeholder={`请选择${item.label}`}
                     options={item.options}
                     allowClear
+                    mode="tags"
+                    maxCount={1}
                     fieldNames={
                       item.selectFileldName ?? {
                         label: 'name',
@@ -116,8 +147,34 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
                     }
                   />
                 )}
+                {item.formType === 'select' && item.label !== '单位名称' && (
+                  <Select
+                    placeholder={`请选择${item.label}`}
+                    options={item.options}
+                    allowClear
+                    fieldNames={
+                      item.selectFileldName ?? {
+                        label: 'label',
+                        value: 'value',
+                      }
+                    }
+                    showSearch
+                    filterOption={(input, option) =>
+                      String(option?.name ?? '')
+                        .toLowerCase()
+                        .includes(input.toLowerCase())
+                    }
+                  />
+                )}
                 {item.formType === 'input' && (
                   <Input
+                    placeholder={`请输入${item.label}`}
+                    autoComplete="off"
+                    allowClear
+                  />
+                )}
+                {item.formType === 'textarea' && (
+                  <Input.TextArea
                     placeholder={`请输入${item.label}`}
                     autoComplete="off"
                     allowClear

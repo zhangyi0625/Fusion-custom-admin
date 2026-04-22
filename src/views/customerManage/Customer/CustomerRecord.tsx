@@ -1,18 +1,14 @@
-import React, { useEffect, useState } from 'react'
-import {
-  Button,
-  Drawer,
-  Space,
-  Tabs,
-  TabsProps,
-  Timeline,
-  TimelineItemProps,
-} from 'antd'
-import {
-  getCustomerDetail,
-  getCustomerRecord,
-} from '@/services/customerManage/Customer/CustomerApi'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Drawer, Space, Tabs, TabsProps } from 'antd'
+import { getCustomerDetail } from '@/services/customerManage/Customer/CustomerApi'
 import type { CustomerType } from '@/services/customerManage/Customer/CustomerModel'
+import FollowRecord from '@/views/projectManage/SaleProject/Component/FollowRecord'
+import OperationRecord, {
+  OperationRecordRef,
+} from './component/operationRecord'
+import AssociationItems, {
+  AssociationItemsRef,
+} from './component/associationItems'
 
 export type CustomerRecordProps = {
   params: {
@@ -22,14 +18,6 @@ export type CustomerRecordProps = {
   onCancel: () => void
 }
 
-const components: TabsProps['items'] = [
-  {
-    label: '操作记录',
-    key: 'editRecord',
-    // children: <EditRecord />,
-  },
-]
-
 const CustomerRecord: React.FC<CustomerRecordProps> = ({
   params,
   onCancel,
@@ -38,11 +26,50 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
 
   const [customerInfo, setCustomerInfo] = useState<{
     info: Partial<CustomerType>
-    record: TimelineItemProps[]
   }>({
-    record: [],
     info: {},
   })
+
+  const [defaultActiveKey, setDefaultActiveKey] =
+    useState<string>('followRecord')
+
+  const OperationRecordComRef = useRef<OperationRecordRef>(null)
+
+  const AssociationItemsRef = useRef<AssociationItemsRef>(null)
+
+  const components: TabsProps['items'] = [
+    {
+      label: '跟进记录',
+      key: 'followRecord',
+      children: (
+        <FollowRecord
+          isCustomer={true}
+          detail={customerInfo.info as any}
+          projectId={customerInfo.info.id as string}
+        />
+      ),
+    },
+    {
+      label: '关联项目',
+      key: 'associationItems',
+      children: (
+        <AssociationItems
+          ref={AssociationItemsRef}
+          detailId={customerInfo.info.id as string}
+        />
+      ),
+    },
+    {
+      label: '操作记录',
+      key: 'operationRecord',
+      children: (
+        <OperationRecord
+          ref={OperationRecordComRef}
+          detailId={customerInfo.info.id as string}
+        />
+      ),
+    },
+  ]
 
   useEffect(() => {
     if (!visible) return
@@ -50,22 +77,20 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
   }, [visible])
 
   const init = () => {
-    Promise.all([getCustomerDetail(id), getCustomerRecord(id)]).then((resp) => {
-      let newLine = resp[1].map(
-        (item: { createTime: string; createName: string; content: string }) => {
-          return {
-            children: (
-              <div className="text-gray-400">
-                {item.createTime}
-                <span className="ml-[16px]">{item.createName ?? ''}</span>
-                <p className="text-dull-grey">{item.content ?? ''}</p>
-              </div>
-            ),
-          }
-        }
-      )
-      setCustomerInfo({ info: resp[0], record: newLine })
+    Promise.all([getCustomerDetail(id)]).then((resp) => {
+      setCustomerInfo({ info: resp[0] })
     })
+  }
+
+  const onChange = (value: string) => {
+    setDefaultActiveKey(value)
+    if (value === 'associationItems') {
+      AssociationItemsRef.current?.onRefresh()
+    } else if (value === 'operationRecord') {
+      OperationRecordComRef.current?.onRefresh()
+    } else if (value === 'followRecord') {
+      init()
+    }
   }
 
   return (
@@ -90,9 +115,31 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
           手机号：
           <span className="text-dull-grey">{customerInfo.info.phone} </span>
         </p>
+        <p>
+          单位名称：
+          <span className="text-dull-grey">
+            {customerInfo.info.refCompanyName ?? customerInfo.info.companyName}
+          </span>
+        </p>
+        <p>
+          客户来源：
+          <span className="text-dull-grey">{customerInfo.info.source} </span>
+        </p>
+        <p>
+          客户级别：
+          <span className="text-dull-grey">{customerInfo.info.level}</span>
+        </p>
+        <p>
+          备注：
+          <span className="text-dull-grey">{customerInfo.info.remark} </span>
+        </p>
       </div>
-      <Tabs items={components} />
-      <Timeline items={customerInfo.record} />
+      <Tabs
+        items={components}
+        activeKey={defaultActiveKey}
+        onChange={onChange}
+        key={customerInfo.info.id}
+      />
     </Drawer>
   )
 }

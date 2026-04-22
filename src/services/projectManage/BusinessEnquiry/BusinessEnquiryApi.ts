@@ -14,7 +14,7 @@ import { MakeQuotationTableType } from '../SaleProject/SaleProjectModel'
  */
 export enum BusinessEnquiryApi {
   businessEnquiryList = '/business/project',
-  businessEnquiryListByPage = '//business/project/page',
+  businessEnquiryListByPage = '/business/project/page',
   businessUpgrade = '/business/project/upgrade/',
   businessOperationRecord = '/business/project-event/',
   businessEnquiryRecord = '/business/project-inquiry-quote/',

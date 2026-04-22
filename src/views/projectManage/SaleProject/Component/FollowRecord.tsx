@@ -12,6 +12,11 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import type { BusinessFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postDownloadFile } from '@/services/upload/UploadApi'
 import { filterKeys } from '@/utils/tool'
+import {
+  getFollowCustomer,
+  postFollowCustomer,
+  updateFollowCustomer,
+} from '@/services/customerManage/Customer/CustomerApi'
 
 export type FollowRecordProps = {
   projectId: string
@@ -19,9 +24,14 @@ export type FollowRecordProps = {
     customerId: string
     customerName: string
   }
+  isCustomer?: boolean
 }
 
-const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
+const FollowRecord: React.FC<FollowRecordProps> = ({
+  projectId,
+  detail,
+  isCustomer,
+}) => {
   const { modal, message } = App.useApp()
 
   const [dataSource, setDataSource] = useState([])
@@ -50,9 +60,18 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
       key: 'customerName',
       align: 'center',
       width: 120,
+      hidden: isCustomer,
       render(value) {
         return <div>{value.customerName ?? value.supplierName}</div>
       },
+    },
+    {
+      title: '跟进方式',
+      key: 'followedMethod',
+      dataIndex: 'followedMethod',
+      align: 'center',
+      width: 120,
+      hidden: !isCustomer,
     },
     {
       title: '跟进时间',
@@ -151,7 +170,9 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
   }
 
   const loadFollowRecord = async () => {
-    const res = await getBusinessFollowRecord(projectId)
+    const res = isCustomer
+      ? await getFollowCustomer({ customerId: projectId })
+      : await getBusinessFollowRecord(projectId)
     setDataSource(res)
   }
 
@@ -199,10 +220,14 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
     try {
       if (params.currentRow == null) {
         // 新增数据
-        await addBusinessFollowRecord(info)
+        ;(await isCustomer)
+          ? postFollowCustomer({ ...info, customerId: projectId })
+          : addBusinessFollowRecord(info)
       } else {
         // 编辑数据
-        await updateBusinessFollowRecord(info)
+        ;(await isCustomer)
+          ? updateFollowCustomer({ ...info, customerId: projectId })
+          : updateBusinessFollowRecord(info)
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
@@ -214,6 +239,7 @@ const FollowRecord: React.FC<FollowRecordProps> = ({ projectId, detail }) => {
   return (
     <>
       <AddFollowRecord
+        isCustomer={isCustomer}
         params={params}
         supplier={supplier}
         onCancel={() =>
