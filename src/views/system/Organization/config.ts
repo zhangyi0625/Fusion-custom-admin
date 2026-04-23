@@ -20,7 +20,7 @@ export const AddOrganizationForm: Omit<
     name: 'parentId',
     formType: 'select',
     span: 6,
-    selectFileldName: { label: 'organizationName', value: 'organizationId' },
+    selectFieldName: { label: 'organizationName', value: 'organizationId' },
     options: [],
     isRules: true,
   },

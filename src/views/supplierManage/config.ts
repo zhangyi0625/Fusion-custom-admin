@@ -49,7 +49,7 @@ export const ContractsSearchColumns: CustomColumn[] = [
       authorization: 'Bearer ' + sessionStorage.getItem('token'),
       'Content-Type': 'application/json',
     },
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -79,7 +79,7 @@ export const AddSupplierForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'contactId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -192,7 +192,7 @@ export const AddContractsForm: Omit<CustomColumn, 'selectFetch'>[] = [
     formType: 'select',
     options: [],
     span: 24,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },

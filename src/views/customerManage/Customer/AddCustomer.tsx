@@ -155,7 +155,7 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
                     mode="tags"
                     maxCount={1}
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'name',
                         value: 'id',
                       }
@@ -174,7 +174,7 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
                     options={item.options}
                     allowClear
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'label',
                         value: 'value',
                       }

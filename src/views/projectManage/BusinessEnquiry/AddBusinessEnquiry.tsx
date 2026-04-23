@@ -165,8 +165,8 @@ const AddBusinessEnquiry: React.FC<AddBusinessEnquiryProps> = ({
                     }
                     options={item.options}
                     fieldNames={
-                      item.selectFileldName ?? {
-                        label: 'labal',
+                      item.selectFieldName ?? {
+                        label: 'label',
                         value: 'value',
                       }
                     }

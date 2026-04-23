@@ -245,7 +245,7 @@ const AddSalesContract: React.FC<AddSalesContractProps> = ({
                     options={item.options}
                     allowClear
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'label',
                         value: 'value',
                       }

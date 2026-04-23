@@ -143,7 +143,7 @@ const AddOrganization: React.FC<AddOrganizationProps> = ({
                 options={item.options}
                 allowClear
                 fieldNames={
-                  item.selectFileldName ?? {
+                  item.selectFieldName ?? {
                     label: 'name',
                     value: 'id',
                   }

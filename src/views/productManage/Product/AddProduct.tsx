@@ -112,7 +112,7 @@ const AddProduct: React.FC<AddProductProps> = ({
 
   const onBlurSelect = (
     e: React.FocusEvent<HTMLElement>,
-    item: CustomColumn
+    item: CustomColumn,
   ) => {
     // Try to get the value from the event target if possible
     const value = (e.target as HTMLInputElement).value ?? ''
@@ -189,7 +189,7 @@ const AddProduct: React.FC<AddProductProps> = ({
                     options={item.options}
                     allowClear
                     fieldNames={
-                      item.selectFileldName ?? {
+                      item.selectFieldName ?? {
                         label: 'name',
                         value: 'name',
                       }

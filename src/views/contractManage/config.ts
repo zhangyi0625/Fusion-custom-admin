@@ -58,7 +58,7 @@ export const SalesContractSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFileldName: {
+    selectFieldName: {
       label: 'username',
       value: 'userId',
     },
@@ -92,7 +92,7 @@ export const PurchaseContractSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -156,7 +156,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     formType: 'select',
     span: 12,
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -176,7 +176,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'customerId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -189,7 +189,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'companyId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -211,7 +211,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'SPOT',
       },
     ],
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },
@@ -245,7 +245,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'CLOSED',
       },
     ],
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },
@@ -259,7 +259,7 @@ export const AddSalesContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     formType: 'select',
     options: [],
     isRules: true,
-    selectFileldName: {
+    selectFieldName: {
       label: 'username',
       value: 'userId',
     },
@@ -283,7 +283,7 @@ export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     formType: 'select',
     span: 12,
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -303,7 +303,7 @@ export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
     name: 'supplierId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -325,7 +325,7 @@ export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'SPOT',
       },
     ],
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },
@@ -359,7 +359,7 @@ export const AddPurchaseContractForm: Omit<CustomColumn, 'selectFetch'>[] = [
         value: 'CLOSED',
       },
     ],
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },

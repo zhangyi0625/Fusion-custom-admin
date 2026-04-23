@@ -7,7 +7,7 @@ export const ProductSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     customPlaceholder: '产品型号',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'name',
     },
@@ -21,7 +21,7 @@ export const ProductSearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     customPlaceholder: '产品规格',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'name',
     },
@@ -36,7 +36,7 @@ export const ProductSearchColumns: CustomColumn[] = [
     customPlaceholder: '产品电压',
     options: [],
     selectFetch: false,
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'name',
     },

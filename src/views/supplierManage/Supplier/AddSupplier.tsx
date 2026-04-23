@@ -215,8 +215,8 @@ const AddSupplier: React.FC<AddSupplierProps> = ({
                     filterOption
                     options={item.options}
                     fieldNames={
-                      item.selectFileldName ?? {
-                        label: 'labal',
+                      item.selectFieldName ?? {
+                        label: 'label',
                         value: 'value',
                       }
                     }

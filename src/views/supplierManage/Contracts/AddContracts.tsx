@@ -112,8 +112,8 @@ const AddContract: React.FC<AddContractProps> = ({
                         filterOption
                         options={item.options}
                         fieldNames={
-                          item.selectFileldName ?? {
-                            label: 'labal',
+                          item.selectFieldName ?? {
+                            label: 'label',
                             value: 'value',
                           }
                         }
@@ -121,7 +121,7 @@ const AddContract: React.FC<AddContractProps> = ({
                     )}
                   </Form.Item>
                 </Col>
-              )
+              ),
           )}
         </Row>
       </Form>

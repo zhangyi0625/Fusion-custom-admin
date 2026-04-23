@@ -21,7 +21,7 @@ export const BusinessEnquirySearchColumns: CustomColumn[] = [
       },
     ],
     defaultValue: 1,
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },
@@ -54,7 +54,7 @@ export const BusinessEnquirySearchColumns: CustomColumn[] = [
     formType: 'normalSelect',
     options: [],
     span: 6,
-    selectFileldName: {
+    selectFieldName: {
       label: 'username',
       value: 'userId',
     },
@@ -118,7 +118,7 @@ export const AddBusinessEnquiryForm: Omit<
     name: 'customerId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -129,7 +129,7 @@ export const AddBusinessEnquiryForm: Omit<
     name: 'companyId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -146,7 +146,7 @@ export const AddBusinessEnquiryForm: Omit<
     label: '项目类型',
     name: 'type',
     formType: 'select',
-    selectFileldName: {
+    selectFieldName: {
       label: 'label',
       value: 'value',
     },
@@ -181,7 +181,7 @@ export const AddBusinessEnquiryForm: Omit<
     name: 'entrustId',
     formType: 'select',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
@@ -195,7 +195,7 @@ export const AddBusinessEnquiryForm: Omit<
     options: [],
     span: 12,
     isRules: true,
-    selectFileldName: {
+    selectFieldName: {
       label: 'username',
       value: 'userId',
     },
@@ -217,7 +217,7 @@ export const AddFollowRecordForm: Omit<
     name: 'supplierId',
     formType: 'treeSelect',
     options: [],
-    selectFileldName: {
+    selectFieldName: {
       label: 'name',
       value: 'id',
     },
