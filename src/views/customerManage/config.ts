@@ -9,6 +9,7 @@ export const PayerUnitSearchColumns: CustomColumn[] = [
     span: 6,
     selectFetch: false,
     hiddenItem: false,
+    defaultValue: '',
   },
   {
     label: null,
@@ -135,7 +136,7 @@ export const AddCustomerForm: Omit<
   },
   {
     label: '客户来源',
-    formType: 'input',
+    formType: 'select',
     span: 24,
     name: 'source',
     options: [],

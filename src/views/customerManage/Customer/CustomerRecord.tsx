@@ -96,7 +96,7 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
   return (
     <Drawer
       title="客户详情"
-      width={720}
+      width={912}
       open={visible}
       onClose={onCancel}
       classNames={{ footer: 'text-right' }}

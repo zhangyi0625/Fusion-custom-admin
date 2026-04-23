@@ -231,8 +231,10 @@ const FollowRecord: React.FC<FollowRecordProps> = ({
       }
       message.success(!params.currentRow ? '添加成功' : '修改成功')
       // 操作成功，关闭弹窗，刷新数据
-      setParams({ ...params, visible: false, currentRow: null })
-      loadFollowRecord()
+      setTimeout(() => {
+        setParams({ ...params, visible: false, currentRow: null })
+        loadFollowRecord()
+      }, 300)
     } catch (error) {}
   }
 

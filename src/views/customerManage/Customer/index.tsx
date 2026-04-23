@@ -98,7 +98,11 @@ const Customer: React.FC = () => {
             {value.refCompanyName ? value.refCompanyName : value.companyName}
             {value.refCompanyName ? (
               <span
-                onClick={() => navigate(`/customerManage/payerUnit`)}
+                onClick={() =>
+                  navigate(
+                    `/customerManage/payerUnit?companyName=${value.refCompanyName}`,
+                  )
+                }
                 className="underline text-[#1677FF] cursor-pointer ml-[4px]"
               >
                 查看
@@ -123,6 +127,20 @@ const Customer: React.FC = () => {
       dataIndex: 'source',
       align: 'center',
       width: 100,
+    },
+    {
+      title: '备注',
+      key: 'remark',
+      dataIndex: 'remark',
+      align: 'center',
+      width: 100,
+    },
+    {
+      title: '地址',
+      key: 'address',
+      dataIndex: 'address',
+      align: 'center',
+      width: 220,
     },
     {
       title: '状态',

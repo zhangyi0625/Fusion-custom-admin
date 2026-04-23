@@ -21,6 +21,7 @@ import { AddCustomerFollowRecordForm, AddFollowRecordForm } from '../../config'
 import type { BusinessFollowRecordType } from '@/services/projectManage/BusinessEnquiry/BusinessEnquiryModel'
 import { postUploadFile } from '@/services/upload/UploadApi'
 import dayjs from 'dayjs'
+import { getDictionaryListByIdPage } from '@/services/system/dictionary/dictionaryApi'
 
 export type AddFollowRecordProps = {
   params: {
@@ -48,6 +49,8 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
 
   const [fileList, setFileList] = useState<UploadFile[]>([])
 
+  const [followRecordForm, setFollowRecordForm] = useState([])
+
   useEffect(() => {
     if (!visible) return
     if (currentRow) {
@@ -61,6 +64,17 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
       setFileList([])
     }
   }, [visible])
+
+  useEffect(() => {
+    getFollowRecord()
+  }, [])
+
+  const getFollowRecord = async () => {
+    let resp = await getDictionaryListByIdPage({
+      dictId: '2047198938297155586',
+    })
+    setFollowRecordForm(resp.list)
+  }
 
   const uploadProps: UploadProps = {
     name: 'file',
@@ -90,14 +104,26 @@ const AddFollowRecord: React.FC<AddFollowRecordProps> = ({
   }
 
   const getFollowRecordForm = useCallback(() => {
+    let newArr = [...AddCustomerFollowRecordForm]
+
     const arr = !isCustomer
       ? [...AddFollowRecordForm]
-      : [...AddCustomerFollowRecordForm]
+      : newArr.map((i) => {
+          if (i.formType === 'select' && i.label === '跟进方式') {
+            i.options = followRecordForm.map(
+              (el: { dictDataName: string }) => ({
+                label: el.dictDataName,
+                value: el.dictDataName,
+              }),
+            )
+          }
+          return i
+        })
     arr.map((item) => {
       if (item.name === 'supplierId') item.options = supplier as any
     })
     return arr
-  }, [supplier])
+  }, [supplier, followRecordForm])
 
   const onConfirm = () => {
     form

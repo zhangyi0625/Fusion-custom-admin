@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   App,
   Button,
@@ -24,11 +24,16 @@ import type {
   PayerUnitType,
 } from '@/services/customerManage/PayerUnit/PayerUnitModel'
 import { PayerUnitSearchColumns } from '../config'
+import { useSearchParams } from 'react-router-dom'
 
 const PayerUnit: React.FC = () => {
   const { parentRef, height } = useParentSize()
 
   const { modal, message } = App.useApp()
+
+  const [searchParams] = useSearchParams()
+
+  const [formMaps, setFormMaps] = useState(PayerUnitSearchColumns)
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<PayerUnitParams>({
     page: 1,
@@ -43,6 +48,24 @@ const PayerUnit: React.FC = () => {
     visible: false,
     currentRow: null,
   })
+
+  const [immediate, setImmediate] = useState(true)
+
+  useEffect(() => {
+    formMaps.map((item) => {
+      if (item.name === 'name') {
+        item.defaultValue = searchParams.get('companyName')
+      }
+    })
+    setSearchDefaultForm({
+      ...searchDefaultForm,
+      name: searchParams.get('companyName') ?? '',
+    })
+    setFormMaps([...formMaps])
+    setTimeout(() => {
+      setImmediate(false)
+    }, 500)
+  }, [searchParams])
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -123,8 +146,8 @@ const PayerUnit: React.FC = () => {
   const onUpdateSearch = (info?: unknown) => {
     const filteredObj = Object.fromEntries(
       Object.entries(info ?? {}).filter(
-        ([, value]) => value !== undefined || value !== null
-      )
+        ([, value]) => value !== undefined || value !== null,
+      ),
     )
     let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
     setSearchDefaultForm({
@@ -160,30 +183,32 @@ const PayerUnit: React.FC = () => {
     <>
       {/* 菜单检索条件栏 */}
       <ConfigProvider>
-        <Card>
-          <SearchForm
-            columns={PayerUnitSearchColumns}
-            gutterWidth={24}
-            labelPosition="left"
-            defaultColsNumber={2}
-            defaultFormItemLayout={{
-              labelCol: {
-                xs: { span: 24 },
-                sm: { span: 0 },
-              },
-              wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 24 },
-              },
-            }}
-            btnSeparate={false}
-            isShowReset={true}
-            isShowExpend={false}
-            iconHidden={true}
-            searchBtnText="查询"
-            onUpdateSearch={onUpdateSearch}
-          />
-        </Card>
+        {!immediate && (
+          <Card>
+            <SearchForm
+              columns={formMaps}
+              gutterWidth={24}
+              labelPosition="left"
+              defaultColsNumber={2}
+              defaultFormItemLayout={{
+                labelCol: {
+                  xs: { span: 24 },
+                  sm: { span: 0 },
+                },
+                wrapperCol: {
+                  xs: { span: 24 },
+                  sm: { span: 24 },
+                },
+              }}
+              btnSeparate={false}
+              isShowReset={true}
+              isShowExpend={false}
+              iconHidden={true}
+              searchBtnText="查询"
+              onUpdateSearch={onUpdateSearch}
+            />
+          </Card>
+        )}
       </ConfigProvider>
       <Card
         style={{ flex: 1, marginTop: '8px', minHeight: 0 }}

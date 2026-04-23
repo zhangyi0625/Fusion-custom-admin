@@ -48,21 +48,42 @@ const AddCustomer: React.FC<AddCustomerProps> = ({
   }, [visible])
 
   const loadPayerUnit = async () => {
-    const res = await getPayerUnit()
-    const result = await getDictionaryListByIdPage({
-      dictId: '2046798065079304194',
-    })
-    customerForm.map((item) => {
-      if (item.formType === 'select' && item.label === '单位名称') {
-        item.options = res
-      } else if (item.formType === 'select' && item.label !== '单位名称') {
-        item.options = result.list.map((el: { dictDataName: string }) => ({
-          label: el.dictDataName,
-          value: el.dictDataName,
-        }))
-      }
-    })
-    setCustomerForm([...customerForm])
+    // const res = await getPayerUnit()
+    // const result = await getDictionaryListByIdPage({
+    //   dictId: '2046798065079304194',
+    // })
+    Promise.all([
+      getPayerUnit(),
+      getDictionaryListByIdPage({
+        dictId: '2046798065079304194',
+      }),
+      getDictionaryListByIdPage({
+        dictId: '2047198836761444353',
+      }),
+    ])
+      .then((resp) => {
+        customerForm.map((item) => {
+          if (item.formType === 'select' && item.label === '单位名称') {
+            item.options = resp[0]
+          } else if (item.formType === 'select' && item.label === '客户级别') {
+            item.options = resp[1].list.map((el: { dictDataName: string }) => ({
+              label: el.dictDataName,
+              value: el.dictDataName,
+            }))
+          } else if (item.formType === 'select' && item.label === '客户来源') {
+            item.options = resp[2].list.map((el: { dictDataName: string }) => ({
+              label: el.dictDataName,
+              value: el.dictDataName,
+            }))
+          }
+        })
+        setCustomerForm([...customerForm])
+      })
+      .catch((error) => {
+        console.log(error, 'error')
+      })
+
+    // setCustomerForm([...customerForm])
   }
 
   const onConfirm = () => {

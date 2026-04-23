@@ -102,7 +102,9 @@ const SaleProject: React.FC = () => {
           item.defaultValue = id
         }
       })
-      console.log(id, formMaps)
+      setTimeout(() => {
+        setImmediate(false)
+      }, 500)
       setSearchColumns([...formMaps])
     }
   }, [searchParams, formMaps])
@@ -444,49 +446,51 @@ const SaleProject: React.FC = () => {
     <>
       {/* 菜单检索条件栏 */}
       <ConfigProvider>
-        <Card>
-          <SearchForm
-            columns={formMaps}
-            gutterWidth={24}
-            labelPosition="left"
-            defaultColsNumber={1}
-            defaultFormItemLayout={{
-              labelCol: {
-                xs: { span: 24 },
-                sm: { span: 0 },
-              },
-              wrapperCol: {
-                xs: { span: 24 },
-                sm: { span: 24 },
-              },
-            }}
-            btnSeparate={false}
-            isShowReset={true}
-            isShowExpend={true}
-            iconHidden={true}
-            searchBtnText="查询"
-            advancedFilterText={['展开', '收起']}
-            onUpdateSearch={onUpdateSearch}
-          />
-          <div className="flex items-center">
-            <p className="text-gray-900">项目状态：</p>
-            {ProjectStatusOptions.map((item) => (
-              <Button
-                key={item.value}
-                className="ml-[8px]"
-                size="middle"
-                type={
-                  searchDefaultForm.status === item.value
-                    ? 'primary'
-                    : 'default'
-                }
-                onClick={() => changeStatus(item.value)}
-              >
-                {item.text}
-              </Button>
-            ))}
-          </div>
-        </Card>
+        {!immediate && (
+          <Card>
+            <SearchForm
+              columns={formMaps}
+              gutterWidth={24}
+              labelPosition="left"
+              defaultColsNumber={1}
+              defaultFormItemLayout={{
+                labelCol: {
+                  xs: { span: 24 },
+                  sm: { span: 0 },
+                },
+                wrapperCol: {
+                  xs: { span: 24 },
+                  sm: { span: 24 },
+                },
+              }}
+              btnSeparate={false}
+              isShowReset={true}
+              isShowExpend={true}
+              iconHidden={true}
+              searchBtnText="查询"
+              advancedFilterText={['展开', '收起']}
+              onUpdateSearch={onUpdateSearch}
+            />
+            <div className="flex items-center">
+              <p className="text-gray-900">项目状态：</p>
+              {ProjectStatusOptions.map((item) => (
+                <Button
+                  key={item.value}
+                  className="ml-[8px]"
+                  size="middle"
+                  type={
+                    searchDefaultForm.status === item.value
+                      ? 'primary'
+                      : 'default'
+                  }
+                  onClick={() => changeStatus(item.value)}
+                >
+                  {item.text}
+                </Button>
+              ))}
+            </div>
+          </Card>
+        )}
       </ConfigProvider>
       <Card
         style={{ flex: 1, marginTop: '8px', minHeight: 0 }}

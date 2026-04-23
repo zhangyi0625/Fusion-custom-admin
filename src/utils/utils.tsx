@@ -13,7 +13,7 @@ import { LazyLoad } from '@/router/lazyLoad'
  */
 export function handleRouter(
   routerList: RouteItem[],
-  newArr: RouteObject[] = []
+  newArr: RouteObject[] = [],
 ) {
   if (!routerList) return newArr
   for (const item of routerList) {
@@ -58,7 +58,7 @@ export function setObjToUrlParams(baseUrl: string, obj: any): string {
 
 export function deepMerge<T = object>(
   src: Record<string, any> = {},
-  target: any = {}
+  target: any = {},
 ): T {
   let key: string
   for (key in target) {
@@ -79,7 +79,7 @@ export function deepMerge<T = object>(
  */
 export const searchRoute = (
   path: string,
-  routes: RouteItem[] = []
+  routes: RouteItem[] = [],
 ): RouteItem | null => {
   for (const item of routes) {
     if (item.path === path) return item
@@ -153,7 +153,7 @@ export const addKeyToData = (data: any[], key: string) => {
 
 export const filterTree = (
   keyword: number = 2,
-  treeData: RouteItem[] = []
+  treeData: RouteItem[] = [],
 ): RouteItem[] => {
   if (!treeData.length) return []
   return treeData.reduce((result: RouteItem[], node: RouteItem) => {

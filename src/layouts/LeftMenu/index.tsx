@@ -36,7 +36,7 @@ type MenuItem = Required<MenuProps>['items'][number]
 const LeftMenu: React.FC = memo(() => {
   // 从状态库中获取状态
   const { sidebar, theme, navigation } = useSelector(
-    (state: RootState) => state.preferences
+    (state: RootState) => state.preferences,
   )
   const { menus } = useSelector((state: RootState) => state.menuState)
   const dispatch = useDispatch()
@@ -46,6 +46,9 @@ const LeftMenu: React.FC = memo(() => {
   const [menuList, setMenuList] = useState<MenuItem[]>([])
   const [loading, setLoading] = useState(false)
   const [openKeys, setOpenKeys] = useState<string[]>([])
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([
+    pathname.split('?')[0],
+  ])
 
   const { collapsed, width } = sidebar
   let { mode } = theme
@@ -64,7 +67,7 @@ const LeftMenu: React.FC = memo(() => {
     key?: React.Key | null,
     icon?: React.ReactNode,
     children?: MenuItem[],
-    type?: 'group'
+    type?: 'group',
   ): MenuItem => {
     return {
       key,
@@ -92,8 +95,8 @@ const LeftMenu: React.FC = memo(() => {
           item.title,
           item.path,
           getIcon(item.icon),
-          deepLoopFloat(item.children)
-        )
+          deepLoopFloat(item.children),
+        ),
       )
     }
     return newArr
@@ -110,14 +113,17 @@ const LeftMenu: React.FC = memo(() => {
 
   // 刷新页面菜单保持高亮
   useEffect(() => {
-    const openKey = getOpenKeys(pathname)
+    const pathWithoutQuery = pathname.split('?')[0]
+    setSelectedKeys([pathWithoutQuery])
+    const openKey = getOpenKeys(pathWithoutQuery)
     // 判断如果是二级路由，不在左边菜单那种的就不去更新
-    const route = searchRoute(pathname, menus)
+    const route = searchRoute(pathWithoutQuery, menus)
     if (route && Object.keys(route).length) {
       const title = route.title
       if (title) document.title = `${title} - 销售协同管理平台`
       if (!collapsed) setOpenKeys(openKey)
     }
+    console.log(pathname, collapsed, menus, openKey)
   }, [pathname, collapsed, menus])
 
   // 设置当前展开的 subMenu
@@ -176,7 +182,7 @@ const LeftMenu: React.FC = memo(() => {
           <Menu
             mode="inline"
             theme={mode}
-            defaultSelectedKeys={[pathname]}
+            selectedKeys={selectedKeys}
             openKeys={navigation.accordion ? openKeys : undefined}
             items={menuList}
             onClick={clickMenu}

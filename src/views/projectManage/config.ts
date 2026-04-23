@@ -247,7 +247,8 @@ export const AddCustomerFollowRecordForm: Omit<
   {
     label: '跟进方式',
     name: 'followedMethod',
-    formType: 'input',
+    formType: 'select',
+    options: [],
     isRules: true,
     span: 12,
   },
