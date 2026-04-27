@@ -13,6 +13,7 @@ export interface CustomerType {
   remark?: string
   status: number | boolean
   keywords?: string
+  projectName?: string
 }
 
 export interface CustomerParams extends Partial<CustomerType>, DefaultPaging {

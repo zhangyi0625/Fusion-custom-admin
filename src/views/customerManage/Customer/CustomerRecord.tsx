@@ -115,7 +115,7 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
           手机号：
           <span className="text-dull-grey">{customerInfo.info.phone} </span>
         </p>
-        <p>
+        <p className="whitespace-nowrap">
           单位名称：
           <span className="text-dull-grey">
             {customerInfo.info.refCompanyName ?? customerInfo.info.companyName}
@@ -128,6 +128,12 @@ const CustomerRecord: React.FC<CustomerRecordProps> = ({
         <p>
           客户级别：
           <span className="text-dull-grey">{customerInfo.info.level}</span>
+        </p>
+        <p>
+          项目名称：
+          <span className="text-dull-grey">
+            {customerInfo.info.projectName}{' '}
+          </span>
         </p>
         <p>
           备注：

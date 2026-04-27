@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   App,
   Button,
@@ -28,6 +28,7 @@ import type {
 } from '@/services/customerManage/Customer/CustomerModel'
 import { ExportTableDataByXLSX } from '@/utils/export'
 import { useNavigate } from 'react-router-dom'
+import { getDictionaryListByIdPage } from '@/services/system/dictionary/dictionaryApi'
 
 const MyCustomer: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -35,6 +36,8 @@ const MyCustomer: React.FC = () => {
   const { modal, message } = App.useApp()
 
   const navigate = useNavigate()
+
+  const [formMaps, setFormMaps] = useState(CustomerSearchColumns)
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<CustomerParams>({
     page: 1,
@@ -129,11 +132,18 @@ const MyCustomer: React.FC = () => {
       width: 100,
     },
     {
+      title: '项目名称',
+      key: 'projectName',
+      dataIndex: 'projectName',
+      align: 'center',
+      width: 200,
+    },
+    {
       title: '备注',
       key: 'remark',
       dataIndex: 'remark',
       align: 'center',
-      width: 100,
+      width: 250,
     },
     {
       title: '地址',
@@ -197,6 +207,27 @@ const MyCustomer: React.FC = () => {
     },
   ]
 
+  useEffect(() => {
+    init()
+  }, [])
+
+  const init = async () => {
+    try {
+      let resp = await getDictionaryListByIdPage({
+        dictId: '2046798065079304194',
+      })
+      formMaps.map((item) => {
+        if (item.name === 'level') {
+          item.options = resp.list.map((el: { dictDataName: string }) => ({
+            label: el.dictDataName,
+            value: el.dictDataName,
+          }))
+        }
+      })
+      setFormMaps([...formMaps])
+    } catch {}
+  }
+
   const deleteItem = (id: string) => {
     modal.confirm({
       title: '删除该客户',
@@ -218,7 +249,11 @@ const MyCustomer: React.FC = () => {
         ([, value]) => value !== undefined || value !== null,
       ),
     )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort'],
+      true,
+    )
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -290,7 +325,7 @@ const MyCustomer: React.FC = () => {
       <ConfigProvider>
         <Card>
           <SearchForm
-            columns={CustomerSearchColumns}
+            columns={formMaps}
             gutterWidth={24}
             labelPosition="left"
             defaultColsNumber={2}

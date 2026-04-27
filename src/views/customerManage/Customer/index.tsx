@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   App,
   Button,
@@ -28,6 +28,7 @@ import type {
 } from '@/services/customerManage/Customer/CustomerModel'
 import { ExportTableDataByXLSX } from '@/utils/export'
 import { useNavigate } from 'react-router-dom'
+import { getDictionaryListByIdPage } from '@/services/system/dictionary/dictionaryApi'
 
 const Customer: React.FC = () => {
   const { parentRef, height } = useParentSize()
@@ -35,6 +36,8 @@ const Customer: React.FC = () => {
   const navigate = useNavigate()
 
   const { modal, message } = App.useApp()
+
+  const [formMaps, setFormMaps] = useState(CustomerSearchColumns)
 
   const [searchDefaultForm, setSearchDefaultForm] = useState<CustomerParams>({
     page: 1,
@@ -61,6 +64,27 @@ const Customer: React.FC = () => {
   })
 
   const [downLoading, setDownLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    init()
+  }, [])
+
+  const init = async () => {
+    try {
+      let resp = await getDictionaryListByIdPage({
+        dictId: '2046798065079304194',
+      })
+      formMaps.map((item) => {
+        if (item.name === 'level') {
+          item.options = resp.list.map((el: { dictDataName: string }) => ({
+            label: el.dictDataName,
+            value: el.dictDataName,
+          }))
+        }
+      })
+      setFormMaps([...formMaps])
+    } catch {}
+  }
 
   const tableColumns: TableProps['columns'] = [
     {
@@ -129,11 +153,18 @@ const Customer: React.FC = () => {
       width: 100,
     },
     {
+      title: '项目名称',
+      key: 'projectName',
+      dataIndex: 'projectName',
+      align: 'center',
+      width: 200,
+    },
+    {
       title: '备注',
       key: 'remark',
       dataIndex: 'remark',
       align: 'center',
-      width: 100,
+      width: 250,
     },
     {
       title: '地址',
@@ -218,7 +249,11 @@ const Customer: React.FC = () => {
         ([, value]) => value !== undefined || value !== null,
       ),
     )
-    let pageInfo = filterKeys(searchDefaultForm, ['page', 'limit'], true)
+    let pageInfo = filterKeys(
+      searchDefaultForm,
+      ['page', 'limit', 'sort'],
+      true,
+    )
     setSearchDefaultForm({
       ...pageInfo,
       ...filteredObj,
@@ -290,7 +325,7 @@ const Customer: React.FC = () => {
       <ConfigProvider>
         <Card>
           <SearchForm
-            columns={CustomerSearchColumns}
+            columns={formMaps}
             gutterWidth={24}
             labelPosition="left"
             defaultColsNumber={2}

@@ -70,6 +70,16 @@ export const CustomerSearchColumns: CustomColumn[] = [
     selectFetch: false,
     hiddenItem: false,
   },
+  {
+    label: null,
+    name: 'level',
+    formType: 'normalSelect',
+    customPlaceholder: '请选择客户等级',
+    options: [],
+    span: 6,
+    selectFetch: false,
+    hiddenItem: false,
+  },
 ]
 
 export const AddPayerUnitForm: Omit<
@@ -147,6 +157,13 @@ export const AddCustomerForm: Omit<
     span: 24,
     name: 'level',
     options: [],
+  },
+  {
+    label: '项目名称',
+    name: 'projectName',
+    formType: 'input',
+    customPlaceholder: '请输入项目名称',
+    span: 24,
   },
   {
     label: '备注',
